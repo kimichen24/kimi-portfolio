@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+
+# Build output (rebuilt by CI / locally)
+dist/
+
+# Sandbox sibling project (separate repo)
+foldcraft/
+
+# WorkBuddy internal memory / state
+.workbuddy/
+
+# Local debug & verification artifacts
+.audit/
+.chrome-debug/
+.chrome-diag/
+.chrome-test/
+.chrome-verify/
+verify_shots/
+*.mjs
+*.cjs
+cs_check.html
+_*.png
+_*.txt
+_*.js
+_*.json
+audit_*.png
+apply_style.cjs
+campus_new.css
+
+# Editor / OS
+.DS_Store
+*.log
+
+# Local debug & verification artifacts (not part of the site)
+*.png
+crop_qr.py
+doubao_new.css
+strengths_live.js
+overview.md

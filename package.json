@@ -1,0 +1,28 @@
+{
+  "name": "kimi-portfolio",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "陈权峰 Kimi · 个人作品集官网 — 内容运营 / 用户调研 / 数据驱动 / AI 增效",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview --host"
+  },
+  "dependencies": {
+    "@gsap/react": "^2.1.2",
+    "framer-motion": "^12.43.0",
+    "gsap": "^3.15.0",
+    "ogl": "^1.0.11",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "three": "^0.185.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
+    "vite": "^5.4.11"
+  }
+}

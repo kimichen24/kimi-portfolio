@@ -1,0 +1,9 @@
+.color-bends-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  /* 柔和白底：transparent 模式下画布透明区域透出此柔白底，
+     纯黑弯曲带浮于其上，与全站柔和白背景风格一致 */
+  background: #eceef1;
+}
