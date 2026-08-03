@@ -1,0 +1,404 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   全局基础
+   ========================================================================== */
+@layer base {
+  /* 页面正常文档流 — 允许 main 内容溢出时滚动
+     - html/#root 保持 100% 高度（避免铺满视口的 fixed 元素错位）
+     - body 正常文档流（去掉 position: fixed，启用滚动）
+     - overscroll-behavior: none 阻止滚动边界弹性（不传给 background） */
+  html,
+  #root {
+    height: 100%;
+    width: 100%;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overscroll-behavior: none;
+    color-scheme: light;
+    background-color: #eceef1;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text',
+      'Helvetica Neue', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
+    background-color: #eceef1;
+    color: #1d1d1f;
+    line-height: 1.6;
+    min-height: 100%;
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  ::selection {
+    background-color: rgba(2, 132, 199, 0.45);
+    color: #ffffff;
+  }
+
+  /* 苹果风滚动条 — 深色版 */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.16);
+    border-radius: 10px;
+    border: 2px solid #eceef1;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.28);
+  }
+}
+
+/* ==========================================================================
+   复用样式
+   ========================================================================== */
+@layer components {
+  /* 苹果风容器 — 最大版心 1700px */
+  .container-page {
+    @apply mx-auto w-full max-w-container px-8 md:px-12 lg:px-16 xl:px-20;
+  }
+
+  /* ── 各页独立深色背景（高浓度、有纵深、低饱和、不同质化） ──
+     页面采用深暗基调（近黑）+ 每页一缕极低饱和色调光晕（蓝/紫/青/石墨/居中蓝），
+     靠「顶亮底暗」的纵深渐变制造深度，靠「暗背景 + 柔白卡片」的强对比让内容突出，
+     背景不抢戏、不刺眼，全站风格一致。 */
+  .page-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -10;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .page-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.18 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+  .page-bg--home {
+    background:
+      radial-gradient(130% 100% at 50% -15%, rgba(46, 74, 140, 0.22) 0%, transparent 50%),
+      radial-gradient(100% 90% at 90% 115%, rgba(20, 46, 72, 0.20) 0%, transparent 55%),
+      linear-gradient(180deg, #0b1018 0%, #060810 55%, #04060a 100%);
+  }
+  .page-bg--projects {
+    background:
+      radial-gradient(110% 85% at 8% -8%, rgba(96, 72, 150, 0.20) 0%, transparent 52%),
+      radial-gradient(100% 95% at 100% 110%, rgba(20, 40, 64, 0.18) 0%, transparent 55%),
+      linear-gradient(180deg, #0c0a14 0%, #07060d 55%, #040409 100%);
+  }
+  .page-bg--experience {
+    background:
+      radial-gradient(100% 80% at 50% -10%, rgba(20, 96, 96, 0.20) 0%, transparent 52%),
+      linear-gradient(180deg, #080d0d 0%, #050a0a 55%, #030706 100%);
+  }
+  .page-bg--strengths {
+    background:
+      radial-gradient(120% 90% at 50% 12%, rgba(64, 64, 88, 0.18) 0%, transparent 58%),
+      linear-gradient(180deg, #0b0b12 0%, #070710 55%, #040409 100%);
+  }
+  .page-bg--contact {
+    background:
+      radial-gradient(90% 90% at 50% 50%, rgba(40, 80, 140, 0.22) 0%, transparent 60%),
+      linear-gradient(180deg, #08101c 0%, #050a14 55%, #03060c 100%);
+  }
+
+  /* 苹果风标题 — 柔白底默认深墨 */
+  .h-display {
+    @apply font-display font-semibold tracking-tightest text-ink-900;
+  }
+
+  /* 苹果风正文 — 柔白底默认深灰 */
+  .text-body {
+    @apply text-ink-600 leading-[1.6];
+  }
+
+  /* 磨砂玻璃导航栏 — 浅色版（柔白底上可见） */
+  .glass-nav {
+    background-color: rgba(255, 255, 255, 0.7);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .glass-nav-scrolled {
+    background-color: rgba(255, 255, 255, 0.82);
+    backdrop-filter: saturate(180%) blur(24px);
+    -webkit-backdrop-filter: saturate(180%) blur(24px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  /* 苹果风按钮 — 主按钮：海蓝底白字，hover 时颜色翻转（白底蓝字） */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-accent px-7 py-3.5
+           text-sm font-medium text-white transition-all duration-300
+           hover:scale-[1.015] active:scale-[0.985]
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/40;
+    border: 1px solid transparent;
+    box-shadow: 0 1px 2px rgba(2, 132, 199, 0.35), 0 6px 16px rgba(2, 132, 199, 0.3);
+  }
+  .btn-primary:hover {
+    background-color: #ffffff;
+    color: #0284c7;
+    border-color: #0284c7;
+    box-shadow:
+      0 1px 2px rgba(2, 132, 199, 0.25),
+      0 6px 16px rgba(255, 255, 255, 0.15);
+  }
+
+  /* 次按钮：默认透明蓝字，hover 时翻转蓝底白字 */
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5
+           text-sm font-medium text-accent transition-all duration-300
+           active:scale-[0.985]
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/30;
+    border: 1px solid rgba(2, 132, 199, 0.5);
+    background-color: transparent;
+  }
+  .btn-secondary:hover {
+    background-color: #0284c7;
+    color: #ffffff;
+    border-color: #0284c7;
+  }
+
+  /* Hero 专用按钮 — 苹果极简风（深色底，hover 颜色翻转） */
+  .btn-hero-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-white px-7 py-3.5
+           text-sm font-medium text-ink-900 transition-all duration-300
+           hover:bg-white hover:scale-[1.015] active:scale-[0.985]
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60;
+    border: 1px solid transparent;
+    box-shadow:
+      0 1px 2px rgba(255, 255, 255, 0.15) inset,
+      0 8px 24px rgba(0, 0, 0, 0.35);
+  }
+  .btn-hero-primary:hover {
+    background-color: #0284c7;
+    color: #ffffff;
+    border-color: #ffffff;
+  }
+
+  .btn-hero-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5
+           text-sm font-medium text-white/85 transition-all duration-300
+           border border-white/15 backdrop-blur-md
+           hover:bg-white hover:border-white hover:text-ink-900
+           active:scale-[0.985]
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40;
+  }
+
+  /* 苹果风卡片 — 极简浅底（柔白背景上的干净卡片） */
+  .card-apple {
+    @apply rounded-3xl bg-white transition-all duration-300;
+    color: #1d1d1f;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.03),
+      0 4px 16px rgba(0, 0, 0, 0.04);
+  }
+  .card-apple:hover {
+    transform: translateY(-2px);
+    border-color: rgba(0, 0, 0, 0.08);
+    box-shadow:
+      0 2px 4px rgba(0, 0, 0, 0.04),
+      0 8px 28px rgba(0, 0, 0, 0.06);
+  }
+
+  /* ── 大号展示卡片 — 纯白底 + 极淡发丝边框 + 轻微浮起 ── */
+  .card-apple-xl {
+    @apply relative overflow-hidden rounded-[28px] transition-all duration-300;
+    color: #111517;
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow:
+      0 1px 3px rgba(0, 0, 0, 0.03),
+      0 8px 32px rgba(0, 0, 0, 0.05);
+  }
+  .card-apple-xl:hover {
+    transform: translateY(-3px);
+    border-color: rgba(0, 0, 0, 0.09);
+    box-shadow:
+      0 2px 5px rgba(0, 0, 0, 0.04),
+      0 14px 44px rgba(0, 0, 0, 0.07);
+  }
+
+  /* ── 卡片顶部色调标识线（由 JS 通过 --tone 变量着色） ── */
+  .card-accent-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--tone-color, rgba(255, 255, 255, 0.3));
+    opacity: 0.9;
+  }
+
+  /* ── 数据指标药丸 — 极淡底 + 左侧色调标识条（柔白背景上的干净小卡） ── */
+  .metric-pill {
+    @apply flex flex-col items-center gap-0.5 rounded-[14px] px-4 py-2.5 transition-all duration-300;
+    background: #fafafa;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-left: 2.5px solid var(--tone-color, rgba(2, 132, 199, 0.7));
+    min-width: 72px;
+  }
+  .metric-pill:hover {
+    background: #f5f5f7;
+    border-color: rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+  }
+
+  /* 隐藏轮播轨道滚动条（保留滑动能力）*/
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* 模块小标题 — Eyebrow */
+  .eyebrow {
+    @apply text-xs font-medium uppercase tracking-[0.18em] text-ink-500;
+  }
+
+  /* 卡片悬浮上浮（替代 framer whileHover，由 GSAP 揭示结束后接管）
+     - 丝滑缓动，无廉价弹跳；translate3d 走合成层，不触发重排 */
+  .glow-card-hover {
+    transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+  }
+  .glow-card-hover:hover {
+    transform: translate3d(0, -6px, 0);
+  }
+
+  /* 联系卡片 3D 翻转 — 丝滑缓动，尊重减弱动效偏好 */
+  .flip-inner {
+    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
+    transition: transform 0.72s cubic-bezier(0.2, 0.8, 0.2, 1);
+    will-change: transform;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .flip-inner { transition-duration: 0.001ms; }
+  }
+}
+
+/* 首屏加载期间隐藏导航栏（Apple 风格：加载完成前不显示任何 UI 元素） */
+body[data-loading] .fixed.z-50,
+body[data-loading] [class*="z-50"] {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(-200%) !important;
+}
+
+/* ==========================================================================
+   自定义动画
+   ========================================================================== */
+@layer utilities {
+  /* 滚动渐入 */
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* 颗粒纹理叠加（Hero 背景） */
+  .grain-overlay {
+    position: relative;
+  }
+  .grain-overlay::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.4;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.18 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+
+  /* 动态渐变背景 */
+  .aurora-bg {
+    background: linear-gradient(
+      120deg,
+      #f5f5f7 0%,
+      #e8f1fd 25%,
+      #f0e8fd 50%,
+      #e8f7fd 75%,
+      #f5f5f7 100%
+    );
+    background-size: 300% 300%;
+    animation: gradient-shift 18s ease infinite;
+  }
+
+  /* 弱化文字渐变（用于深色底部 CTA） */
+  .text-gradient-light {
+    background: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.7) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* hover 时图片缩放 */
+  .hover-zoom img,
+  .hover-zoom .placeholder-img {
+    transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .hover-zoom:hover img,
+  .hover-zoom:hover .placeholder-img {
+    transform: scale(1.04);
+  }
+
+  /* 首页滚动指示器 — 竖线光点循环下落 */
+  .animate-scroll-line {
+    animation: scroll-line 2.2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  }
+}
+
+@keyframes scroll-line {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.7;
+  }
+  75% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(260%);
+    opacity: 0;
+  }
+}
+
+/* 尊重减少动效偏好 */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
