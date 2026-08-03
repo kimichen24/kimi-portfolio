@@ -209,7 +209,7 @@ export default function Strengths() {
               <div className="relative mx-auto shrink-0 sm:mx-0">
                 <div className="group relative h-[200px] w-[200px] overflow-hidden rounded-[22px] sm:h-[240px] sm:w-[240px]">
                   <img
-                    src="/images/Create_a_cute_3D_Pixar_style_c_2026-08-01T09-55-54.webp"
+                    src="images/Create_a_cute_3D_Pixar_style_c_2026-08-01T09-55-54.webp"
                     alt={profile.name}
                     loading="lazy"
                     decoding="async"
@@ -397,7 +397,7 @@ export default function Strengths() {
             platform="wechat"
             platformLabel="WeChat"
             handle={profile.social.find((s) => s.platform === '微信')?.handle}
-            qr="/images/wechat-qr.jpg"
+            qr="images/wechat-qr.jpg"
             accent="#07C160"
           />
 
@@ -425,7 +425,7 @@ export default function Strengths() {
             platform="qq"
             platformLabel="QQ"
             handle={profile.social.find((s) => s.platform === 'QQ')?.handle}
-            qr="/images/qq-qr.jpg"
+            qr="images/qq-qr.jpg"
             accent="#12B7F5"
           />
         </div>
