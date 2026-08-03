@@ -150,7 +150,6 @@ function FlipContactCard({ platform, platformLabel, handle, qr, accent }) {
           <img
             src={qr}
             alt={`${platformLabel}二维码`}
-            loading="lazy"
             decoding="async"
             className="h-[92px] w-[92px] rounded-lg object-contain ring-1 ring-black/10"
           />
@@ -211,7 +210,6 @@ export default function Strengths() {
                   <img
                     src="images/Create_a_cute_3D_Pixar_style_c_2026-08-01T09-55-54.webp"
                     alt={profile.name}
-                    loading="lazy"
                     decoding="async"
                     className="h-full w-full object-cover transition-transform duration-700 ease-out"
                   />
