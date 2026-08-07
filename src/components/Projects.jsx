@@ -346,7 +346,6 @@ export default function Projects() {
                   <iframe
                     src={v.url}
                     title={`${v.title} · 在线预览`}
-                    loading="lazy"
                     className="h-full w-full border-0 bg-white"
                   />
                 </div>

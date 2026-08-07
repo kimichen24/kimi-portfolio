@@ -90,7 +90,7 @@ export const projects = [
       { value: '3', label: '核心痛点' },
       { value: 'P0–P2', label: '优化优先级' },
     ],
-    reportUrl: 'https://75b25b3d56bf4278b91aa7a52286f2d8.sh4.agentos-app.net',
+    reportUrl: 'reports/intern-radar/report.html',
     cover: { gradient: 'from-sky-100 via-blue-50 to-indigo-100', tone: 'warm' },
     // 补充材料（竞品对比矩阵 + 用户画像卡片）
     extras: [
@@ -137,7 +137,7 @@ export const projects = [
       { value: '3×', label: '群活跃倍数' },
     ],
     // 完整报告（HTML，新标签页打开）
-    reportUrl: 'https://b712e7a05f314dfdbbe9e60c2702afec.gz1.agentos-app.net',
+    reportUrl: 'reports/campus-trade/report.html',
     cover: { gradient: 'from-emerald-100 via-teal-50 to-sky-100', tone: 'cool' },
     // 补充材料（基线盘点 + 用户访谈 + A/B 效果验证）
     extras: [
@@ -206,7 +206,7 @@ export const projects = [
       { value: 'P0', label: '方案优先级' },
     ],
     // 完整报告（HTML，新标签页打开）
-    reportUrl: 'https://8b6f3f557b814264b8d863637a005c2d.bj3.agentos-app.net',
+    reportUrl: 'reports/doubao-research/report.html',
     cover: { gradient: 'from-violet-100 via-indigo-50 to-blue-100', tone: 'deep' },
     // 补充材料（访谈痛点聚类 + 竞品横向评测）
     extras: [
