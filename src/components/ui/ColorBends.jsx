@@ -227,7 +227,14 @@ export default function ColorBends({
       renderer.render(scene, camera);
       rafRef.current = requestAnimationFrame(loop);
     };
-    rafRef.current = requestAnimationFrame(loop);
+    // 无障碍：开启「减少动态效果」时只渲染一帧静态画面，不启动动画循环（WCAG 2.3.3）
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    renderer.render(scene, camera); // 静态首帧
+    if (reduceMotion) {
+      rafRef.current = null;
+    } else {
+      rafRef.current = requestAnimationFrame(loop);
+    }
 
     // 标签页隐藏时暂停渲染（避免后台满帧跑 WebGL，省 GPU/电量）；可见时恢复。
     const onVisibility = () => {
@@ -240,7 +247,7 @@ export default function ColorBends({
         rafRef.current = requestAnimationFrame(loop);
       }
     };
-    document.addEventListener('visibilitychange', onVisibility);
+    if (!reduceMotion) document.addEventListener('visibilitychange', onVisibility);
     if (document.hidden && rafRef.current !== null) {
       cancelAnimationFrame(rafRef.current);
       rafRef.current = null;

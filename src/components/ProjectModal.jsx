@@ -290,7 +290,6 @@ export default function ProjectModal({ project, open, onClose }) {
                 <iframe
                   src={project.reportUrl}
                   title={`${project.title} 完整报告`}
-                  loading="lazy"
                   className="h-[420px] w-full rounded-2xl border border-black/10 bg-black/[0.03] md:h-[500px]"
                 />
               </section>
