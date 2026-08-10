@@ -160,6 +160,23 @@ const IconGlobe = (props) => (
   </svg>
 )
 
+const IconArrowRight = (props) => (
+  <svg
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M5 12h14" />
+    <path d="M12 5l7 7-7 7" />
+  </svg>
+)
+
 /* ==========================================================================
    Section 1 — Hero（视频背景 + 中文四宫格覆盖层）
    ========================================================================== */
@@ -206,8 +223,6 @@ function SpaceTravelHero() {
       <PageBackground />
 
       {/* ═══ 加载覆盖层（黑白映衬 · 极简风格） ═══ */}
-      {/* 设计语言：柔白层次底 + 深色字母标 + 极细黑色进度线 + opacity 溶解淡出
-          与全站「柔白底 + 纯黑弯曲带」同源，淡出时黑白对比自然过渡到正文页面 */}
       <div
         data-hero="curtain"
         aria-hidden
@@ -247,22 +262,14 @@ function SpaceTravelHero() {
         </div>
       </div>
 
-      {/* 极细基线参考线 — 极克制，强化排版秩序感（编辑式网格） */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 z-[12]">
-        <div className="absolute top-0 bottom-0 left-[10%] w-px bg-black/[0.035]" />
-        <div className="absolute top-0 bottom-0 right-[10%] w-px bg-black/[0.035]" />
-      </div>
-
-      {/* 文案可读性衬底 — 定向柔化，替代逐字发光（发光在浅底上会读成"脏阴影"） */}
-      {/* 只在左下主张区 / 左上 logo 区做极淡的雾化，右侧与中部完全留给弯曲带 */}
+      {/* 中心文案可读性衬底 — 克制柔化，避免纯黑弯曲带穿过标题时对比不足
+          Apple HIG：玻璃质感只用于浮层；这里用极淡的实心径向渐变保证可读性 */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 z-20"
         style={{
-          background: [
-            'radial-gradient(118% 76% at 4% 106%, rgba(236,238,241,0.97) 0%, rgba(236,238,241,0.70) 32%, rgba(236,238,241,0) 68%)',
-            'radial-gradient(42% 40% at 2% -4%, rgba(236,238,241,0.92) 0%, rgba(236,238,241,0) 74%)',
-          ].join(', '),
+          background:
+            'radial-gradient(70% 60% at 50% 48%, rgba(236,238,241,0.92) 0%, rgba(236,238,241,0.55) 45%, rgba(236,238,241,0) 72%)',
         }}
       />
 
@@ -275,78 +282,78 @@ function SpaceTravelHero() {
         }}
       />
 
-      {/* 顶部栏：左上 logo（药丸导航由 App.jsx 全局提供） */}
-      <div className="absolute left-0 right-0 top-0 z-30 flex items-start justify-start p-6 pt-20 md:p-10 md:pt-12 lg:p-12 lg:pt-14">
-        <button
-          type="button"
-          onClick={() => navigate('home')}
-          data-hero="logo"
-          className="group inline-flex items-baseline gap-3 transition-[gap] duration-300 ease-out hover:gap-3.5"
-        >
-          <span className="text-xl font-semibold tracking-tight text-ink-900 transition-transform duration-300 ease-out group-hover:-translate-y-px sm:text-2xl md:text-[1.7rem]">
-            陈权峰
-          </span>
-          <span className="text-[10px] font-medium uppercase tracking-[0.32em] text-ink-500 transition-all duration-300 ease-out group-hover:translate-y-px group-hover:text-ink-700 sm:text-xs md:text-sm">
-            Kimi
-          </span>
-        </button>
-      </div>
-
-      {/* 底部栏：左下 slogan + 右下 tagline */}
-      <div className="absolute bottom-0 left-0 right-0 z-30 flex flex-col items-start justify-end gap-10 p-6 pb-16 md:flex-row md:items-end md:justify-between md:gap-12 md:p-10 md:pb-14 lg:p-12 lg:pb-16">
-        {/* 左下 — Slogan + 副标题 */}
-        <div className="max-w-2xl">
-          {/* 细标 — 发丝线 + 方向定位 */}
-          <div data-hero="sub" className="mb-6 flex items-center gap-3">
-            <span aria-hidden className="h-px w-8 bg-ink-900/20 sm:w-10" />
-            <span className="text-[10px] font-medium uppercase tracking-[0.34em] text-ink-500 sm:text-[11px]">
-              {profile.role}
-            </span>
-          </div>
-
-          <h1
-            data-hero="title"
-            className="font-display text-[clamp(2rem,4.6vw,4rem)] font-medium leading-[1.02] tracking-tightest text-ink-900"
-          >
-            Fake it till you make it<span className="text-ink-900">.</span>
-          </h1>
-
-          {/* 动态下划线 — 开场动画收尾：从 0 展开到 100% */}
-          <div
-            data-hero="underline"
-            className="mt-5 h-px w-full max-w-[180px] origin-left rounded-full bg-ink-900/40"
-          />
-
-          <p
-            data-hero="sub"
-            className="mt-6 max-w-md text-[13px] leading-[1.85] text-ink-600 md:text-sm"
-          >
-            构建产品 · 探索技术 · 分享思考
-            <br className="hidden md:block" />
-            用代码把想法变成现实，一个项目一个脚印。
-          </p>
-        </div>
-
-        {/* 右下 — 定位信息（md+ 才出现，给左侧主张留足呼吸） */}
-        <div
+      {/* ═══ Apple HIG 风格主视觉 — 一个视口一个焦点 ═══ */}
+      <div className="absolute inset-0 z-30 flex flex-col items-center justify-center px-6">
+        {/* Eyebrow：角色定位 */}
+        <span
           data-hero="sub"
-          className="hidden shrink-0 flex-col items-end gap-1.5 text-right md:flex"
+          className="mb-6 text-[10px] font-medium uppercase tracking-[0.22em] text-ink-500 sm:mb-8 sm:text-xs sm:tracking-[0.32em]"
         >
-          <span className="text-[9px] font-medium uppercase tracking-[0.42em] text-ink-400/70">
-            Based in
-          </span>
-          <span className="text-[13px] font-medium text-ink-800">{profile.location}</span>
-          <span className="text-[12px] text-ink-500">{profile.school}</span>
+          {profile.role}
+        </span>
+
+        {/* 主标题 — 超大字号、紧凑行距、视觉焦点 */}
+        <h1
+          data-hero="title"
+          className="max-w-5xl text-center font-display text-[clamp(2.6rem,10vw,7rem)] font-semibold leading-[0.98] tracking-tight text-ink-900"
+        >
+          Fake it till
+          <br className="hidden sm:block" /> you make it
+          <span className="text-ink-900/50">.</span>
+        </h1>
+
+        {/* 副标题 — 呼吸充足、可读 */}
+        <p
+          data-hero="sub"
+          className="mt-8 max-w-md text-center text-[15px] leading-[1.75] text-ink-600 sm:mt-10 sm:max-w-lg sm:text-base"
+        >
+          {profile.tagline}
+        </p>
+
+        {/* CTA 组 — 主按钮 + 文字链，比例圆角、柔和阴影 */}
+        <div data-hero="sub" className="mt-10 flex flex-col items-center gap-4 sm:mt-12 sm:flex-row sm:gap-5">
+          <button
+            type="button"
+            onClick={() => navigate('projects')}
+            className="group inline-flex items-center gap-2 rounded-full bg-ink-900 px-7 py-3.5 text-sm font-medium text-white shadow-[0_4px_20px_rgba(0,0,0,0.18)] transition-all duration-300 hover:scale-[1.02] hover:bg-black hover:shadow-[0_8px_28px_rgba(0,0,0,0.22)] active:scale-[0.98]"
+          >
+            查看作品
+            <IconArrowRight className="transition-transform duration-300 group-hover:translate-x-0.5" />
+          </button>
+
+          <button
+            type="button"
+            onClick={() => navigate('contact')}
+            className="group inline-flex items-center gap-1.5 text-sm font-medium text-ink-900 transition-colors duration-300 hover:text-ink-600"
+          >
+            联系我
+            <IconArrowRight className="transition-transform duration-300 group-hover:translate-x-0.5" />
+          </button>
         </div>
       </div>
 
-      {/* 底部居中滚动指示 — 经典作品集符号，给首屏一个"向下"的暗示 */}
-      <div className="absolute bottom-8 left-1/2 z-30 flex -translate-x-1/2 flex-col items-center gap-2.5">
-        <span className="text-[9px] font-medium uppercase tracking-[0.28em] text-ink-400/60">
-          Scroll
+      {/* 底部署名 + 滚动指示 — 居中、极简 */}
+      <div className="absolute bottom-0 left-0 right-0 z-30 flex flex-col items-center pb-10 sm:pb-12">
+        <span
+          data-hero="sub"
+          className="text-[11px] font-medium tracking-[0.18em] text-ink-600 sm:text-xs"
+        >
+          陈权峰 · Kimi Chen
         </span>
-        <div className="relative h-10 w-px overflow-hidden bg-ink-900/10">
-          <div className="h-3 w-full bg-ink-900/45 animate-scroll-line" />
+        <span
+          data-hero="sub"
+          className="mt-1 text-[10px] tracking-[0.12em] text-ink-500 sm:text-[11px]"
+        >
+          {profile.location}
+        </span>
+
+        <div data-hero="sub" className="mt-7 flex flex-col items-center gap-2">
+          <span className="text-[9px] font-medium uppercase tracking-[0.28em] text-ink-400">
+            Scroll
+          </span>
+          <div className="relative h-10 w-px overflow-hidden bg-ink-900/15">
+            <div className="h-3 w-full bg-ink-900/55 animate-scroll-line" />
+          </div>
         </div>
       </div>
     </section>
