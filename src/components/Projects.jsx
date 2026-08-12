@@ -1,11 +1,14 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
+import { motion } from 'framer-motion'
 import { useGSAP } from '@gsap/react'
 import PlaceholderImage from './ui/PlaceholderImage'
-import { projects, vibeProjects } from '../data/content'
 import BackButton from './BackButton'
 import PageBackground from './ui/PageBackground'
 import ProjectModal from './ProjectModal'
+import Tilt from './ui/Tilt'
+import MagneticButton from './ui/MagneticButton'
 import { primeReveals, buildScrollReveals, prefersReduced } from '../lib/animations'
+import { useContent, useUI } from '../data'
 
 /**
  * 项目模块 — 一页一个 · 横向滑动浏览 · 苹果产品展示卡风格
@@ -15,10 +18,19 @@ import { primeReveals, buildScrollReveals, prefersReduced } from '../lib/animati
  * - 点击「查看详情」打开详情弹窗（ProjectModal）
  */
 export default function Projects() {
+  const { projects, vibeProjects } = useContent()
+  const ui = useUI()
   const [active, setActive] = useState(null)
   const [index, setIndex] = useState(0)
+  const [filter, setFilter] = useState('all') // 'all' | 'project' | 'experiment'
   const scrollRef = useRef(null)
   const scope = useRef(null)
+
+  // 分类筛选：全部 / 项目（产品研究）/ 实验（Vibe Coding）
+  const showProjects = filter === 'all' || filter === 'project'
+  const showVibe = filter === 'all' || filter === 'experiment'
+  const projCls = showProjects ? '' : 'hidden'
+  const vibeCls = showVibe ? '' : 'hidden'
 
   useGSAP(
     () => {
@@ -77,11 +89,11 @@ export default function Projects() {
     <section
       id="projects"
       ref={scope}
-      className="flex min-h-screen w-full flex-col pt-28 pb-20 md:pt-36 md:pb-24"
+      className="flex min-h-screen w-full flex-col pt-32 pb-20 md:pt-36 md:pb-24"
     >
       <BackButton />
 
-      {/* 项目页背景 — 全站统一的柔白底 + 纯黑弯曲带 */}
+      {/* 项目页背景 — 全站统一的纯黑背景 */}
       <PageBackground />
 
       <div className="container-page">
@@ -92,7 +104,7 @@ export default function Projects() {
         >
           <div className="mb-2 flex items-center gap-3">
             <span className="h-px flex-1 max-w-[48px] bg-ink-300" />
-            <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink-400">
+            <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink-500">
               Projects
             </span>
           </div>
@@ -100,16 +112,44 @@ export default function Projects() {
             data-reveal="title"
             className="h-display text-3xl tracking-tightest md:text-4xl lg:text-5xl"
           >
-            项目
+            {ui.projects.title}
           </h2>
-          <p className="mt-2 max-w-md text-[13px] leading-relaxed text-ink-400 md:text-sm">
-            三个完整项目——从问题诊断到方案落地，都有数据验证。
+          <p className="mt-2 max-w-md text-[13px] leading-relaxed text-ink-500 md:text-sm">
+            {ui.projects.desc}
           </p>
+        </div>
+
+        {/* 分类筛选 tab — 全部 / 项目 / 实验 */}
+        <div
+          className="mb-8 flex flex-wrap gap-2"
+          role="tablist"
+          aria-label="项目分类筛选"
+        >
+          {[
+            { key: 'all', label: ui.projects.filterAll },
+            { key: 'project', label: ui.projects.filterProject },
+            { key: 'experiment', label: ui.projects.filterExperiment },
+          ].map((t) => (
+            <button
+              key={t.key}
+              type="button"
+              role="tab"
+              aria-selected={filter === t.key}
+              onClick={() => setFilter(t.key)}
+              className={`rounded-full border px-4 py-1.5 text-[13px] font-medium transition-all duration-300 ${
+                filter === t.key
+                  ? 'border-black/20 bg-ink-900 text-white'
+                  : 'border-black/10 bg-black/[0.03] text-ink-600 hover:border-black/20 hover:text-ink-900'
+              }`}
+            >
+              {t.label}
+            </button>
+          ))}
         </div>
 
         {/* 轮播区域 */}
         <div
-          className="relative"
+          className={`relative ${projCls}`}
           role="region"
           aria-label="项目轮播，使用左右方向键浏览"
           tabIndex={0}
@@ -120,8 +160,8 @@ export default function Projects() {
             type="button"
             onClick={prev}
             disabled={index === 0}
-            aria-label="上一个项目"
-            className="absolute left-0 top-1/2 z-20 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-black/[0.08] bg-black/[0.04] text-ink-600 backdrop-blur-md transition-all duration-300 hover:bg-black/[0.10] hover:text-ink-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20 disabled:cursor-not-allowed disabled:opacity-25 md:flex"
+            aria-label={ui.projects.prev}
+            className="absolute left-0 top-1/2 z-20 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-black/[0.10] bg-black/[0.04] text-ink-600 backdrop-blur-md transition-all duration-300 hover:bg-black/[0.08] hover:text-ink-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20 disabled:cursor-not-allowed disabled:opacity-25 md:flex"
           >
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 5 L7 10 L12 15" />
@@ -133,8 +173,8 @@ export default function Projects() {
             type="button"
             onClick={next}
             disabled={index === projects.length - 1}
-            aria-label="下一个项目"
-            className="absolute right-0 top-1/2 z-20 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-black/[0.08] bg-black/[0.04] text-ink-600 backdrop-blur-md transition-all duration-300 hover:bg-black/[0.10] hover:text-ink-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20 disabled:cursor-not-allowed disabled:opacity-25 md:flex"
+            aria-label={ui.projects.next}
+            className="absolute right-0 top-1/2 z-20 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-black/[0.10] bg-black/[0.04] text-ink-600 backdrop-blur-md transition-all duration-300 hover:bg-black/[0.08] hover:text-ink-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20 disabled:cursor-not-allowed disabled:opacity-25 md:flex"
           >
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
               <path d="M8 5 L13 10 L8 15" />
@@ -147,11 +187,16 @@ export default function Projects() {
             className="hide-scrollbar flex snap-x snap-mandatory overflow-x-auto scroll-smooth"
           >
             {projects.map((p, idx) => (
-              <div
+              <motion.div
                 key={p.id}
                 className="w-full shrink-0 snap-center px-3 py-2 md:px-14"
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '0px 0px -8% 0px' }}
+                transition={{ duration: 0.6, delay: idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
               >
                 {/* ── 苹果展示卡（纯玻璃，去掉彩色发光 / 顶线 / 色条） ── */}
+                <Tilt className="h-full" max={5}>
                 <article
                   className="card-apple-xl group relative mx-auto flex w-full max-w-[1020px] flex-col overflow-hidden md:h-[540px] md:flex-row"
                 >
@@ -161,26 +206,35 @@ export default function Projects() {
                       data-reveal="img"
                       className="relative shrink-0 overflow-hidden md:h-full md:w-[48%]"
                     >
-                      <div className="h-full w-full transition-transform duration-[900ms] ease-out group-hover:scale-[1.04]">
-                        <PlaceholderImage
-                          tone={p.cover.tone}
-                          label={p.title}
-                          aspect="aspect-[16/10] md:aspect-auto md:h-full"
-                          rounded={false}
-                        />
+                      {/* 视差层 — 随滚动轻微位移，制造景深（独立于 hover 缩放层） */}
+                      <div data-parallax className="h-full w-full">
+                        <div className="h-full w-full transition-transform duration-[900ms] ease-out group-hover:scale-[1.04]">
+                          <PlaceholderImage
+                            tone={p.cover.tone}
+                            label={p.title}
+                            aspect="aspect-[16/10] md:aspect-auto md:h-full"
+                            rounded={false}
+                          />
+                        </div>
                       </div>
-                      {/* 编辑式序号 — 大字号极淡，强化排版秩序（克制） */}
+                      {/* 编辑式序号 — 左上角超大极淡，强化「第几个」的排版秩序 */}
                       <span
                         aria-hidden
-                        className="pointer-events-none absolute bottom-5 left-5 z-10 font-display text-[60px] font-semibold leading-none tracking-tighter text-ink-900/10 md:text-[84px]"
+                        className="pointer-events-none absolute left-5 top-5 z-10 font-display text-[60px] font-semibold leading-none tracking-tighter text-ink-900/10 md:text-[84px]"
                       >
                         {String(idx + 1).padStart(2, '0')}
                       </span>
-                      {/* 封面右侧柔边过渡（融入纯白卡片） */}
+                      {/* 封面底部项目名 caption — hover 浮现，翻杂志感 */}
+                      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 translate-y-3 bg-gradient-to-t from-black/60 via-black/15 to-transparent px-6 pb-5 pt-12 opacity-0 transition-all duration-500 ease-out group-hover:translate-y-0 group-hover:opacity-100">
+                        <span className="text-[13px] font-medium tracking-wide text-white/90">
+                          {p.title}
+                        </span>
+                      </div>
+                      {/* 封面右侧柔边过渡（融入浅色卡片） */}
                       <div
                         className="absolute inset-y-0 right-0 hidden w-10 md:block"
                         style={{
-                          background: 'linear-gradient(to right, transparent, rgba(255,255,255,0.85))',
+                          background: 'linear-gradient(to right, transparent, rgba(245,245,247,0.75))',
                         }}
                       />
                     </div>
@@ -190,7 +244,7 @@ export default function Projects() {
                       {/* 上半：文字信息 */}
                       <div>
                         {/* 分类标签 */}
-                        <span className="mb-4 inline-flex w-fit items-center gap-1.5 rounded-full border border-black/[0.07] bg-black/[0.04] px-3 py-1 text-[10px] font-medium uppercase tracking-[0.16em] text-ink-500">
+                        <span className="mb-4 inline-flex w-fit items-center gap-1.5 rounded-full border border-black/[0.10] bg-black/[0.04] px-3 py-1 text-[10px] font-medium uppercase tracking-[0.16em] text-ink-500">
                           {p.tag}
                         </span>
 
@@ -198,6 +252,13 @@ export default function Projects() {
                         <h3 className="h-display text-ink-900 mt-3 text-2xl leading-tight tracking-tight md:text-3xl lg:text-4xl">
                           {p.title}
                         </h3>
+
+                        {/* 一句话结论 — 扫一眼即懂价值 */}
+                        {p.headline && (
+                          <p className="mt-2 text-[15px] font-semibold leading-snug text-ink-900 md:text-base">
+                            {p.headline}
+                          </p>
+                        )}
 
                         {/* 描述 — 轻量副文本 */}
                         <p className="mt-3 line-clamp-2 text-sm leading-[1.6] text-ink-500 md:line-clamp-3 md:text-base md:text-ink-600">
@@ -222,12 +283,11 @@ export default function Projects() {
                         </div>
 
                         {/* CTA 按钮 — 浅底卡片上的深底按钮，强对比 */}
-                        <button
-                          type="button"
+                        <MagneticButton
                           onClick={() => openModal(p)}
-                          className="group/btn mt-6 inline-flex items-center gap-2 rounded-full bg-ink-900 px-5 py-2.5 text-xs font-medium text-white transition-all duration-300 hover:bg-ink-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-ink-900/30"
+                          className="group/btn mt-6 inline-flex items-center gap-2 rounded-full bg-ink-900 px-5 py-2.5 text-xs font-medium text-white transition-all duration-300 hover:bg-ink-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20"
                         >
-                          查看详情
+                          {ui.projects.detail}
                           <svg
                             width="14"
                             height="14"
@@ -241,29 +301,30 @@ export default function Projects() {
                           >
                             <path d="M3 7H11M8 4L11 7L8 10" />
                           </svg>
-                        </button>
+                        </MagneticButton>
                       </div>
                     </div>
                   </article>
-              </div>
+                </Tilt>
+              </motion.div>
             ))}
           </div>
         </div>
 
         {/* 计数器 + 极细进度条导航（克制、有呼吸感） */}
-        <div className="mt-10 flex items-center gap-5">
-          <div className="shrink-0 text-xs font-medium tabular-nums tracking-[0.2em] text-ink-400">
+        <div className={`mt-10 flex items-center gap-5 ${projCls}`}>
+          <div className="shrink-0 text-xs font-medium tabular-nums tracking-[0.2em] text-ink-500">
             {String(index + 1).padStart(2, '0')}
-            <span className="mx-1.5 text-ink-300">/</span>
+            <span className="mx-1.5 text-ink-400">/</span>
             {String(projects.length).padStart(2, '0')}
           </div>
           <div
-            className="relative h-px flex-1 max-w-[260px] bg-ink-900/10"
+            className="relative h-px flex-1 max-w-[260px] bg-black/10"
             role="progressbar"
             aria-valuemin={1}
             aria-valuemax={projects.length}
             aria-valuenow={index + 1}
-            aria-label="项目浏览进度"
+            aria-label={ui.projects.progress}
           >
             <div
               className="absolute left-0 top-0 h-full bg-ink-900/70 transition-[width] duration-500 ease-out"
@@ -274,13 +335,13 @@ export default function Projects() {
       </div>
 
       {/* ════════ Vibe Coding 实验场 — 轻量网页作品，直接内嵌线上版 ════════ */}
-      <div className="container-page mt-24 md:mt-32">
+      <div className={`container-page mt-24 md:mt-32 ${vibeCls}`}>
         <div data-reveal-block>
           {/* 标题 — 与作品集同款左对齐排版 */}
           <div className="mb-8 md:mb-12">
           <div className="mb-2 flex items-center gap-3">
             <span className="h-px flex-1 max-w-[48px] bg-ink-300" />
-            <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink-400">
+            <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink-500">
               Vibe Coding
             </span>
           </div>
@@ -290,8 +351,8 @@ export default function Projects() {
           >
             Vibe Coding
           </h2>
-          <p className="mt-2 max-w-md text-[13px] leading-relaxed text-ink-400 md:text-sm">
-            随手造物 —— 一些轻量、能直接跑起来的小工具。
+          <p className="mt-2 max-w-md text-[13px] leading-relaxed text-ink-500 md:text-sm">
+            {ui.projects.vibeDesc}
           </p>
         </div>
 
@@ -305,15 +366,20 @@ export default function Projects() {
             >
               {/* 左：项目信息卡 */}
               <div className="card-apple flex flex-col p-7">
-                <span className="mb-4 inline-flex w-fit items-center gap-1.5 rounded-full border border-black/[0.07] bg-black/[0.04] px-3 py-1 text-[10px] font-medium uppercase tracking-[0.16em] text-ink-500">
+                <span className="mb-4 inline-flex w-fit items-center gap-1.5 rounded-full border border-black/[0.10] bg-black/[0.04] px-3 py-1 text-[10px] font-medium uppercase tracking-[0.16em] text-ink-500">
                   {v.tag}
                 </span>
                 <h3 className="h-display text-2xl leading-tight tracking-tight text-ink-900 md:text-3xl">
                   {v.title}
                 </h3>
-                <p className="mt-1 text-[12px] font-medium tracking-wide text-ink-400">
+                <p className="mt-1 text-[12px] font-medium tracking-wide text-ink-500">
                   {v.titleEn}
                 </p>
+                {v.headline && (
+                  <p className="mt-2 text-[14px] font-semibold leading-snug text-ink-900">
+                    {v.headline}
+                  </p>
+                )}
                 <p className="mt-3 text-sm leading-[1.6] text-ink-500 md:text-ink-600">
                   {v.summary}
                 </p>
@@ -321,9 +387,9 @@ export default function Projects() {
                   href={v.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group/btn mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-ink-900 px-5 py-2.5 text-xs font-medium text-white transition-all duration-300 hover:bg-ink-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-ink-900/30"
+                  className="group/btn mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-ink-900 px-5 py-2.5 text-xs font-medium text-white transition-all duration-300 hover:bg-ink-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20"
                 >
-                  打开网站
+                  {ui.projects.openSite}
                   <svg
                     width="14"
                     height="14"
@@ -346,7 +412,7 @@ export default function Projects() {
                   <iframe
                     src={v.url}
                     title={`${v.title} · 在线预览`}
-                    className="h-full w-full border-0 bg-white"
+                    className="h-full w-full border-0 bg-ink-100"
                   />
                 </div>
               </div>

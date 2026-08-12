@@ -14,6 +14,7 @@
 import { useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import PlaceholderImage from './ui/PlaceholderImage'
+import { useUI } from '../data'
 
 const backdrop = {
   hidden: { opacity: 0 },
@@ -38,6 +39,7 @@ const panel = {
 }
 
 export default function ProjectModal({ project, open, onClose }) {
+  const ui = useUI()
   const handleClose = useCallback(() => onClose?.(), [onClose])
 
   // ESC 关闭 + body 标记（供 FloatingNav 检测隐藏）
@@ -72,14 +74,14 @@ export default function ProjectModal({ project, open, onClose }) {
         >
           {/* 遮罩 */}
           <div
-            className="fixed inset-0 bg-black/70 backdrop-blur-sm"
+            className="fixed inset-0 bg-black/40 backdrop-blur-sm"
             onClick={handleClose}
             aria-hidden="true"
           />
 
           {/* 面板 */}
           <motion.div
-            className="relative z-10 w-full max-w-2xl rounded-[2rem] border border-black/10 bg-[#f6f7f9] p-6 shadow-2xl md:p-9"
+            className="relative z-10 w-full max-w-2xl rounded-[2rem] border border-black/10 bg-white p-6 shadow-2xl md:p-9"
             variants={panel}
             initial="hidden"
             animate="visible"
@@ -92,8 +94,8 @@ export default function ProjectModal({ project, open, onClose }) {
             <button
               type="button"
               onClick={handleClose}
-              className="absolute right-4 top-4 z-20 flex h-9 w-9 items-center justify-center rounded-full border border-black/10 bg-black/5 text-ink-600 transition-colors hover:bg-black/10 hover:text-ink-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-ink-900/20 md:right-5 md:top-5"
-              aria-label="关闭"
+              className="absolute right-4 top-4 z-20 flex h-9 w-9 items-center justify-center rounded-full border border-black/10 bg-ink-100 text-ink-500 transition-colors hover:bg-ink-200 hover:text-ink-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20 md:right-5 md:top-5"
+              aria-label={ui.modal.close}
             >
               <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
                 <path d="M3 3L12 12M12 3L3 12" />
@@ -109,8 +111,8 @@ export default function ProjectModal({ project, open, onClose }) {
 
               {/* 标题区 */}
               <div className="flex flex-col justify-center">
-                <div className="mb-3 inline-flex w-fit items-center gap-2 rounded-full border border-black/10 bg-black/[0.04] px-3 py-1 text-[11px] font-medium uppercase tracking-[0.14em] text-ink-700">
-                  <span className="h-1 w-1 rounded-full bg-accent" />
+                <div className="mb-3 inline-flex w-fit items-center gap-2 rounded-full border border-black/10 bg-black/[0.04] px-3 py-1 text-[11px] font-medium uppercase tracking-[0.14em] text-ink-600">
+                  <span className="h-1 w-1 rounded-full bg-black/40" />
                   {project.tag}
                 </div>
                 <h2 className="mb-3 text-xl font-semibold leading-snug tracking-tight text-ink-900 md:text-2xl">
@@ -125,12 +127,12 @@ export default function ProjectModal({ project, open, onClose }) {
             {/* ── 核心工作 ── */}
             <section className="mt-8 md:mt-10">
               <h3 className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-ink-500">
-                核心工作
+                {ui.modal.coreWork}
               </h3>
-              <ul className="space-y-3 rounded-2xl border border-black/[0.06] bg-white p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
+              <ul className="space-y-3 rounded-2xl border border-black/[0.10] bg-ink-100 p-5 shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
                 {project.actions.map((a, i) => (
                   <li key={i} className="flex items-start gap-3 text-[14px] leading-[1.65] text-ink-700">
-                    <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-accent/70" />
+                    <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-black/40" />
                     <span>{a}</span>
                   </li>
                 ))}
@@ -140,13 +142,13 @@ export default function ProjectModal({ project, open, onClose }) {
             {/* ── 量化成果 ── */}
             <section className="mt-7 md:mt-9">
               <h3 className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-ink-500">
-                关键成果
+                {ui.modal.keyResults}
               </h3>
               <div className="grid grid-cols-3 gap-3">
                 {project.metrics.map((m) => (
                   <div
                     key={m.label}
-                    className="flex flex-col justify-center rounded-2xl border border-black/[0.06] bg-white p-4 text-center shadow-[0_2px_12px_rgba(0,0,0,0.03)]"
+                    className="flex flex-col justify-center rounded-2xl border border-black/[0.10] bg-ink-100 p-4 text-center shadow-[0_2px_12px_rgba(0,0,0,0.06)]"
                   >
                     <span className="text-lg font-semibold tracking-tight text-ink-900 md:text-xl">
                       {m.value}
@@ -163,13 +165,13 @@ export default function ProjectModal({ project, open, onClose }) {
             {project.extras && project.extras.length > 0 && (
               <section className="mt-8 md:mt-10">
                 <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.16em] text-ink-500">
-                  补充材料
+                  {ui.modal.extras}
                 </h3>
                 <div className="space-y-5">
                   {project.extras.map((extra) => (
                     <div
                       key={extra.title}
-                      className="rounded-2xl border border-black/[0.06] bg-white p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)]"
+                      className="rounded-2xl border border-black/[0.10] bg-ink-100 p-5 shadow-[0_2px_12px_rgba(0,0,0,0.06)]"
                     >
                       <div className="mb-3">
                         <h4 className="text-sm font-semibold text-ink-900">{extra.title}</h4>
@@ -182,12 +184,12 @@ export default function ProjectModal({ project, open, onClose }) {
                         <div className="-mx-1 overflow-x-auto px-1">
                           <table className="w-full min-w-[400px] border-collapse text-left">
                             <thead>
-                              <tr className="border-b border-black/[0.08]">
+                              <tr className="border-b border-black/[0.10]">
                                 {extra.columns.map((col, ci) => (
                                   <th
                                     key={col}
                                     scope="col"
-                                    className={`pb-2 text-[11px] font-medium text-ink-400 ${
+                                    className={`pb-2 text-[11px] font-medium text-ink-500 ${
                                       ci === 0 ? 'pr-3' : 'pl-3 text-right'
                                     }`}
                                   >
@@ -198,7 +200,7 @@ export default function ProjectModal({ project, open, onClose }) {
                             </thead>
                             <tbody>
                               {extra.rows.map((row, ri) => (
-                                <tr key={ri} className="border-b border-black/[0.04] last:border-0">
+                                <tr key={ri} className="border-b border-black/[0.06] last:border-0">
                                   {row.map((cell, ci) => (
                                     <td
                                       key={ci}
@@ -242,7 +244,7 @@ export default function ProjectModal({ project, open, onClose }) {
                               key={item.label}
                               className="grid gap-1 md:grid-cols-[minmax(92px,max-content)_1fr] md:gap-4"
                             >
-                              <dt className="text-xs font-medium text-ink-400 md:whitespace-nowrap">
+                              <dt className="text-xs font-medium text-ink-500 md:whitespace-nowrap">
                                 {item.label}
                               </dt>
                               <dd className="text-[13px] leading-[1.6] text-ink-700">{item.value}</dd>
@@ -253,7 +255,7 @@ export default function ProjectModal({ project, open, onClose }) {
 
                       {/* 脚注 — 补一句定性结论 */}
                       {extra.note && (
-                        <p className="mt-3.5 border-t border-black/[0.05] pt-3 text-xs leading-[1.65] text-ink-500">
+                        <p className="mt-3.5 border-t border-black/[0.08] pt-3 text-xs leading-[1.65] text-ink-500">
                           {extra.note}
                         </p>
                       )}
@@ -272,16 +274,16 @@ export default function ProjectModal({ project, open, onClose }) {
                       <rect x="2.5" y="2.5" width="10" height="10" rx="2" />
                       <path d="M5 6.5h5M5 9h3" />
                     </svg>
-                    完整报告预览
+                    {ui.modal.report}
                   </h3>
                   <a
                     href={project.reportUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-black/[0.04] px-3 py-1 text-[11px] font-medium text-ink-600 transition-colors hover:bg-black/[0.08] hover:text-ink-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-ink-900/20"
-                    aria-label="在新标签页打开完整报告"
+                    className="inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-black/[0.04] px-3 py-1 text-[11px] font-medium text-ink-600 transition-colors hover:bg-black/[0.08] hover:text-ink-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20"
+                    aria-label={ui.modal.reportAria}
                   >
-                    {isExternalReport ? '访问公开报告' : '新标签页打开'}
+                    {isExternalReport ? ui.modal.openExternal : ui.modal.openNew}
                     <svg width="12" height="12" viewBox="0 0 15 15" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M6 3.5H3.5V11.5H11.5V9M9 3.5H11.5V6M11.5 3.5L6.5 8.5" />
                     </svg>
@@ -290,7 +292,7 @@ export default function ProjectModal({ project, open, onClose }) {
                 <iframe
                   src={project.reportUrl}
                   title={`${project.title} 完整报告`}
-                  className="h-[420px] w-full rounded-2xl border border-black/10 bg-black/[0.03] md:h-[500px]"
+                  className="h-[420px] w-full rounded-2xl border border-black/10 bg-ink-100 md:h-[500px]"
                 />
               </section>
             )}

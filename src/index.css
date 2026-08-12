@@ -6,10 +6,6 @@
    全局基础
    ========================================================================== */
 @layer base {
-  /* 页面正常文档流 — 允许 main 内容溢出时滚动
-     - html/#root 保持 100% 高度（避免铺满视口的 fixed 元素错位）
-     - body 正常文档流（去掉 position: fixed，启用滚动）
-     - overscroll-behavior: none 阻止滚动边界弹性（不传给 background） */
   html,
   #root {
     height: 100%;
@@ -21,15 +17,33 @@
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     overscroll-behavior: none;
-    color-scheme: light;
-    background-color: #eceef1;
+    color-scheme: light dark;
+    background-color: rgb(var(--bg));
+  }
+
+  /* Lenis 平滑滚动必需样式 — 避免与 scroll-behavior 冲突、保证高度正确 */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+  .lenis.lenis-smooth iframe {
+    pointer-events: none;
   }
 
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text',
       'Helvetica Neue', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
-    background-color: #eceef1;
-    color: #1d1d1f;
+    background-color: rgb(var(--bg));
+    color: rgb(var(--ink-800));
     line-height: 1.6;
     min-height: 100%;
     overscroll-behavior: none;
@@ -37,11 +51,11 @@
   }
 
   ::selection {
-    background-color: rgba(2, 132, 199, 0.45);
-    color: #ffffff;
+    background-color: rgb(var(--selection) / 0.22);
+    color: rgb(var(--ink-900));
   }
 
-  /* 苹果风滚动条 — 深色版 */
+  /* 苹果风滚动条 — 浅色版 */
   ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
@@ -50,12 +64,12 @@
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.16);
+    background: rgb(var(--scrollbar-thumb) / 0.20);
     border-radius: 10px;
-    border: 2px solid #eceef1;
+    border: 2px solid rgb(var(--bg));
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.28);
+    background: rgb(var(--scrollbar-thumb) / 0.32);
   }
 }
 
@@ -68,170 +82,125 @@
     @apply mx-auto w-full max-w-container px-8 md:px-12 lg:px-16 xl:px-20;
   }
 
-  /* ── 各页独立深色背景（高浓度、有纵深、低饱和、不同质化） ──
-     页面采用深暗基调（近黑）+ 每页一缕极低饱和色调光晕（蓝/紫/青/石墨/居中蓝），
-     靠「顶亮底暗」的纵深渐变制造深度，靠「暗背景 + 柔白卡片」的强对比让内容突出，
-     背景不抢戏、不刺眼，全站风格一致。 */
+  /* ── 全站统一 Apple 浅色背景：#f5f5f7，干净无渐变 ──
+     整站统一为浅灰底 + 深字，卡片纯白，极致克制。 */
   .page-bg {
     position: absolute;
     inset: 0;
     z-index: -10;
     overflow: hidden;
     pointer-events: none;
-  }
-  .page-bg::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    opacity: 0.05;
-    mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.18 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-  }
-  .page-bg--home {
-    background:
-      radial-gradient(130% 100% at 50% -15%, rgba(46, 74, 140, 0.22) 0%, transparent 50%),
-      radial-gradient(100% 90% at 90% 115%, rgba(20, 46, 72, 0.20) 0%, transparent 55%),
-      linear-gradient(180deg, #0b1018 0%, #060810 55%, #04060a 100%);
-  }
-  .page-bg--projects {
-    background:
-      radial-gradient(110% 85% at 8% -8%, rgba(96, 72, 150, 0.20) 0%, transparent 52%),
-      radial-gradient(100% 95% at 100% 110%, rgba(20, 40, 64, 0.18) 0%, transparent 55%),
-      linear-gradient(180deg, #0c0a14 0%, #07060d 55%, #040409 100%);
-  }
-  .page-bg--experience {
-    background:
-      radial-gradient(100% 80% at 50% -10%, rgba(20, 96, 96, 0.20) 0%, transparent 52%),
-      linear-gradient(180deg, #080d0d 0%, #050a0a 55%, #030706 100%);
-  }
-  .page-bg--strengths {
-    background:
-      radial-gradient(120% 90% at 50% 12%, rgba(64, 64, 88, 0.18) 0%, transparent 58%),
-      linear-gradient(180deg, #0b0b12 0%, #070710 55%, #040409 100%);
-  }
-  .page-bg--contact {
-    background:
-      radial-gradient(90% 90% at 50% 50%, rgba(40, 80, 140, 0.22) 0%, transparent 60%),
-      linear-gradient(180deg, #08101c 0%, #050a14 55%, #03060c 100%);
+    background: rgb(var(--bg));
   }
 
-  /* 苹果风标题 — 柔白底默认深墨 */
+  /* 苹果风标题 — 浅色底默认近黑，暗色底自动变浅 */
   .h-display {
-    @apply font-display font-semibold tracking-tightest text-ink-900;
+    @apply font-display font-semibold tracking-tightest;
+    color: rgb(var(--ink-800));
   }
 
-  /* 苹果风正文 — 柔白底默认深灰 */
+  /* 苹果风正文 — 浅色底默认中灰，暗色底自动变浅 */
   .text-body {
-    @apply text-ink-600 leading-[1.6];
+    @apply leading-[1.6];
+    color: rgb(var(--ink-600));
   }
 
-  /* 磨砂玻璃导航栏 — 浅色版（柔白底上可见） */
+  /* 磨砂玻璃导航栏 — 浅色版（暗色底自动转深色玻璃） */
   .glass-nav {
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgb(var(--c-white) / 0.72);
     backdrop-filter: saturate(180%) blur(20px);
     -webkit-backdrop-filter: saturate(180%) blur(20px);
-    border: 1px solid rgba(0, 0, 0, 0.08);
+    border: 1px solid rgb(var(--border) / 0.08);
   }
 
   .glass-nav-scrolled {
-    background-color: rgba(255, 255, 255, 0.82);
+    background-color: rgb(var(--c-white) / 0.84);
     backdrop-filter: saturate(180%) blur(24px);
     -webkit-backdrop-filter: saturate(180%) blur(24px);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    border-bottom: 1px solid rgb(var(--border) / 0.08);
   }
 
-  /* 苹果风按钮 — 主按钮：海蓝底白字，hover 时颜色翻转（白底蓝字） */
+  /* 苹果风按钮 — 主按钮：黑底白字，hover 轻微变灰 */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full bg-accent px-7 py-3.5
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5
            text-sm font-medium text-white transition-all duration-300
            hover:scale-[1.015] active:scale-[0.985]
-           focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/40;
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20;
+    background-color: rgb(var(--c-black));
     border: 1px solid transparent;
-    box-shadow: 0 1px 2px rgba(2, 132, 199, 0.35), 0 6px 16px rgba(2, 132, 199, 0.3);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 6px 16px rgba(0, 0, 0, 0.1);
   }
   .btn-primary:hover {
-    background-color: #ffffff;
-    color: #0284c7;
-    border-color: #0284c7;
-    box-shadow:
-      0 1px 2px rgba(2, 132, 199, 0.25),
-      0 6px 16px rgba(255, 255, 255, 0.15);
+    background-color: rgb(var(--c-black) / 0.85);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 6px 16px rgba(0, 0, 0, 0.08);
   }
 
-  /* 次按钮：默认透明蓝字，hover 时翻转蓝底白字 */
+  /* 次按钮：透明 + 深字浅边，hover 翻浅灰底 */
   .btn-secondary {
     @apply inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5
-           text-sm font-medium text-accent transition-all duration-300
+           text-sm font-medium text-ink-900 transition-all duration-300
            active:scale-[0.985]
-           focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/30;
-    border: 1px solid rgba(2, 132, 199, 0.5);
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20;
+    border: 1px solid rgb(var(--border) / 0.16);
     background-color: transparent;
   }
   .btn-secondary:hover {
-    background-color: #0284c7;
-    color: #ffffff;
-    border-color: #0284c7;
+    background-color: rgb(var(--border) / 0.05);
+    color: rgb(var(--ink-900));
+    border-color: rgb(var(--border) / 0.28);
   }
 
-  /* Hero 专用按钮 — 苹果极简风（深色底，hover 颜色翻转） */
+  /* Hero 专用按钮 — 苹果极简风（黑底白字） */
   .btn-hero-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full bg-white px-7 py-3.5
-           text-sm font-medium text-ink-900 transition-all duration-300
-           hover:bg-white hover:scale-[1.015] active:scale-[0.985]
-           focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60;
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5
+           text-sm font-medium text-white transition-all duration-300
+           hover:scale-[1.015] active:scale-[0.985]
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20;
+    background-color: rgb(var(--c-black));
     border: 1px solid transparent;
-    box-shadow:
-      0 1px 2px rgba(255, 255, 255, 0.15) inset,
-      0 8px 24px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 8px 24px rgba(0, 0, 0, 0.1);
   }
   .btn-hero-primary:hover {
-    background-color: #0284c7;
+    background-color: rgb(var(--c-black) / 0.85);
     color: #ffffff;
-    border-color: #ffffff;
+    border-color: rgb(var(--c-black) / 0.85);
   }
 
   .btn-hero-ghost {
     @apply inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5
-           text-sm font-medium text-white/85 transition-all duration-300
-           border border-white/15 backdrop-blur-md
-           hover:bg-white hover:border-white hover:text-ink-900
+           text-sm font-medium text-ink-900 transition-all duration-300
+           border border-black/10 bg-white
+           hover:bg-ink-100 hover:border-black/20 hover:text-black
            active:scale-[0.985]
-           focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40;
+           focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20;
   }
 
-  /* 苹果风卡片 — 极简浅底（柔白背景上的干净卡片） */
+  /* 苹果风卡片 — 纯白底 + 浅灰边 + 精致阴影（浅色背景） */
   .card-apple {
-    @apply rounded-3xl bg-white transition-all duration-300;
-    color: #1d1d1f;
-    border: 1px solid rgba(0, 0, 0, 0.06);
-    box-shadow:
-      0 1px 2px rgba(0, 0, 0, 0.03),
-      0 4px 16px rgba(0, 0, 0, 0.04);
+    @apply rounded-3xl transition-all duration-300;
+    color: rgb(var(--ink-800));
+    background: rgb(var(--surface));
+    border: 1px solid rgb(var(--border) / 0.08);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.04);
   }
   .card-apple:hover {
     transform: translateY(-2px);
-    border-color: rgba(0, 0, 0, 0.08);
-    box-shadow:
-      0 2px 4px rgba(0, 0, 0, 0.04),
-      0 8px 28px rgba(0, 0, 0, 0.06);
+    border-color: rgb(var(--border) / 0.12);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05), 0 8px 28px rgba(0, 0, 0, 0.07);
   }
 
-  /* ── 大号展示卡片 — 纯白底 + 极淡发丝边框 + 轻微浮起 ── */
+  /* ── 大号展示卡片 — 纯白底 + 浅发丝边框 + 轻微浮起 ── */
   .card-apple-xl {
     @apply relative overflow-hidden rounded-[28px] transition-all duration-300;
-    color: #111517;
-    background: #ffffff;
-    border: 1px solid rgba(0, 0, 0, 0.06);
-    box-shadow:
-      0 1px 3px rgba(0, 0, 0, 0.03),
-      0 8px 32px rgba(0, 0, 0, 0.05);
+    color: rgb(var(--ink-800));
+    background: rgb(var(--surface));
+    border: 1px solid rgb(var(--border) / 0.08);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 8px 32px rgba(0, 0, 0, 0.05);
   }
   .card-apple-xl:hover {
     transform: translateY(-3px);
-    border-color: rgba(0, 0, 0, 0.09);
-    box-shadow:
-      0 2px 5px rgba(0, 0, 0, 0.04),
-      0 14px 44px rgba(0, 0, 0, 0.07);
+    border-color: rgb(var(--border) / 0.12);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05), 0 14px 44px rgba(0, 0, 0, 0.08);
   }
 
   /* ── 卡片顶部色调标识线（由 JS 通过 --tone 变量着色） ── */
@@ -241,21 +210,21 @@
     left: 0;
     right: 0;
     height: 2px;
-    background: var(--tone-color, rgba(255, 255, 255, 0.3));
+    background: var(--tone-color, rgba(0, 0, 0, 0.2));
     opacity: 0.9;
   }
 
-  /* ── 数据指标药丸 — 极淡底 + 左侧色调标识条（柔白背景上的干净小卡） ── */
+  /* ── 数据指标药丸 — 浅灰底 + 左侧深标识条 ── */
   .metric-pill {
     @apply flex flex-col items-center gap-0.5 rounded-[14px] px-4 py-2.5 transition-all duration-300;
-    background: #fafafa;
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    border-left: 2.5px solid var(--tone-color, rgba(2, 132, 199, 0.7));
+    background: rgb(var(--surface));
+    border: 1px solid rgb(var(--border) / 0.08);
+    border-left: 2.5px solid var(--tone-color, rgb(var(--border) / 0.35));
     min-width: 72px;
   }
   .metric-pill:hover {
-    background: #f5f5f7;
-    border-color: rgba(0, 0, 0, 0.08);
+    background: rgb(var(--surface));
+    border-color: rgb(var(--border) / 0.12);
     transform: translateY(-1px);
   }
 
@@ -270,11 +239,11 @@
 
   /* 模块小标题 — Eyebrow */
   .eyebrow {
-    @apply text-xs font-medium uppercase tracking-[0.18em] text-ink-500;
+    @apply text-xs font-medium uppercase tracking-[0.18em];
+    color: rgb(var(--ink-500));
   }
 
-  /* 卡片悬浮上浮（替代 framer whileHover，由 GSAP 揭示结束后接管）
-     - 丝滑缓动，无廉价弹跳；translate3d 走合成层，不触发重排 */
+  /* 卡片悬浮上浮（替代 framer whileHover，由 GSAP 揭示结束后接管） */
   .glow-card-hover {
     transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
     will-change: transform;
@@ -338,19 +307,19 @@ body[data-loading] [class*="z-50"] {
   .aurora-bg {
     background: linear-gradient(
       120deg,
-      #f5f5f7 0%,
-      #e8f1fd 25%,
-      #f0e8fd 50%,
-      #e8f7fd 75%,
-      #f5f5f7 100%
+      #1a1a22 0%,
+      #10243a 25%,
+      #1a2238 50%,
+      #102a3a 75%,
+      #1a1a22 100%
     );
     background-size: 300% 300%;
     animation: gradient-shift 18s ease infinite;
   }
 
-  /* 弱化文字渐变（用于深色底部 CTA） */
+  /* 弱化文字渐变（用于浅色底部 CTA，暗色底自动变浅） */
   .text-gradient-light {
-    background: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.7) 100%);
+    background: linear-gradient(180deg, rgb(var(--ink-900)) 0%, rgb(var(--ink-900) / 0.55) 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -389,6 +358,37 @@ body[data-loading] [class*="z-50"] {
   }
 }
 
+/* 首页 KIMI 字标 — 进场后的极轻微呼吸浮动，增强记忆点（克制、不破坏 GSAP 开场） */
+.hero-kimi-float {
+  animation: hero-kimi-float 8s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes hero-kimi-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+/* 首页滚动叙事钩子 — 下箭头轻微弹跳 */
+.scroll-bounce {
+  animation: scroll-bounce 1.8s ease-in-out infinite;
+  color: rgb(var(--ink-500));
+}
+@keyframes scroll-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(5px);
+  }
+}
+
 /* 尊重减少动效偏好 */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -401,4 +401,53 @@ body[data-loading] [class*="z-50"] {
     opacity: 1;
     transform: none;
   }
+}
+
+/* ==========================================================================
+   主题变量 — 亮 / 暗 双套
+   ink-N 数值越大越“深”；暗模式下整体反转（浅字 + 深表面）
+   散落的 bg-black / text-white / bg-white 等通过 black/white 变量自动适配
+   ========================================================================== */
+:root {
+  --ink-50: 250 250 250;
+  --ink-100: 245 245 247;
+  --ink-200: 232 232 237;
+  --ink-300: 210 210 215;
+  --ink-400: 161 161 166;
+  --ink-500: 134 134 139;
+  --ink-600: 110 110 115;
+  --ink-700: 66 66 69;
+  --ink-800: 29 29 31;
+  --ink-900: 0 0 0;
+
+  --c-black: 0 0 0;
+  --c-white: 255 255 255;
+
+  --bg: 245 245 247;
+  --surface: 255 255 255;
+  --border: 0 0 0;
+  --selection: 0 113 227;
+  --scrollbar-thumb: 0 0 0;
+}
+
+.dark {
+  --ink-50: 10 10 15;
+  --ink-100: 28 28 30;
+  --ink-200: 44 44 46;
+  --ink-300: 58 58 60;
+  --ink-400: 99 99 102;
+  --ink-500: 142 142 147;
+  --ink-600: 174 174 178;
+  --ink-700: 209 209 214;
+  --ink-800: 229 229 234;
+  --ink-900: 245 245 247;
+
+  --c-black: 245 245 247;
+  --c-white: 10 10 15;
+
+  --bg: 10 10 15;
+  --surface: 28 28 30;
+  --border: 255 255 255;
+  --selection: 10 132 255;
+  --scrollbar-thumb: 255 255 255;
 }

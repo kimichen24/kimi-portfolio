@@ -3,6 +3,8 @@ node_modules/
 
 # Build output (rebuilt by CI / locally)
 dist/
+.build-tmp/
+.build-verify/
 
 # Sandbox sibling project (separate repo)
 foldcraft/

@@ -1,13 +1,21 @@
-import { useEffect } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import Experience from './components/Experience'
-import Projects from './components/Projects'
-import Strengths from './components/Strengths'
 import SpaceTravel from './components/SpaceTravel'
-import Contact from './components/Contact'
 import FloatingNav from './components/FloatingNav'
+import MobileBottomNav from './components/MobileBottomNav'
 import Footer from './components/Footer'
+import PageFrame from './components/PageFrame'
 import { PageProvider, usePage } from './context/PageContext'
+import { LanguageProvider } from './context/LanguageContext'
+import { ThemeProvider } from './context/ThemeContext'
+import { initSmoothScroll, destroySmoothScroll, scrollToTop } from './lib/smoothScroll'
+
+// 路由级代码分割：首页作为落地页保持即时渲染，其余 4 页懒加载，
+// 缩窄首屏关键 JS 体积，非首屏页面随导航按需拉取。
+const Experience = lazy(() => import('./components/Experience'))
+const Projects = lazy(() => import('./components/Projects'))
+const Strengths = lazy(() => import('./components/Strengths'))
+const Contact = lazy(() => import('./components/Contact'))
 
 // 页面映射
 const PAGE_MAP = {
@@ -26,24 +34,35 @@ function PageRenderer() {
   const { page } = usePage()
   const PageComp = PAGE_MAP[page] || SpaceTravel
 
-  // 切换页面时 scroll 顶部（不依赖 framer-motion 的位置）
+  // 切换页面时 scroll 顶部（用 Lenis 实例归位，避免与平滑滚动打架）
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+    scrollToTop(true)
   }, [page])
 
   return (
     <AnimatePresence mode="wait">
       <motion.div
         key={page}
-        initial={{ opacity: 0, scale: 1.02 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.98 }}
-        transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+        initial={{ opacity: 0, y: 10, filter: 'blur(4px)' }}
+        animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+        exit={{ opacity: 0, y: -8, filter: 'blur(3px)' }}
+        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
         className="w-full"
       >
-        <PageComp />
+        <Suspense fallback={<PageFallback />}>
+          <PageComp />
+        </Suspense>
       </motion.div>
     </AnimatePresence>
+  )
+}
+
+// 懒加载占位 — 极简旋转指示，避免布局跳动
+function PageFallback() {
+  return (
+    <div className="flex min-h-screen items-center justify-center">
+      <span className="h-6 w-6 animate-spin rounded-full border-2 border-black/10 border-t-ink-900" />
+    </div>
   )
 }
 
@@ -61,19 +80,35 @@ function PillNavGate() {
  * App — 单页作品集（单页切换模式 + 允许页内滚动）
  */
 export default function App() {
+  // 全站平滑滚动打底（苹果丝滑感核心杠杆）；减弱动效时模块内部自动跳过
+  useEffect(() => {
+    initSmoothScroll()
+    return () => destroySmoothScroll()
+  }, [])
+
   return (
-    <PageProvider>
-      {/* 单页切换区域 — 正常文档流，页面内容可以滚动
-          各页背景由页面组件内的 .page-bg 提供（暗调、按页不同质化） */}
-      <main className="relative z-0 min-h-screen">
-        <PageRenderer />
-      </main>
+    <ThemeProvider>
+      <LanguageProvider>
+        <PageProvider>
+        {/* 单页切换区域 — 正常文档流，页面内容可以滚动
+            各页背景由页面组件内的 .page-bg 提供（暗调、按页不同质化） */}
+        <main className="relative z-0 min-h-screen pb-24 md:pb-0">
+          <PageRenderer />
+        </main>
 
-      {/* 药丸导航 — 全站显示（fixed，滚动时跟随），保留毛玻璃 */}
-      <PillNavGate />
+        {/* 药丸导航 — 全站显示（fixed，滚动时跟随），保留毛玻璃 */}
+        <PillNavGate />
 
-      {/* 底部 Footer — 跟随内容流 */}
-      <Footer />
-    </PageProvider>
+        {/* 移动端底部标签栏 — 仅 md 以下显示，补齐移动端导航缺口 */}
+        <MobileBottomNav />
+
+        {/* 全站编辑式签名层 — 内框 / 套准标记 / 滚动进度 / 页码索引 */}
+        <PageFrame />
+
+        {/* 底部 Footer — 跟随内容流 */}
+        <Footer />
+        </PageProvider>
+      </LanguageProvider>
+    </ThemeProvider>
   )
 }
