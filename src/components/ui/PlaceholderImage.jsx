@@ -9,35 +9,17 @@
  *
  * 后续替换：把 <PlaceholderImage /> 替换为 <img src="/assets/your.png" /> 即可
  */
-const palette = {
-  warm: {
-    from: 'rgba(255,255,255,0.13)',
-    via: 'rgba(255,255,255,0.08)',
-    to: 'rgba(255,255,255,0.10)',
-    accent: 'rgba(255,180,140,0.18)',
-    accent2: 'rgba(255,140,100,0.10)',
-    stroke: 'rgba(255,180,160,0.65)',
-    iconGlow: 'rgba(255,140,120,0.25)',
-  },
-  cool: {
-    from: 'rgba(255,255,255,0.13)',
-    via: 'rgba(255,255,255,0.08)',
-    to: 'rgba(255,255,255,0.10)',
-    accent: 'rgba(120,220,180,0.16)',
-    accent2: 'rgba(80,200,150,0.09)',
-    stroke: 'rgba(120,220,180,0.60)',
-    iconGlow: 'rgba(80,200,150,0.22)',
-  },
-  deep: {
-    from: 'rgba(255,255,255,0.13)',
-    via: 'rgba(255,255,255,0.08)',
-    to: 'rgba(255,255,255,0.10)',
-    accent: 'rgba(147,154,255,0.16)',
-    accent2: 'rgba(130,145,255,0.09)',
-    stroke: 'rgba(160,170,255,0.58)',
-    iconGlow: 'rgba(130,145,255,0.20)',
-  },
+/* 纯单色玻璃调色板 —— 浅色 Apple 风：极淡黑灰层次 */
+const neutral = {
+  from: 'rgba(0,0,0,0.06)',
+  via: 'rgba(0,0,0,0.03)',
+  to: 'rgba(0,0,0,0.05)',
+  accent: 'rgba(0,0,0,0.08)',
+  accent2: 'rgba(0,0,0,0.04)',
+  stroke: 'rgba(0,0,0,0.45)',
+  iconGlow: 'rgba(0,0,0,0.08)',
 }
+const palette = { warm: neutral, cool: neutral, deep: neutral }
 
 function Glyph({ tone }) {
   const c = palette[tone]?.stroke ?? palette.warm.stroke
@@ -146,7 +128,7 @@ export default function PlaceholderImage({ tone = 'warm', label = '项目截图'
       {/* 顶部高光线 — 苹果式玻璃反光感 */}
       <div
         className="absolute inset-x-0 top-0 h-px"
-        style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent)' }}
+        style={{ background: 'linear-gradient(90deg, transparent, rgba(0,0,0,0.06), transparent)' }}
       />
 
       {/* 图标 */}
@@ -164,7 +146,7 @@ export default function PlaceholderImage({ tone = 'warm', label = '项目截图'
       <div
         className="absolute bottom-0 left-0 right-0 h-16"
         style={{
-          background: 'linear-gradient(to top, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.08) 50%, transparent 100%)',
+          background: 'linear-gradient(to top, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.03) 50%, transparent 100%)',
         }}
       />
     </div>
@@ -184,17 +166,17 @@ export function AvatarPlaceholder({ name = 'K', size = 168 }) {
         height: size,
         padding: 2,
         background:
-          'linear-gradient(135deg, rgba(255,107,107,0.6), rgba(129,140,248,0.5), rgba(52,211,153,0.5))',
+          'linear-gradient(135deg, rgba(0,0,0,0.12), rgba(0,0,0,0.08), rgba(0,0,0,0.12))',
       }}
     >
       <div
         className="grid h-full w-full place-items-center rounded-full"
         style={{
-          background: 'linear-gradient(135deg, #18181c 0%, #0b0b0d 100%)',
+          background: 'linear-gradient(135deg, #ffffff 0%, #f5f5f7 100%)',
         }}
       >
         <span
-          className="font-semibold text-white/90"
+          className="font-semibold text-ink-900"
           style={{ fontFamily: "'Instrument Serif', serif", fontSize: size * 0.42, lineHeight: 1 }}
         >
           {name}

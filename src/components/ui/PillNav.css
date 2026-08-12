@@ -301,81 +301,90 @@
 }
 
 /* ==========================================================================
-   移动端（竖屏）导航 — 深色玻璃质感
+   移动端（竖屏）导航 — 浅色玻璃质感
    ========================================================================== */
 @media (max-width: 768px) {
-  /* 汉堡按钮 → 深色玻璃圆 */
+  /* 汉堡按钮 → 浅色玻璃圆 */
   .mobile-menu-button {
-    background: rgba(18, 18, 20, 0.55);
+    background: rgba(255, 255, 255, 0.78);
     backdrop-filter: blur(16px) saturate(180%);
     -webkit-backdrop-filter: blur(16px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
   }
   .hamburger-line {
-    background: rgba(255, 255, 255, 0.92);
+    background: rgba(0, 0, 0, 0.85);
   }
 
-  /* 弹出菜单面板 → 深色玻璃 */
+  /* 弹出菜单面板 → 浅色玻璃 */
   .mobile-menu-popover {
-    background: rgba(18, 18, 20, 0.72) !important;
+    background: rgba(255, 255, 255, 0.84) !important;
     backdrop-filter: blur(28px) saturate(180%) !important;
     -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12);
   }
 
-  /* 菜单项 → 深色玻璃药丸 */
+  /* 菜单项 → 浅色玻璃药丸 */
   .mobile-menu-popover .mobile-menu-link {
-    background-color: rgba(255, 255, 255, 0.06) !important;
-    color: rgba(255, 255, 255, 0.92) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: rgba(0, 0, 0, 0.04) !important;
+    color: rgba(0, 0, 0, 0.78) !important;
+    border: 1px solid rgba(0, 0, 0, 0.06);
   }
   .mobile-menu-popover .mobile-menu-link:hover {
-    background-color: rgba(255, 255, 255, 0.16) !important;
-    color: #ffffff !important;
+    background-color: rgba(0, 0, 0, 0.1) !important;
+    color: #000000 !important;
   }
   .mobile-menu-popover .mobile-menu-link.is-active {
-    background-color: rgba(255, 255, 255, 0.95) !important;
-    color: #0a0a0a !important;
-    border-color: rgba(255, 255, 255, 0.95) !important;
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    border-color: #000000 !important;
   }
 }
 
 /* ==========================================================================
-   变体：磨砂玻璃（frosted）
+   变体：磨砂玻璃（frosted）— 浅色版，与 Apple 浅色主题统一
    ========================================================================== */
-/* 修正：原选择器 `.pill-nav--frosted.pill-nav-items` 要求同一元素同时持有两
-   个类，但实际 frosted 类在 <nav> 上、pill-nav-items 在子 div 上，故从不命中，
-   浅色磨砂样式从未生效，导航栏回退到 --base 近黑背景。改为后代选择器后生效。 */
 .pill-nav.pill-nav--frosted .pill-nav-items {
-  background: rgba(255, 255, 255, 0.82);
+  background: rgba(255, 255, 255, 0.72);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   box-shadow:
-    0 10px 34px rgba(0, 0, 0, 0.16),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    0 10px 34px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
 .pill-nav.pill-nav--frosted .pill {
   background: transparent;
-  color: rgba(0, 0, 0, 0.72);
+  color: rgba(0, 0, 0, 0.58);
   border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .pill-nav.pill-nav--frosted .pill.is-active {
-  background: rgba(10, 10, 10, 0.92);
+  background: transparent;
   color: #ffffff;
-  border-color: rgba(10, 10, 10, 0.92);
+  border-color: #000000;
+}
+
+/* 滑动高亮块 — 当前页药丸背景，随切换在药丸间滑动（layoutId 共享元素） */
+.pill-active-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: 9999px;
+  pointer-events: none;
+}
+.pill-nav.pill-nav--frosted .pill-active-bg {
+  background: #000000;
 }
 
 .pill-nav.pill-nav--frosted .pill .hover-circle {
-  background: rgba(10, 10, 10, 0.92);
+  background: #000000;
 }
 
 .pill-nav.pill-nav--frosted .pill .pill-label {
-  color: rgba(0, 0, 0, 0.72);
+  color: rgba(0, 0, 0, 0.58);
 }
 
 .pill-nav.pill-nav--frosted .pill .pill-label-hover {
@@ -388,5 +397,5 @@
 }
 
 .pill-nav.pill-nav--frosted .pill.is-active::after {
-  background: rgba(10, 10, 10, 0.92);
+  background: #000000;
 }

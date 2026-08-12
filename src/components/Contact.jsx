@@ -1,9 +1,10 @@
 import { useRef, useState } from 'react'
 import { useGSAP } from '@gsap/react'
-import { profile } from '../data/content'
 import BackButton from './BackButton'
+import MagneticButton from './ui/MagneticButton'
 import { primeReveals, buildScrollReveals, prefersReduced } from '../lib/animations'
 import PageBackground from './ui/PageBackground'
+import { useContent, useUI } from '../data'
 
 /* 社交图标（与「关于我」页一致） */
 const SocialGlyph = ({ platform }) => {
@@ -36,6 +37,8 @@ const SocialGlyph = ({ platform }) => {
  * 底部联系模块 — 整屏柔白底，大字号极淡水印 + 邮箱复制 + 社交图标组
  */
 export default function Contact() {
+  const { profile } = useContent()
+  const ui = useUI()
   const scope = useRef(null)
   const [copied, setCopied] = useState(false)
   const [copiedSocial, setCopiedSocial] = useState(null)
@@ -83,11 +86,11 @@ export default function Contact() {
     <section
       id="contact"
       ref={scope}
-      className="relative flex min-h-screen w-full overflow-hidden flex-col items-center justify-center px-6 pt-28 pb-20 text-center text-ink-900 md:pt-36 md:pb-24"
+      className="relative flex min-h-screen w-full overflow-hidden flex-col items-start justify-center px-6 pt-32 pb-20 text-left text-ink-900 md:pt-36 md:pb-24"
     >
       <BackButton />
 
-      {/* 联系页背景 — 全站统一的柔白底 + 纯黑弯曲带 */}
+      {/* 联系页背景 — 全站统一的纯黑背景 */}
       <PageBackground />
 
       {/* 大字号极淡水印 — 强化「联系」语义，克制不抢戏 */}
@@ -95,38 +98,39 @@ export default function Contact() {
         aria-hidden
         className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center"
       >
-        <span className="select-none whitespace-nowrap font-display text-[15vw] font-bold leading-none tracking-tightest text-ink-900/[0.025]">
-          {"LET'S TALK"}
+        <span className="select-none whitespace-nowrap font-display text-[15vw] font-bold leading-none tracking-tightest text-ink-900/[0.05]">
+          {ui.contact.letsTalk}
         </span>
       </div>
 
       <div
         data-reveal-block
-        className="relative z-10 mx-auto flex max-w-3xl flex-col items-center"
+        className="relative z-10 flex max-w-3xl flex-col items-start"
       >
-        <span className="eyebrow mb-4 inline-block">Contact · 联系</span>
+        <span className="eyebrow mb-4 inline-block">{ui.contact.eyebrow}</span>
 
         <h2
           data-reveal="title"
-          className="h-display text-4xl font-bold tracking-tight text-ink-700 md:text-5xl lg:text-6xl"
+          className="h-display text-4xl font-bold tracking-tight text-ink-900 md:text-5xl lg:text-6xl"
         >
-          联系我
+          {ui.contact.title}
         </h2>
 
         <p
           data-reveal-item
-          className="mt-4 max-w-lg text-center text-[14px] leading-relaxed text-ink-500 md:text-base"
+          className="mt-4 max-w-lg text-left text-[14px] leading-relaxed text-ink-500 md:text-base"
         >
-          有项目想聊、或者只是想打个招呼，都欢迎发邮件。
+          {ui.contact.desc}
         </p>
 
         {/* 邮箱 — 大号显示，点击复制（同时唤起邮件客户端） */}
-        <a
-          data-reveal-item
+        <div data-reveal-item>
+        <MagneticButton
+          as="a"
           href={`mailto:${profile.email}`}
           onClick={() => copyText(profile.email, 'email')}
           aria-label={`复制邮箱 ${profile.email}`}
-          className="group relative mt-14 inline-flex items-center gap-3 rounded-full border border-black/[0.08] bg-white/80 px-8 py-4 shadow-sm backdrop-blur-sm transition-all duration-300 hover:border-black/20 hover:bg-white"
+          className="group relative mt-14 inline-flex items-center gap-3 rounded-full border border-black/[0.10] bg-black/[0.04] px-8 py-4 shadow-sm backdrop-blur-sm transition-all duration-300 hover:border-black/20 hover:bg-black/[0.08]"
         >
           <svg
             width="22"
@@ -148,13 +152,14 @@ export default function Contact() {
 
           {/* 「已复制」微提示 */}
           <span
-            className={`pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 translate-y-1 rounded-full bg-ink-900 px-3 py-1 text-[11px] font-medium text-white transition-all duration-300 ${
+            className={`pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 translate-y-1 rounded-full bg-black/[0.08] px-3 py-1 text-[11px] font-medium text-ink-900 transition-all duration-300 ${
               copied ? 'opacity-100 translate-y-0' : 'opacity-0'
             }`}
           >
-            已复制
+            {ui.contact.copied}
           </span>
-        </a>
+        </MagneticButton>
+        </div>
 
         {/* 社交图标组 — 点击复制对应账号 */}
         <div
@@ -167,17 +172,17 @@ export default function Contact() {
               type="button"
               onClick={() => copyText(s.handle, s.platform)}
               aria-label={`复制${s.platform}账号 ${s.handle}`}
-              className="group/s relative inline-flex h-11 w-11 items-center justify-center rounded-full border border-black/[0.08] bg-white/60 text-ink-500 transition-all duration-300 hover:border-black/20 hover:bg-white hover:text-ink-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-ink-900/20"
+              className="group/s relative inline-flex h-11 w-11 items-center justify-center rounded-full border border-black/[0.10] bg-black/[0.04] text-ink-500 transition-all duration-300 hover:border-black/20 hover:bg-black/[0.08] hover:text-ink-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20"
             >
               <SocialGlyph platform={s.icon} />
 
               {/* 「已复制」微提示 */}
               <span
-                className={`pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 -translate-y-1 whitespace-nowrap rounded-full bg-ink-900 px-2.5 py-1 text-[10px] font-medium text-white transition-all duration-300 ${
+                className={`pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 -translate-y-1 whitespace-nowrap rounded-full bg-black/[0.08] px-2.5 py-1 text-[10px] font-medium text-ink-900 transition-all duration-300 ${
                   copiedSocial === s.platform ? 'translate-y-0 opacity-100' : 'opacity-0'
                 }`}
               >
-                已复制
+                {ui.contact.copied}
               </span>
             </button>
           ))}
@@ -186,13 +191,13 @@ export default function Contact() {
         {/* 元信息 — 去掉 Status，只保留身份与方向 */}
         <div
           data-reveal-item
-          className="mt-16 flex items-center gap-3 text-center"
+          className="mt-16 flex items-center gap-3 text-left"
         >
-          <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink-400">
+          <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink-500">
             {profile.name}
           </span>
-          <span className="h-3 w-px bg-ink-300" />
-          <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink-400">
+          <span className="h-3 w-px bg-black/20" />
+          <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink-500">
             {profile.role}
           </span>
         </div>

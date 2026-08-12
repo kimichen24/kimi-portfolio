@@ -13,9 +13,9 @@ export default function Footer() {
       {/* 底部渐变地面：把 footer 轻轻「坐」进页面背景里 */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink-900/[0.04] via-ink-900/[0.01] to-transparent"
+        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/[0.04] via-black/[0.02] to-transparent"
       />
-      <div className="relative px-6 pb-5 pt-6 text-center text-[10px] font-medium tracking-[0.04em] text-ink-500 md:text-[11px]">
+      <div className="relative px-6 pb-20 pt-6 text-center text-[10px] font-medium tracking-[0.04em] text-ink-500 md:pb-5 md:text-[11px]">
         © {year} Kimi Chen · Designed & Built with passion
       </div>
     </footer>

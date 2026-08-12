@@ -66,6 +66,18 @@ export const Icon = {
   ),
 
   /**
+   * 首页 — 房子 (house)
+   * 药丸导航「首页」项，移动端汉堡菜单可由此返回首页
+   */
+  Home: (props) => (
+    <svg {...baseProps} {...props}>
+      <path d="M3 10.5 12 4l9 6.5" />
+      <path d="M5 9.5V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.5" />
+      <path d="M9.5 21v-6h5v6" />
+    </svg>
+  ),
+
+  /**
    * 火花 / AI — 四角发光 (sparkles)
    * Strengths 卡片用
    */

@@ -1,9 +1,9 @@
 import { useRef, useState } from 'react'
 import { useGSAP } from '@gsap/react'
-import { profile, strengths, softwareTools } from '../data/content'
 import BackButton from './BackButton'
 import PageBackground from './ui/PageBackground'
 import { primeReveals, buildStrengthsReveals, prefersReduced } from '../lib/animations'
+import { useContent, useUI } from '../data'
 
 /* ── 软件工具图标（内联 SVG） ── */
 const ToolIcons = {
@@ -75,6 +75,35 @@ const SkillIcon = ({ type, color }) => {
   }
 }
 
+/* ── 单张技能卡（两个分组复用） ── */
+function SkillCard({ skill }) {
+  return (
+    <div
+      data-reveal-item
+      className="card-apple group flex gap-4 p-7"
+    >
+      <div
+        className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-105"
+        style={{ backgroundColor: skill.color + '14' }}
+      >
+        <SkillIcon type={skill.icon} color={skill.color} />
+      </div>
+
+      <div className="min-w-0 flex-1">
+        <h3 className="text-[16px] font-semibold tracking-tight text-ink-900 sm:text-[17px]">
+          {skill.title}
+        </h3>
+        <p className="mt-1 text-[10px] font-medium uppercase tracking-[0.18em] text-ink-500">
+          {skill.titleEn}
+        </p>
+        <p className="mt-2.5 text-[13px] leading-[1.65] text-ink-600">
+          {skill.desc}
+        </p>
+      </div>
+    </div>
+  )
+}
+
 /* ── 社交图标 ── */
 const SocialIcon = ({ platform }) => {
   const p = { width: 20, height: 20, viewBox: '0 0 24 24', fill: 'currentColor' }
@@ -117,6 +146,7 @@ function SectionHeading({ children, eyebrow, className = '' }) {
 
 /* ── 可翻转的联系卡片：点击绕 Y 轴丝滑翻转 + 轻微放大「弹出」，露出二维码 ── */
 function FlipContactCard({ platform, platformLabel, handle, qr, accent }) {
+  const ui = useUI()
   const [flipped, setFlipped] = useState(false)
   return (
     <div data-reveal-item className="[perspective:1400px]">
@@ -124,36 +154,36 @@ function FlipContactCard({ platform, platformLabel, handle, qr, accent }) {
         type="button"
         onClick={() => setFlipped((f) => !f)}
         aria-pressed={flipped}
-        aria-label={flipped ? `收起 ${platformLabel} 二维码` : `翻转查看 ${platformLabel} 二维码`}
+        aria-label={flipped ? `${ui.strengths.flipBack} ${platformLabel}` : `${ui.strengths.flipFront} ${platformLabel}`}
         className="flip-inner group relative block h-[172px] w-full cursor-pointer rounded-[14px] outline-none focus-visible:ring-2 focus-visible:ring-ink-900/20"
         style={{
           transform: flipped ? 'rotateY(180deg) scale(1.04)' : 'rotateY(0deg) scale(1)',
         }}
       >
         {/* 正面：图标 + 账号 */}
-        <span className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-[14px] border border-black/[0.06] bg-white p-7 text-center [backface-visibility:hidden] [-webkit-backface-visibility:hidden] transition-colors duration-300">
+        <span className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-[14px] border border-black/[0.10] bg-black/[0.04] p-7 text-center [backface-visibility:hidden] [-webkit-backface-visibility:hidden] transition-colors duration-300">
           <span
             className="flex h-12 w-12 items-center justify-center rounded-xl"
             style={{ color: accent, backgroundColor: accent + '14' }}
           >
             <SocialIcon platform={platform} />
           </span>
-          <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-ink-400">
+          <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-ink-500">
             {platformLabel}
           </span>
           <span className="text-[14px] font-medium text-ink-700">{handle}</span>
-          <span className="mt-1 text-[11px] text-ink-400">点击查看二维码</span>
+          <span className="mt-1 text-[11px] text-ink-500">{ui.strengths.flipFront}</span>
         </span>
 
         {/* 背面：二维码 */}
-        <span className="absolute inset-0 flex flex-col items-center justify-center gap-2.5 rounded-[14px] border border-black/[0.06] bg-white p-5 text-center [backface-visibility:hidden] [-webkit-backface-visibility:hidden] [transform:rotateY(180deg)] [-webkit-transform:rotateY(180deg)]">
+        <span className="absolute inset-0 flex flex-col items-center justify-center gap-2.5 rounded-[14px] border border-black/[0.10] bg-black/[0.04] p-5 text-center [backface-visibility:hidden] [-webkit-backface-visibility:hidden] [transform:rotateY(180deg)] [-webkit-transform:rotateY(180deg)]">
           <img
             src={qr}
             alt={`${platformLabel}二维码`}
             decoding="async"
             className="h-[92px] w-[92px] rounded-lg object-contain ring-1 ring-black/10"
           />
-          <span className="text-[12px] text-ink-500">扫码添加 {platformLabel}</span>
+          <span className="text-[12px] text-ink-500">{ui.strengths.flipBack} {platformLabel}</span>
         </span>
       </button>
     </div>
@@ -166,6 +196,8 @@ function FlipContactCard({ platform, platformLabel, handle, qr, accent }) {
    ═══════════════════════════════════════════════════════════════ */
 
 export default function Strengths() {
+  const { profile, strengths, softwareTools } = useContent()
+  const ui = useUI()
   const scope = useRef(null)
 
   useGSAP(
@@ -181,19 +213,19 @@ export default function Strengths() {
     <section
       id="strengths"
       ref={scope}
-      className="relative w-full pb-20 pt-28 md:pb-24 md:pt-36"
+      className="relative w-full pb-20 pt-32 md:pb-24 md:pt-36"
     >
       <BackButton />
 
-      {/* 关于我页背景 — 全站统一的柔白底 + 纯黑弯曲带 */}
+      {/* 关于我页背景 — 全站统一的纯黑背景 */}
       <PageBackground />
 
       {/* 页级标签 — 轻量，不做居中大标题仪式 */}
       <div className="container-page mb-8 md:mb-12">
         <div className="flex items-center gap-3">
-          <span className="h-1.5 w-1.5 rounded-full bg-ink-400" />
-          <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink-400">
-            About
+          <span className="h-1.5 w-1.5 rounded-full bg-ink-500" />
+          <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink-500">
+            {ui.strengths.about}
           </span>
           <span className="h-px flex-1 bg-ink-300" />
         </div>
@@ -204,35 +236,31 @@ export default function Strengths() {
         <div data-reveal-item data-st="profile">
           <div className="card-apple overflow-hidden rounded-[26px]">
             <div className="flex flex-col gap-8 sm:flex-row sm:gap-10 lg:gap-14 p-8 sm:p-10 lg:p-14">
-              {/* ── 左侧头像（缩小） ── */}
+              {/* ── 左侧头像（KIMI 四字英文 wordmark 取代 3D 头像） ── */}
               <div className="relative mx-auto shrink-0 sm:mx-0">
-                <div className="group relative h-[200px] w-[200px] overflow-hidden rounded-[22px] sm:h-[240px] sm:w-[240px]">
-                  <img
-                    src="images/Create_a_cute_3D_Pixar_style_c_2026-08-01T09-55-54.webp"
-                    alt={profile.name}
-                    decoding="async"
-                    className="h-full w-full object-cover transition-transform duration-700 ease-out"
-                  />
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
-                  <div className="pointer-events-none absolute inset-0 rounded-[22px] ring-1 ring-black/10 transition-all duration-500 group-hover:ring-black/20" />
+                <div className="group relative flex h-[200px] w-[200px] items-center justify-center overflow-hidden rounded-[22px] bg-ink-100 sm:h-[240px] sm:w-[240px]">
+                  <span className="font-display text-[64px] font-semibold leading-none tracking-tight text-ink-900 drop-shadow-[0_2px_24px_rgba(0,0,0,0.08)] sm:text-[78px]">
+                    KIMI
+                  </span>
+                  <div className="pointer-events-none absolute inset-0 rounded-[22px] ring-1 ring-black/10 transition-all duration-500 group-hover:ring-black/25" />
                 </div>
 
                 {/* 状态标签 + GitHub — 头像下方 */}
                 <div className="mt-4 flex flex-col items-center gap-2.5 sm:items-start">
                   <div className="flex items-center gap-2">
                     <span className="relative inline-flex h-2 w-2">
-                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                      <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-black/20 opacity-75" />
+                      <span className="relative inline-flex h-2 w-2 rounded-full bg-black/50" />
                     </span>
-                    <span className="text-xs font-medium tracking-wide text-ink-600">Open to opportunities</span>
+                    <span className="text-xs font-medium tracking-wide text-ink-600">{ui.strengths.openTo}</span>
                   </div>
 
                   <a
                     href="https://github.com/kimichen24"
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label="GitHub：@kimichen24（在新标签页打开）"
-                    className="group/github inline-flex items-center gap-2 rounded-full border border-black/10 bg-black/[0.03] px-3 py-1.5 text-xs font-medium text-ink-700 transition-all duration-300 hover:border-black/20 hover:bg-black/[0.06] hover:text-ink-900"
+                    aria-label={ui.strengths.githubAria}
+                    className="group/github inline-flex items-center gap-2 rounded-full border border-black/10 bg-black/[0.04] px-3 py-1.5 text-xs font-medium text-ink-700 transition-all duration-300 hover:border-black/20 hover:bg-black/[0.06] hover:text-ink-900"
                   >
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                       <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
@@ -257,6 +285,11 @@ export default function Strengths() {
                   {profile.englishName}
                 </p>
 
+                {/* 一句话定位 — 比 bioLine 更抓眼 */}
+                <p className="mt-2 text-[13px] font-medium tracking-wide text-ink-600 sm:text-[14px]">
+                  {ui.strengths.positioning}
+                </p>
+
                 {/* 分隔线 */}
                 <div className="mt-5 h-px w-full bg-gradient-to-r from-transparent via-black/10 to-transparent" />
 
@@ -264,7 +297,7 @@ export default function Strengths() {
                 <div className="mt-5 grid grid-cols-1 gap-y-3 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-3">
                   {/* 学校 */}
                   <div className="flex items-center gap-2">
-                    <svg className="h-[16px] w-[16px] shrink-0 text-sky-400/70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <svg className="h-[16px] w-[16px] shrink-0 text-ink-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
                       <path d="M6 12v5c3 3 9 3 12 0v-5" />
                     </svg>
@@ -273,7 +306,7 @@ export default function Strengths() {
 
                   {/* 所在地 */}
                   <div className="flex items-center gap-2">
-                    <svg className="h-[16px] w-[16px] shrink-0 text-sky-400/70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <svg className="h-[16px] w-[16px] shrink-0 text-ink-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                       <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                       <circle cx="12" cy="10" r="3" />
                     </svg>
@@ -283,10 +316,10 @@ export default function Strengths() {
                   {/* 荣誉 — 跨两列 */}
                   <div className="col-span-1 sm:col-span-2 flex flex-wrap items-center gap-2 mt-1">
                     {profile.honors.map((h) => (
-                      <span
-                        key={h}
-                        className="inline-flex items-center gap-1.5 rounded-full border border-sky-500/30 bg-sky-500/10 px-3 py-1 text-xs font-medium text-sky-700"
-                      >
+                        <span
+                          key={h}
+                          className="inline-flex items-center gap-1.5 rounded-full border border-black/15 bg-black/[0.04] px-3 py-1 text-xs font-medium text-ink-700"
+                        >
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                           <circle cx="12" cy="9" r="6" />
                           <path d="M9 14l-2 7 5-3 5 3-2-7" />
@@ -309,11 +342,11 @@ export default function Strengths() {
 
       {/* ══════════ 工具栈 — 干净标签条 ══════════ */}
       <div data-reveal-block className="container-page mt-20 md:mt-28">
-        <div className="mb-6 flex items-center justify-end gap-3">
+        <div className="mb-6 flex items-center justify-start gap-3">
           <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink-500">
-            Tools
+            {ui.strengths.tools}
           </span>
-          <span className="h-px flex-1 max-w-[28px] bg-black/10" />
+          <span className="h-px flex-1 max-w-[28px] bg-black/15" />
         </div>
 
         {/* 药丸标签条 — icon + name，极轻量 */}
@@ -323,7 +356,7 @@ export default function Strengths() {
             return (
               <span
                 key={tool.name}
-                className="inline-flex items-center gap-2 rounded-full border border-black/[0.06] bg-white px-3.5 py-2 transition-colors duration-200 hover:border-black/12 hover:bg-gray-50"
+                className="inline-flex items-center gap-2 rounded-full border border-black/[0.10] bg-black/[0.04] px-3.5 py-2 transition-colors duration-200 hover:border-black/20 hover:bg-black/[0.08]"
               >
                 <span className="flex h-5 w-5 items-center justify-center" style={{ color: tool.color }}>
                   {IconRender ? IconRender(tool.color) : null}
@@ -341,41 +374,38 @@ export default function Strengths() {
       <div data-reveal-block className="container-page mt-24 md:mt-32">
         <div
           data-st="skills-title"
-          className="mb-10 flex items-center justify-center gap-4"
+          className="mb-10 flex items-center justify-start gap-4"
         >
-          <span className="h-px w-12 bg-black/10" />
+          <span className="h-px w-12 bg-black/15" />
           <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink-500">
-            Skills
+            {ui.strengths.skills}
           </span>
-          <span className="h-px w-12 bg-black/10" />
+          <span className="h-px w-12 bg-black/15" />
         </div>
 
+        {/* 分组一：核心能力（前 3 张） */}
+        <div className="mb-4 flex items-center gap-3">
+          <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink-500">
+            {ui.strengths.core}
+          </span>
+          <span className="h-px flex-1 max-w-[40px] bg-black/15" />
+        </div>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {strengths.map((skill) => (
-            <div
-              key={skill.id}
-              data-reveal-item
-              className="card-apple group flex gap-4 p-7"
-            >
-              <div
-                className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-105"
-                style={{ backgroundColor: skill.color + '14' }}
-              >
-                <SkillIcon type={skill.icon} color={skill.color} />
-              </div>
+          {strengths.slice(0, 3).map((skill) => (
+            <SkillCard key={skill.id} skill={skill} />
+          ))}
+        </div>
 
-              <div className="min-w-0 flex-1">
-                <h3 className="text-[16px] font-semibold tracking-tight text-ink-900 sm:text-[17px]">
-                  {skill.title}
-                </h3>
-                <p className="mt-1 text-[10px] font-medium uppercase tracking-[0.18em] text-ink-500">
-                  {skill.titleEn}
-                </p>
-                <p className="mt-2.5 text-[13px] leading-[1.65] text-ink-600">
-                  {skill.desc}
-                </p>
-              </div>
-            </div>
+        {/* 分组二：产品 · 协同（后 3 张） */}
+        <div className="mb-4 mt-10 flex items-center gap-3">
+          <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-ink-500">
+            {ui.strengths.build}
+          </span>
+          <span className="h-px flex-1 max-w-[40px] bg-black/15" />
+        </div>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {strengths.slice(3).map((skill) => (
+            <SkillCard key={skill.id} skill={skill} />
           ))}
         </div>
       </div>
@@ -384,8 +414,8 @@ export default function Strengths() {
       <div data-reveal-block data-st="contact-block" className="container-page mt-24 md:mt-32">
         {/* 小标题 */}
         <div data-reveal="fade" data-st="contact-badge" className="mb-8">
-          <span className="inline-flex items-center rounded-full border border-white/15 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-ink-400">
-            Contact
+          <span className="inline-flex items-center rounded-full border border-black/15 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-ink-500">
+            {ui.strengths.contact}
           </span>
         </div>
 
@@ -396,7 +426,7 @@ export default function Strengths() {
             platformLabel="WeChat"
             handle={profile.social.find((s) => s.platform === '微信')?.handle}
             qr="images/wechat-qr.jpg"
-            accent="#07C160"
+            accent="#ffffff"
           />
 
           {/* ── 邮箱（点击发信） ── */}
@@ -404,17 +434,17 @@ export default function Strengths() {
             <a
               href={`mailto:${profile.email}`}
               aria-label={`发送邮件至 ${profile.email}`}
-              className="group relative flex h-[172px] w-full flex-col items-center justify-center gap-3 rounded-[14px] border border-black/[0.06] bg-white p-7 text-center transition-colors duration-300 hover:border-black/12 hover:bg-gray-50"
+              className="group relative flex h-[172px] w-full flex-col items-center justify-center gap-3 rounded-[14px] border border-black/[0.10] bg-black/[0.04] p-7 text-center transition-colors duration-300 hover:border-black/20 hover:bg-black/[0.08]"
             >
               <span
-                className="flex h-12 w-12 items-center justify-center rounded-xl text-[#3B82F6]"
-                style={{ backgroundColor: '#3B82F618' }}
+                className="flex h-12 w-12 items-center justify-center rounded-xl text-ink-900"
+                style={{ backgroundColor: 'rgba(0,0,0,0.08)' }}
               >
                 <SocialIcon platform="mail" />
               </span>
-              <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-ink-400">Email</span>
+              <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-ink-500">Email</span>
               <span className="text-[14px] font-medium text-ink-700">{profile.email}</span>
-              <span className="mt-1 text-[11px] text-ink-400">点击发送邮件</span>
+              <span className="mt-1 text-[11px] text-ink-500">{ui.strengths.emailHint}</span>
             </a>
           </div>
 
@@ -424,7 +454,7 @@ export default function Strengths() {
             platformLabel="QQ"
             handle={profile.social.find((s) => s.platform === 'QQ')?.handle}
             qr="images/qq-qr.jpg"
-            accent="#12B7F5"
+            accent="#ffffff"
           />
         </div>
       </div>

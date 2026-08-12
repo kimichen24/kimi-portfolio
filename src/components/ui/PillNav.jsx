@@ -14,6 +14,7 @@
  */
 import { useEffect, useRef, useState } from 'react'
 import { gsap } from 'gsap'
+import { motion } from 'framer-motion'
 import './PillNav.css'
 
 const PillNav = ({
@@ -268,6 +269,14 @@ const PillNav = ({
                   onMouseLeave={() => handleLeave(i)}
                   onClick={() => handlePillClick(item, i)}
                 >
+                  {/* 滑动高亮：当前页药丸的白色/黑色背景，随切换在药丸间滑动 */}
+                  {activeHref === item.href && (
+                    <motion.span
+                      layoutId="pill-active-bg"
+                      className="pill-active-bg"
+                      transition={{ type: 'spring', stiffness: 400, damping: 32 }}
+                    />
+                  )}
                   <span
                     className="hover-circle"
                     aria-hidden="true"

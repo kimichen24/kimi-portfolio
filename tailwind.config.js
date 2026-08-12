@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: [
     './index.html',
     './src/**/*.{js,jsx,ts,tsx}',
@@ -39,25 +40,28 @@ export default {
       borderRadius: {
         DEFAULT: '9999px',
       },
-      // 苹果风的色板 — 克制的黑白灰 + 一个克制的蓝色强调
+      // 苹果风的色板 — 全部由 CSS 变量驱动，.dark 类切换即整体换肤
       colors: {
         ink: {
-          50: '#fafafa',
-          100: '#f5f5f7',
-          200: '#e8e8ed',
-          300: '#d2d2d7',
-          400: '#a1a1a6',
-          500: '#86868b',
-          600: '#6e6e73',
-          700: '#424245',
-          800: '#1d1d1f',
-          900: '#000000',
+          50: 'rgb(var(--ink-50) / <alpha-value>)',
+          100: 'rgb(var(--ink-100) / <alpha-value>)',
+          200: 'rgb(var(--ink-200) / <alpha-value>)',
+          300: 'rgb(var(--ink-300) / <alpha-value>)',
+          400: 'rgb(var(--ink-400) / <alpha-value>)',
+          500: 'rgb(var(--ink-500) / <alpha-value>)',
+          600: 'rgb(var(--ink-600) / <alpha-value>)',
+          700: 'rgb(var(--ink-700) / <alpha-value>)',
+          800: 'rgb(var(--ink-800) / <alpha-value>)',
+          900: 'rgb(var(--ink-900) / <alpha-value>)',
         },
         accent: {
-          DEFAULT: '#0284c7',
-          hover: '#0ea5e9',
-          soft: '#e0f2fe',
+          DEFAULT: '#0071e3',
+          hover: '#0077ed',
+          soft: '#f5f8ff',
         },
+        // black/white 语义化：亮=标准，暗=反转（主按钮浅底深字、描边变浅）
+        black: 'rgb(var(--c-black) / <alpha-value>)',
+        white: 'rgb(var(--c-white) / <alpha-value>)',
       },
       // 最大版心宽度
       maxWidth: {

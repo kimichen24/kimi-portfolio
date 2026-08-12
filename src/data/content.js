@@ -80,6 +80,7 @@ export const projects = [
     title: '招聘平台产品研究',
     summary:
       '双非 / 无经验大学生在实习僧、Boss 直聘求职时，普遍面临推荐不精准、无法判断岗位是否够格、缺少同类上岸参考等困境。以目标用户视角搭建「战略 / 体验 / 商业 / 能力」四层分析框架，对双平台做竞品走查并收集 18 张真实 App 截图作为证据，交叉验证后输出 P0 / P1 / P2 优化方案与关键页面原型线框。',
+    headline: '18 张真实截图 + 3 大痛点，输出可落地的招聘平台优化方案',
     actions: [
       '搭建「战略 / 体验 / 商业 / 能力」四层分析框架，对实习僧、Boss 直聘做系统竞品走查，收集 18 张真实 App 截图作为证据',
       '结合智联招聘（21 万样本）、中青报等公开行业数据交叉验证，识别 3 大核心痛点：推荐错配、资格靠猜、缺少同类参考',
@@ -91,7 +92,7 @@ export const projects = [
       { value: 'P0–P2', label: '优化优先级' },
     ],
     reportUrl: 'reports/intern-radar/report.html',
-    cover: { gradient: 'from-sky-100 via-blue-50 to-indigo-100', tone: 'warm' },
+    cover: { tone: 'warm' },
     // 补充材料（竞品对比矩阵 + 用户画像卡片）
     extras: [
       {
@@ -126,6 +127,7 @@ export const projects = [
     title: '校园二手交易社群运营效率优化',
     summary:
       '校园二手群日均 200+ 条消息但信息杂乱、买家卖家匹配效率低，成交周期平均超过 5 天。通过 3 天群聊全量消息编码分析诊断核心痛点，设计结构化发布模板与群规 SOP，引入「确认帖」机制规范交易流程，并建立关键节点数据埋点体系以量化优化效果。',
+    headline: '二手群转化率 12%→38%，成交周期砍掉 81.7%',
     actions: [
       '对 3 天全量群聊消息（500+ 条）进行编码分析，定位信息过载与匹配低效两大核心痛点',
       '设计结构化发布模板（必填项 / 格式规范）+ 群规 2.0 + 每日定时发布节奏 SOP',
@@ -138,7 +140,7 @@ export const projects = [
     ],
     // 完整报告（HTML，新标签页打开）
     reportUrl: 'reports/campus-trade/report.html',
-    cover: { gradient: 'from-emerald-100 via-teal-50 to-sky-100', tone: 'cool' },
+    cover: { tone: 'cool' },
     // 补充材料（基线盘点 + 用户访谈 + A/B 效果验证）
     extras: [
       {
@@ -195,6 +197,7 @@ export const projects = [
     title: '豆包校园用户深度调研与产品优化',
     summary:
       '豆包在校园场景的用户留存与功能匹配度不明，产品团队缺乏一线学生用户的深度使用反馈。设计并执行 15 人深度访谈 + 13 份问卷调研，对反馈进行系统编码聚类，横向对比 Kimi / DeepSeek 三款竞品在校园场景的表现差异，输出可落地的 P0 优先级产品优化方案。',
+    headline: '15 人深度访谈 + 竞品横评，收敛出 3 项 P0 优化',
     actions: [
       '设计半结构化访谈大纲，完成 15 名校园用户深度访谈（每人 30-40 分钟）+ 13 份补充问卷',
       '对 200+ 条原始反馈进行三级编码聚类，绘制用户痛点地图并按频率 / 影响度排序',
@@ -207,7 +210,7 @@ export const projects = [
     ],
     // 完整报告（HTML，新标签页打开）
     reportUrl: 'reports/doubao-research/report.html',
-    cover: { gradient: 'from-violet-100 via-indigo-50 to-blue-100', tone: 'deep' },
+    cover: { tone: 'deep' },
     // 补充材料（访谈痛点聚类 + 竞品横向评测）
     extras: [
       {
@@ -348,6 +351,7 @@ export const vibeProjects = [
     tag: 'Vibe Coding · 单文件网页应用',
     summary:
       '面向双非 / 低年级在校生的实习机会分析台：把散落在社群、公众号、官网的招聘文案，结构化提取为「门槛友好度 · 截止时间 · 投递方式」可比维度，并用「友好指数」量化，帮你在最短时间内判断「到底该投哪一个」。单文件 HTML/CSS/JS、零外部依赖、可离线运行。',
+    headline: '把散落的招聘文案，结构化成一键可比的「友好指数」',
     url: 'https://kimichen24.github.io/intern-lens/',
   },
 ]
