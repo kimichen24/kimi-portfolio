@@ -6,6 +6,7 @@ dist/
 .build-tmp/
 .build-verify/
 .build-rel/
+.deploy-*/
 
 # Sandbox sibling project (separate repo)
 foldcraft/
