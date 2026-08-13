@@ -23,18 +23,33 @@ const backdrop = {
 }
 
 const panel = {
-  hidden: { opacity: 0, y: 32, scale: 0.97 },
+  hidden: { opacity: 0, y: 24, scale: 0.94 },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1], delay: 0.05 },
+    // 有重量的回弹（Apple 弹窗感）
+    transition: { type: 'spring', stiffness: 280, damping: 26, delay: 0.04 },
   },
   exit: {
     opacity: 0,
-    y: 20,
-    scale: 0.98,
-    transition: { duration: 0.22, ease: [0.4, 0, 1, 1] },
+    y: 16,
+    scale: 0.97,
+    transition: { duration: 0.2, ease: [0.4, 0, 1, 1] },
+  },
+}
+
+// 面板弹起后，内部内容依次 stagger 进场（标题 → 核心工作 → 指标 → 补充 → 报告）
+const contentContainer = {
+  hidden: {},
+  visible: { transition: { delayChildren: 0.14, staggerChildren: 0.05 } },
+}
+const contentItem = {
+  hidden: { opacity: 0, y: 14 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
   },
 }
 
@@ -127,7 +142,8 @@ export default function ProjectModal({ project, open, onClose }) {
             </button>
 
             {/* ── 顶部：封面 + 标题区（桌面双栏）── */}
-            <div className="grid gap-6 md:grid-cols-[1.1fr_1fr] md:gap-8">
+            <motion.div variants={contentContainer}>
+            <motion.div variants={contentItem} className="grid gap-6 md:grid-cols-[1.1fr_1fr] md:gap-8">
               {/* 封面 */}
               <div className="aspect-[16/10] overflow-hidden rounded-2xl md:aspect-auto md:h-full">
                 <PlaceholderImage tone={project.cover.tone} label={project.title} aspect="aspect-[16/10] md:aspect-auto md:h-full" />
@@ -146,10 +162,10 @@ export default function ProjectModal({ project, open, onClose }) {
                   {project.summary}
                 </p>
               </div>
-            </div>
+            </motion.div>
 
             {/* ── 核心工作 ── */}
-            <section className="mt-8 md:mt-10">
+            <motion.section variants={contentItem} className="mt-8 md:mt-10">
               <h3 className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-ink-500">
                 {ui.modal.coreWork}
               </h3>
@@ -161,10 +177,10 @@ export default function ProjectModal({ project, open, onClose }) {
                   </li>
                 ))}
               </ul>
-            </section>
+            </motion.section>
 
             {/* ── 量化成果 ── */}
-            <section className="mt-7 md:mt-9">
+            <motion.section variants={contentItem} className="mt-7 md:mt-9">
               <h3 className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-ink-500">
                 {ui.modal.keyResults}
               </h3>
@@ -183,11 +199,11 @@ export default function ProjectModal({ project, open, onClose }) {
                   </div>
                 ))}
               </div>
-            </section>
+            </motion.section>
 
             {/* ── 补充材料（仅当项目有 extras）── */}
             {project.extras && project.extras.length > 0 && (
-              <section className="mt-8 md:mt-10">
+              <motion.section variants={contentItem} className="mt-8 md:mt-10">
                 <h3 className="mb-4 text-xs font-semibold uppercase tracking-[0.16em] text-ink-500">
                   {ui.modal.extras}
                 </h3>
@@ -286,12 +302,12 @@ export default function ProjectModal({ project, open, onClose }) {
                     </div>
                   ))}
                 </div>
-              </section>
+              </motion.section>
             )}
 
             {/* ── 完整报告预览 ── */}
             {project.reportUrl && (
-              <section className="mt-8 md:mt-10">
+              <motion.section variants={contentItem} className="mt-8 md:mt-10">
                 <div className="mb-3 flex items-center justify-between">
                   <h3 className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-ink-500">
                     <svg width="14" height="14" viewBox="0 0 15 15" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
@@ -320,8 +336,9 @@ export default function ProjectModal({ project, open, onClose }) {
                     className="h-[420px] w-full rounded-2xl border border-black/10 bg-ink-100 md:h-[500px]"
                   />
                 </div>
-              </section>
+              </motion.section>
             )}
+            </motion.div>
           </motion.div>
         </motion.div>
       )}

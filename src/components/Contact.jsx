@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import { motion } from 'framer-motion'
 import { useGSAP } from '@gsap/react'
 import BackButton from './BackButton'
 import MagneticButton from './ui/MagneticButton'
@@ -161,17 +162,24 @@ export default function Contact() {
         </MagneticButton>
         </div>
 
-        {/* 社交图标组 — 点击复制对应账号 */}
-        <div
-          data-reveal-item
+        {/* 社交图标组 — 点击复制对应账号（进入视口依次轻弹入） */}
+        <motion.div
           className="mt-8 flex items-center gap-3"
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: '0px 0px -8% 0px' }}
+          variants={{ hidden: {}, show: { transition: { staggerChildren: 0.08, delayChildren: 0.1 } } }}
         >
           {socials.map((s) => (
-            <button
+            <motion.button
               key={s.platform}
               type="button"
               onClick={() => copyText(s.handle, s.platform)}
               aria-label={`复制${s.platform}账号 ${s.handle}`}
+              variants={{
+                hidden: { opacity: 0, y: 14, scale: 0.9 },
+                show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } },
+              }}
               className="group/s relative inline-flex h-11 w-11 items-center justify-center rounded-full border border-black/[0.10] bg-black/[0.04] text-ink-500 transition-all duration-300 hover:border-black/20 hover:bg-black/[0.08] hover:text-ink-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20"
             >
               <SocialGlyph platform={s.icon} />
@@ -184,9 +192,9 @@ export default function Contact() {
               >
                 {ui.contact.copied}
               </span>
-            </button>
+            </motion.button>
           ))}
-        </div>
+        </motion.div>
 
         {/* 元信息 — 去掉 Status，只保留身份与方向 */}
         <div

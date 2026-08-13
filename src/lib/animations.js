@@ -303,6 +303,26 @@ export function buildStrengthsReveals(scope) {
     }
   }
 
+  // ── 轻微视差（仅标记元素，且仅在非减少动效时）──
+  if (!prefersReduced()) {
+    gsap.utils.toArray('[data-parallax]', scope).forEach((el) => {
+      gsap.fromTo(
+        el,
+        { yPercent: -6 },
+        {
+          yPercent: 6,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true,
+          },
+        },
+      )
+    })
+  }
+
   ScrollTrigger.refresh()
 }
 

@@ -30,6 +30,12 @@
         color: #000;
         opacity: 0.1;
         margin-bottom: 8px;
+        animation: float-k 8s ease-in-out infinite;
+        will-change: transform;
+      }
+      @keyframes float-k {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-14px); }
       }
       .code {
         font-size: 13px;
@@ -72,6 +78,9 @@
         letter-spacing: 0.18em;
         text-transform: uppercase;
         color: #a1a1a6;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .mark { animation: none; }
       }
     </style>
   </head>
