@@ -25,10 +25,15 @@ export function ThemeProvider({ children }) {
     if (meta) meta.setAttribute('content', theme === 'dark' ? '#0a0a0f' : '#f5f5f7')
   }, [theme])
 
-  const toggleTheme = useCallback(
-    () => setTheme((t) => (t === 'dark' ? 'light' : 'dark')),
-    [],
-  )
+  const toggleTheme = useCallback(() => {
+    // 切换瞬间给 <html> 加 theme-transition，让颜色缓动 0.3s（见 index.css）
+    const root = document.documentElement
+    root.classList.add('theme-transition')
+    setTheme((t) => (t === 'dark' ? 'light' : 'dark'))
+    window.setTimeout(() => {
+      root.classList.remove('theme-transition')
+    }, 360)
+  }, [])
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>
