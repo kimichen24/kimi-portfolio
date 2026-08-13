@@ -5,6 +5,7 @@ import FloatingNav from './components/FloatingNav'
 import MobileBottomNav from './components/MobileBottomNav'
 import Footer from './components/Footer'
 import PageFrame from './components/PageFrame'
+import ErrorBoundary from './components/ErrorBoundary'
 import { PageProvider, usePage } from './context/PageContext'
 import { LanguageProvider } from './context/LanguageContext'
 import { ThemeProvider } from './context/ThemeContext'
@@ -39,19 +40,41 @@ function PageRenderer() {
     scrollToTop(true)
   }, [page])
 
+  // 可访问性：切页后将焦点移到新页根节点，键盘 / 读屏用户不会“卡”在旧页。
+  // AnimatePresence mode="wait" 会在旧页退出动画结束后才挂载新页，
+  // 故用 rAF 轮询直到新页根节点出现再聚焦（最多约 1s）。
+  useEffect(() => {
+    let raf
+    let tries = 0
+    const tryFocus = () => {
+      const el = document.getElementById(`page-${page}`)
+      if (el) {
+        el.focus({ preventScroll: true })
+      } else if (tries++ < 60) {
+        raf = requestAnimationFrame(tryFocus)
+      }
+    }
+    raf = requestAnimationFrame(tryFocus)
+    return () => cancelAnimationFrame(raf)
+  }, [page])
+
   return (
     <AnimatePresence mode="wait">
       <motion.div
         key={page}
+        id={`page-${page}`}
+        tabIndex={-1}
         initial={{ opacity: 0, y: 10, filter: 'blur(4px)' }}
         animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
         exit={{ opacity: 0, y: -8, filter: 'blur(3px)' }}
         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-        className="w-full"
+        className="w-full focus:outline-none"
       >
-        <Suspense fallback={<PageFallback />}>
-          <PageComp />
-        </Suspense>
+        <ErrorBoundary>
+          <Suspense fallback={<PageFallback />}>
+            <PageComp />
+          </Suspense>
+        </ErrorBoundary>
       </motion.div>
     </AnimatePresence>
   )
