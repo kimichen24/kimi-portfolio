@@ -5,6 +5,7 @@ node_modules/
 dist/
 .build-tmp/
 .build-verify/
+.build-rel/
 
 # Sandbox sibling project (separate repo)
 foldcraft/
@@ -40,3 +41,6 @@ crop_qr.py
 doubao_new.css
 strengths_live.js
 overview.md
+check.html
+live.css
+live_index.html

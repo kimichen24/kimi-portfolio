@@ -1,4 +1,5 @@
 import { useRef } from 'react'
+import { motion } from 'framer-motion'
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
 import BackButton from './BackButton'
@@ -41,6 +42,24 @@ export default function Experience() {
             },
           },
         )
+      }
+
+      // 时间线节点：滚到对应经历时依次点亮（深底 + 柔和光晕），不碰 transform 以免与定位冲突
+      if (!prefersReduced()) {
+        gsap.utils.toArray('[data-node]', scope).forEach((node) => {
+          const row = node.closest('[data-reveal-item]') || node
+          gsap.fromTo(
+            node,
+            { backgroundColor: 'rgba(0,0,0,0.30)', boxShadow: '0 0 0 0 rgba(17,17,19,0)' },
+            {
+              backgroundColor: 'rgba(17,17,19,1)',
+              boxShadow: '0 0 0 4px rgba(17,17,19,0.12)',
+              duration: 0.5,
+              ease: 'power2.out',
+              scrollTrigger: { trigger: row, start: 'top 70%', toggleActions: 'play none none reverse' },
+            },
+          )
+        })
       }
     },
     { scope },
@@ -90,8 +109,8 @@ export default function Experience() {
               data-reveal-item
               className="relative grid grid-cols-1 gap-3 pb-16 pt-16 first:pt-0 last:pb-0 lg:grid-cols-[220px_1fr] lg:gap-12 lg:pb-24 lg:pt-20"
             >
-              {/* ── 左侧：年份大字号极淡 + 时间（宽屏右对齐） ── */}
-              <div className="lg:pr-10 lg:text-right">
+              {/* ── 左侧：年份大字号极淡 + 时间（宽屏右对齐，滚动时吸顶） ── */}
+              <div className="lg:sticky lg:top-28 lg:self-start lg:pr-10 lg:text-right">
                 <div className="font-display text-[44px] font-semibold leading-none tracking-tight text-ink-900/[0.10] md:text-[56px]">
                   {exp.period.split('-')[0]}
                 </div>
@@ -103,10 +122,17 @@ export default function Experience() {
                 )}
               </div>
 
-              {/* ── 右侧：主体内容（竖线分隔 + 节点） ── */}
-              <div className="relative lg:border-l lg:border-black/10 lg:pl-10">
+              {/* ── 右侧：主体内容（竖线分隔 + 节点）— 随滚动从右侧轻滑入 ── */}
+              <motion.div
+                className="relative lg:border-l lg:border-black/10 lg:pl-10"
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: '0px 0px -10% 0px' }}
+                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              >
                 {/* 时间线节点 — 落在竖线上，克制的小圆点 */}
                 <span
+                  data-node
                   aria-hidden
                   className="absolute left-0 top-1.5 hidden h-2.5 w-2.5 -translate-x-1/2 rounded-full border-2 border-[#f5f5f7] bg-black/30 lg:block"
                 />
@@ -173,7 +199,7 @@ export default function Experience() {
                     </svg>
                   </a>
                 )}
-              </div>
+              </motion.div>
             </div>
           ))}
         </div>

@@ -7,6 +7,7 @@ import PageBackground from './ui/PageBackground'
 import ProjectModal from './ProjectModal'
 import Tilt from './ui/Tilt'
 import MagneticButton from './ui/MagneticButton'
+import CountUp from './ui/CountUp'
 import { primeReveals, buildScrollReveals, prefersReduced } from '../lib/animations'
 import { useContent, useUI } from '../data'
 
@@ -119,9 +120,9 @@ export default function Projects() {
           </p>
         </div>
 
-        {/* 分类筛选 tab — 全部 / 项目 / 实验 */}
+        {/* 分类筛选 tab — 全部 / 项目 / 实验（滑动下划线） */}
         <div
-          className="mb-8 flex flex-wrap gap-2"
+          className="relative mb-8 flex flex-wrap gap-2"
           role="tablist"
           aria-label="项目分类筛选"
         >
@@ -129,22 +130,32 @@ export default function Projects() {
             { key: 'all', label: ui.projects.filterAll },
             { key: 'project', label: ui.projects.filterProject },
             { key: 'experiment', label: ui.projects.filterExperiment },
-          ].map((t) => (
-            <button
-              key={t.key}
-              type="button"
-              role="tab"
-              aria-selected={filter === t.key}
-              onClick={() => setFilter(t.key)}
-              className={`rounded-full border px-4 py-1.5 text-[13px] font-medium transition-all duration-300 ${
-                filter === t.key
-                  ? 'border-black/20 bg-ink-900 text-white'
-                  : 'border-black/10 bg-black/[0.03] text-ink-600 hover:border-black/20 hover:text-ink-900'
-              }`}
-            >
-              {t.label}
-            </button>
-          ))}
+          ].map((t) => {
+            const active = filter === t.key
+            return (
+              <button
+                key={t.key}
+                type="button"
+                role="tab"
+                aria-selected={active}
+                onClick={() => setFilter(t.key)}
+                className={`relative rounded-full border px-4 py-1.5 text-[13px] font-medium transition-colors duration-300 ${
+                  active
+                    ? 'border-black/20 text-white'
+                    : 'border-black/10 bg-black/[0.03] text-ink-600 hover:border-black/20 hover:text-ink-900'
+                }`}
+              >
+                {active && (
+                  <motion.span
+                    layoutId="proj-filter-active"
+                    className="absolute inset-0 -z-10 rounded-full bg-ink-900"
+                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                  />
+                )}
+                {t.label}
+              </button>
+            )
+          })}
         </div>
 
         {/* 轮播区域 */}
@@ -272,9 +283,10 @@ export default function Projects() {
                         <div className="flex items-center gap-3">
                           {p.metrics.slice(0, 3).map((m) => (
                             <div key={m.label} className="metric-pill">
-                              <span className="text-lg font-semibold leading-none tracking-tight text-ink-900 md:text-xl">
-                                {m.value}
-                              </span>
+                              <CountUp
+                                value={m.value}
+                                className="text-lg font-semibold leading-none tracking-tight text-ink-900 md:text-xl"
+                              />
                               <span className="text-[9px] font-medium uppercase tracking-wider text-ink-500">
                                 {m.label}
                               </span>
