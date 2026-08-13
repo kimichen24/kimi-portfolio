@@ -11,7 +11,7 @@
  * 交互：点击遮罩 / 按 ESC / 点关闭按钮 → 关闭
  * 动画：framer-motion AnimatePresence 过渡
  */
-import { useEffect, useCallback } from 'react'
+import { useEffect, useCallback, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import PlaceholderImage from './ui/PlaceholderImage'
 import { useUI } from '../data'
@@ -42,6 +42,29 @@ export default function ProjectModal({ project, open, onClose }) {
   const ui = useUI()
   const handleClose = useCallback(() => onClose?.(), [onClose])
 
+  // 报告 iframe 懒加载：仅当用户滚动到该区块时才加载（避免弹窗一开就拉取重型报告）
+  const scrollRef = useRef(null)
+  const reportRef = useRef(null)
+  const [reportSrc, setReportSrc] = useState(null)
+  useEffect(() => {
+    if (!open || !project?.reportUrl) return
+    setReportSrc(null)
+    const root = scrollRef.current
+    const target = reportRef.current
+    if (!root || !target) return
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setReportSrc(project.reportUrl)
+          io.disconnect()
+        }
+      },
+      { root, rootMargin: '200px 0px' }
+    )
+    io.observe(target)
+    return () => io.disconnect()
+  }, [open, project])
+
   // ESC 关闭 + body 标记（供 FloatingNav 检测隐藏）
   useEffect(() => {
     if (!open) return
@@ -66,6 +89,7 @@ export default function ProjectModal({ project, open, onClose }) {
     <AnimatePresence>
       {open && (
         <motion.div
+          ref={scrollRef}
           className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto px-4 py-8 md:py-14"
           variants={backdrop}
           initial="hidden"
@@ -289,11 +313,13 @@ export default function ProjectModal({ project, open, onClose }) {
                     </svg>
                   </a>
                 </div>
-                <iframe
-                  src={project.reportUrl}
-                  title={`${project.title} 完整报告`}
-                  className="h-[420px] w-full rounded-2xl border border-black/10 bg-ink-100 md:h-[500px]"
-                />
+                <div ref={reportRef}>
+                  <iframe
+                    src={reportSrc || undefined}
+                    title={`${project.title} 完整报告`}
+                    className="h-[420px] w-full rounded-2xl border border-black/10 bg-ink-100 md:h-[500px]"
+                  />
+                </div>
               </section>
             )}
           </motion.div>

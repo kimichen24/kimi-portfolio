@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { motion, useMotionValue, useSpring } from 'framer-motion'
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
 import './SpaceTravel.css'
@@ -206,6 +207,24 @@ function SpaceTravelHero() {
   const kimiTimer = useRef(null)
   const sloganTimer = useRef(null)
 
+  // ── 指针视差：KIMI 字标随鼠标轻微位移 + 旋转（Apple 风克制版）──
+  const px = useMotionValue(0)
+  const py = useMotionValue(0)
+  const prot = useMotionValue(0)
+  const x = useSpring(px, { stiffness: 80, damping: 15, mass: 0.6 })
+  const y = useSpring(py, { stiffness: 80, damping: 15, mass: 0.6 })
+  const rotate = useSpring(prot, { stiffness: 80, damping: 15, mass: 0.6 })
+  const onHeroMove = (e) => {
+    if (prefersReduced()) return
+    const cx = window.innerWidth / 2
+    const cy = window.innerHeight / 2
+    const nx = (e.clientX - cx) / cx
+    const ny = (e.clientY - cy) / cy
+    px.set(nx * 18)
+    py.set(ny * 12)
+    prot.set(nx * 2.5)
+  }
+
   const runDecode = () => {
     if (prefersReduced()) return
     const target = 'KIMI'
@@ -318,7 +337,7 @@ function SpaceTravelHero() {
   )
 
   return (
-      <section ref={scope} className="relative h-screen w-full overflow-hidden bg-white">
+      <section ref={scope} onMouseMove={onHeroMove} className="relative h-screen w-full overflow-hidden bg-white">
       {/* 首页背景 — 纯白 */}
 
       {/* ═══ 加载覆盖层（浅 Apple 风 · 极简风格） ═══ */}
@@ -386,7 +405,15 @@ function SpaceTravelHero() {
             className="block cursor-pointer select-none rounded text-left outline-none transition-[transform,filter] duration-200 ease-out active:scale-[0.97] focus-visible:ring-2 focus-visible:ring-black/20"
             style={{ filter: sloganBlurring ? 'blur(6px)' : 'blur(0px)' }}
           >
-            {HERO_SLOGANS[sloganIdx]}
+            <motion.span
+              key={sloganIdx}
+              initial={{ opacity: 0, letterSpacing: '-0.04em' }}
+              animate={{ opacity: 1, letterSpacing: '0.01em' }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              className="inline-block"
+            >
+              {HERO_SLOGANS[sloganIdx]}
+            </motion.span>
           </button>
         </span>
 
@@ -396,7 +423,7 @@ function SpaceTravelHero() {
             data-hero="title"
             className="text-left font-display text-[clamp(4.5rem,22vw,16rem)] font-semibold leading-none tracking-tight text-ink-900"
           >
-            <button
+            <motion.button
               type="button"
               onClick={runDecode}
               onKeyDown={(e) => {
@@ -406,10 +433,12 @@ function SpaceTravelHero() {
                 }
               }}
               aria-label="KIMI — 点击解码"
-              className="inline-block cursor-pointer select-none rounded-xl px-2 -mx-2 text-left outline-none transition-transform duration-200 ease-out active:scale-[0.96] focus-visible:ring-2 focus-visible:ring-black/20"
+              className="inline-block cursor-pointer select-none rounded-xl px-2 -mx-2 text-left outline-none focus-visible:ring-2 focus-visible:ring-black/20"
+              style={{ x, y, rotate }}
+              whileTap={{ scale: 0.96 }}
             >
               {kimiText}
-            </button>
+            </motion.button>
           </h1>
         </div>
 

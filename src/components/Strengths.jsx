@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import { motion } from 'framer-motion'
 import { useGSAP } from '@gsap/react'
 import BackButton from './BackButton'
 import PageBackground from './ui/PageBackground'
@@ -80,7 +81,7 @@ function SkillCard({ skill }) {
   return (
     <div
       data-reveal-item
-      className="card-apple group flex gap-4 p-7"
+      className="card-apple group flex gap-4 p-7 transition-transform duration-300 hover:-translate-y-1"
     >
       <div
         className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-105"
@@ -155,13 +156,13 @@ function FlipContactCard({ platform, platformLabel, handle, qr, accent }) {
         onClick={() => setFlipped((f) => !f)}
         aria-pressed={flipped}
         aria-label={flipped ? `${ui.strengths.flipBack} ${platformLabel}` : `${ui.strengths.flipFront} ${platformLabel}`}
-        className="flip-inner group relative block h-[172px] w-full cursor-pointer rounded-[14px] outline-none focus-visible:ring-2 focus-visible:ring-ink-900/20"
+        className="flip-inner group relative block h-[172px] w-full cursor-pointer rounded-[14px] outline-none focus-visible:ring-2 focus-visible:ring-ink-900/20 transition-shadow duration-300 hover:shadow-[0_0_0_1px_rgba(0,0,0,0.16),0_16px_36px_-16px_rgba(0,0,0,0.30)]"
         style={{
           transform: flipped ? 'rotateY(180deg) scale(1.04)' : 'rotateY(0deg) scale(1)',
         }}
       >
         {/* 正面：图标 + 账号 */}
-        <span className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-[14px] border border-black/[0.10] bg-black/[0.04] p-7 text-center [backface-visibility:hidden] [-webkit-backface-visibility:hidden] transition-colors duration-300">
+        <span className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-[14px] border border-black/[0.10] bg-black/[0.04] p-7 text-center [backface-visibility:hidden] [-webkit-backface-visibility:hidden] transition-colors duration-300 group-hover:border-black/20">
           <span
             className="flex h-12 w-12 items-center justify-center rounded-xl"
             style={{ color: accent, backgroundColor: accent + '14' }}
@@ -176,10 +177,11 @@ function FlipContactCard({ platform, platformLabel, handle, qr, accent }) {
         </span>
 
         {/* 背面：二维码 */}
-        <span className="absolute inset-0 flex flex-col items-center justify-center gap-2.5 rounded-[14px] border border-black/[0.10] bg-black/[0.04] p-5 text-center [backface-visibility:hidden] [-webkit-backface-visibility:hidden] [transform:rotateY(180deg)] [-webkit-transform:rotateY(180deg)]">
+        <span className="absolute inset-0 flex flex-col items-center justify-center gap-2.5 rounded-[14px] border border-black/[0.10] bg-black/[0.04] p-5 text-center [backface-visibility:hidden] [-webkit-backface-visibility:hidden] [transform:rotateY(180deg)] [-webkit-transform:rotateY(180deg)] group-hover:border-black/20">
           <img
             src={qr}
             alt={`${platformLabel}二维码`}
+            loading="lazy"
             decoding="async"
             className="h-[92px] w-[92px] rounded-lg object-contain ring-1 ring-black/10"
           />
@@ -349,13 +351,23 @@ export default function Strengths() {
           <span className="h-px flex-1 max-w-[28px] bg-black/15" />
         </div>
 
-        {/* 药丸标签条 — icon + name，极轻量 */}
-        <div data-reveal-item data-st="tools" className="flex flex-wrap gap-2.5">
+        {/* 药丸标签条 — icon + name，极轻量（进入视口 stagger 弹入） */}
+        <motion.div
+          className="flex flex-wrap gap-2.5"
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: '0px 0px -8% 0px' }}
+          variants={{ hidden: {}, show: { transition: { staggerChildren: 0.05, delayChildren: 0.05 } } }}
+        >
           {softwareTools.map((tool) => {
             const IconRender = ToolIcons[tool.icon]
             return (
-              <span
+              <motion.span
                 key={tool.name}
+                variants={{
+                  hidden: { opacity: 0, y: 12, scale: 0.9 },
+                  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } },
+                }}
                 className="inline-flex items-center gap-2 rounded-full border border-black/[0.10] bg-black/[0.04] px-3.5 py-2 transition-colors duration-200 hover:border-black/20 hover:bg-black/[0.08]"
               >
                 <span className="flex h-5 w-5 items-center justify-center" style={{ color: tool.color }}>
@@ -364,10 +376,10 @@ export default function Strengths() {
                 <span className="whitespace-nowrap text-[13px] font-medium text-ink-700">
                   {tool.name}
                 </span>
-              </span>
+              </motion.span>
             )
           })}
-        </div>
+        </motion.div>
       </div>
 
       {/* ══════════ 核心能力 — 干净白卡网格 ══════════ */}
