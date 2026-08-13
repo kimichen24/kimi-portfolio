@@ -46,7 +46,7 @@ export default function Experience() {
 
       // 时间线节点：滚到对应经历时依次点亮（深底 + 柔和光晕），不碰 transform 以免与定位冲突
       if (!prefersReduced()) {
-        gsap.utils.toArray('[data-node]', scope).forEach((node) => {
+        gsap.utils.toArray('[data-node]', scope.current).forEach((node) => {
           const row = node.closest('[data-reveal-item]') || node
           gsap.fromTo(
             node,

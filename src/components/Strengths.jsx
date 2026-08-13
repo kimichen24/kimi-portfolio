@@ -233,15 +233,6 @@ export default function Strengths() {
         </div>
       </div>
 
-      {/* 大字引述 — 左侧竖线 + 极轻视差（随滚动轻微位移，data-parallax） */}
-      <div data-parallax className="container-page mt-4 md:mt-6">
-        <div className="flex gap-5 border-l-2 border-black/15 pl-5 md:pl-6">
-          <p className="font-display text-2xl font-medium leading-snug tracking-tight text-ink-900 md:text-3xl lg:text-[34px]">
-            {ui.strengths.positioning}
-          </p>
-        </div>
-      </div>
-
       {/* ══════════ Profile Hero — 干净白卡 ══════════ */}
       <div data-reveal-block className="container-page">
         <div data-reveal-item data-st="profile">
