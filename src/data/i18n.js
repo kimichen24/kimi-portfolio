@@ -76,6 +76,9 @@ export const ui = {
       openExternal: '访问公开报告',
       openNew: '新标签页打开',
       reportAria: '在新标签页打开完整报告',
+      reportExpand: '放大预览',
+      reportCollapse: '收起预览',
+      reportLoading: '报告加载中…',
     },
   },
   en: {
@@ -153,6 +156,9 @@ export const ui = {
       openExternal: 'Open Public Report',
       openNew: 'Open in New Tab',
       reportAria: 'Open full report in a new tab',
+      reportExpand: 'Expand Preview',
+      reportCollapse: 'Collapse Preview',
+      reportLoading: 'Loading report…',
     },
   },
 }

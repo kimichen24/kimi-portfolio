@@ -61,9 +61,13 @@ export default function ProjectModal({ project, open, onClose }) {
   const scrollRef = useRef(null)
   const reportRef = useRef(null)
   const [reportSrc, setReportSrc] = useState(null)
+  const [reportExpanded, setReportExpanded] = useState(false)
+  const [reportLoaded, setReportLoaded] = useState(false)
   useEffect(() => {
     if (!open || !project?.reportUrl) return
     setReportSrc(null)
+    setReportLoaded(false)
+    setReportExpanded(false)
     const root = scrollRef.current
     const target = reportRef.current
     if (!root || !target) return
@@ -120,7 +124,9 @@ export default function ProjectModal({ project, open, onClose }) {
 
           {/* 面板 */}
           <motion.div
-            className="relative z-10 w-full max-w-2xl rounded-[2rem] border border-black/10 bg-white p-6 shadow-2xl md:p-9"
+            className={`relative z-10 w-full rounded-[2rem] border border-black/10 bg-white p-6 shadow-2xl transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] md:p-9 ${
+              reportExpanded ? 'max-w-4xl' : 'max-w-2xl'
+            }`}
             variants={panel}
             initial="hidden"
             animate="visible"
@@ -308,7 +314,7 @@ export default function ProjectModal({ project, open, onClose }) {
             {/* ── 完整报告预览 ── */}
             {project.reportUrl && (
               <motion.section variants={contentItem} className="mt-8 md:mt-10">
-                <div className="mb-3 flex items-center justify-between">
+                <div className="mb-3 flex items-center justify-between gap-3">
                   <h3 className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-ink-500">
                     <svg width="14" height="14" viewBox="0 0 15 15" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
                       <rect x="2.5" y="2.5" width="10" height="10" rx="2" />
@@ -316,24 +322,54 @@ export default function ProjectModal({ project, open, onClose }) {
                     </svg>
                     {ui.modal.report}
                   </h3>
-                  <a
-                    href={project.reportUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-black/[0.04] px-3 py-1 text-[11px] font-medium text-ink-600 transition-colors hover:bg-black/[0.08] hover:text-ink-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20"
-                    aria-label={ui.modal.reportAria}
-                  >
-                    {isExternalReport ? ui.modal.openExternal : ui.modal.openNew}
-                    <svg width="12" height="12" viewBox="0 0 15 15" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M6 3.5H3.5V11.5H11.5V9M9 3.5H11.5V6M11.5 3.5L6.5 8.5" />
-                    </svg>
-                  </a>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setReportExpanded((v) => !v)}
+                      className="inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-black/[0.04] px-3 py-1 text-[11px] font-medium text-ink-600 transition-colors hover:bg-black/[0.08] hover:text-ink-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20"
+                      aria-label={reportExpanded ? ui.modal.reportCollapse : ui.modal.reportExpand}
+                      aria-pressed={reportExpanded}
+                    >
+                      {reportExpanded ? ui.modal.reportCollapse : ui.modal.reportExpand}
+                      <svg width="12" height="12" viewBox="0 0 15 15" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-300">
+                        {reportExpanded ? (
+                          <path d="M4.5 10.5L10.5 4.5M10.5 4.5H6M10.5 4.5V9" />
+                        ) : (
+                          <path d="M10.5 4.5L4.5 10.5M4.5 10.5H9M4.5 10.5V6" />
+                        )}
+                      </svg>
+                    </button>
+                    <a
+                      href={project.reportUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-black/[0.04] px-3 py-1 text-[11px] font-medium text-ink-600 transition-colors hover:bg-black/[0.08] hover:text-ink-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20"
+                      aria-label={ui.modal.reportAria}
+                    >
+                      {isExternalReport ? ui.modal.openExternal : ui.modal.openNew}
+                      <svg width="12" height="12" viewBox="0 0 15 15" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M6 3.5H3.5V11.5H11.5V9M9 3.5H11.5V6M11.5 3.5L6.5 8.5" />
+                      </svg>
+                    </a>
+                  </div>
                 </div>
-                <div ref={reportRef}>
+                <div
+                  ref={reportRef}
+                  className={`relative overflow-hidden rounded-2xl border border-black/10 bg-ink-100 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                    reportExpanded ? 'h-[78vh] min-h-[520px]' : 'h-[520px] md:h-[640px]'
+                  }`}
+                >
+                  {reportSrc && !reportLoaded && (
+                    <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-ink-100 text-ink-500">
+                      <span className="h-5 w-5 animate-spin rounded-full border-2 border-black/10 border-t-ink-900" />
+                      <span className="text-xs">{ui.modal.reportLoading}</span>
+                    </div>
+                  )}
                   <iframe
                     src={reportSrc || undefined}
                     title={`${project.title} 完整报告`}
-                    className="h-[420px] w-full rounded-2xl border border-black/10 bg-ink-100 md:h-[500px]"
+                    onLoad={() => setReportLoaded(true)}
+                    className="h-full w-full border-0 bg-ink-100"
                   />
                 </div>
               </motion.section>
