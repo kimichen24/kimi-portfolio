@@ -31,7 +31,7 @@ export const profile = {
   // 核心数据卡片
   stats: [
     { value: '3', unit: '', label: '独立项目', desc: '从 0 到 1 落地' },
-    { value: '3万+', unit: '', label: '账号播放', desc: '抖音自然流量' },
+    { value: '5.9万+', unit: '', label: '账号播放', desc: '抖音自然流量' },
     { value: '73', unit: '%', label: '痛点覆盖', desc: 'P0 方案命中' },
     { value: '81.7', unit: '%', label: '效率提升', desc: 'AI 流程化提效' },
   ],
@@ -51,11 +51,11 @@ export const experiences = [
       '每周基于抖音后台数据复盘迭代，建立曲目选题储备池',
     ],
     metrics: [
-      { value: '1000+', label: '5 条作品获赞' },
-      { value: '3万', label: '7 日自然播放' },
+      { value: '5.93万', label: '7 日总播放' },
+      { value: '3484', label: '7 日总点赞' },
       { value: '2万', label: '单条最高播放' },
-      { value: '792', label: '单周主页访问' },
-      { value: '100+', label: '净增粉丝' },
+      { value: '320', label: '当前粉丝' },
+      { value: '18.07s', label: '平均播放时长' },
     ],
     link: { url: 'https://v.douyin.com/sZVo34eBJDM/', label: '抖音主页' },
   },
