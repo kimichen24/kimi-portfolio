@@ -31,7 +31,7 @@ export const profile = {
   // 核心数据卡片
   stats: [
     { value: '3', unit: '', label: '独立项目', desc: '从 0 到 1 落地' },
-    { value: '5.9万+', unit: '', label: '账号播放', desc: '抖音自然流量' },
+    { value: '10.66万+', unit: '', label: '账号播放', desc: '抖音自然流量' },
     { value: '73', unit: '%', label: '痛点覆盖', desc: 'P0 方案命中' },
     { value: '81.7', unit: '%', label: '效率提升', desc: 'AI 流程化提效' },
   ],
@@ -51,11 +51,10 @@ export const experiences = [
       '每周基于抖音后台数据复盘迭代，建立曲目选题储备池',
     ],
     metrics: [
-      { value: '5.93万', label: '7 日总播放' },
-      { value: '3484', label: '7 日总点赞' },
-      { value: '2万', label: '单条最高播放' },
+      { value: '10.66万', label: '总播放量' },
+      { value: '6000+', label: '总点赞量' },
+      { value: '5万', label: '单条最高播放' },
       { value: '320', label: '当前粉丝' },
-      { value: '18.07s', label: '平均播放时长' },
     ],
     link: { url: 'https://v.douyin.com/sZVo34eBJDM/', label: '抖音主页' },
   },
@@ -305,7 +304,7 @@ export const strengths = [
 // 软件工具 — 关于我页面的工具技能网格（产品运营方向）
 export const softwareTools = [
   {
-    name: 'Excel / 数据透视',
+    name: 'Excel',
     desc: '函数公式、透视表、指标体系搭建与周度运营复盘，把杂乱数据整理成可决策看板。',
     icon: 'excel',
     color: '#217346',
@@ -335,7 +334,7 @@ export const softwareTools = [
     color: '#1FD85A',
   },
   {
-    name: 'AI 工具 (ChatGPT / Claude)',
+    name: 'AI 提效',
     desc: '用 AI 辅助文案草拟、数据初读与竞品整理，把重复性工作自动化，省下时间做判断和策略。',
     icon: 'ai',
     color: '#10A37F',

@@ -63,11 +63,13 @@ export default function ProjectModal({ project, open, onClose }) {
   const [reportSrc, setReportSrc] = useState(null)
   const [reportExpanded, setReportExpanded] = useState(false)
   const [reportLoaded, setReportLoaded] = useState(false)
+  const [reportFullscreen, setReportFullscreen] = useState(false)
   useEffect(() => {
     if (!open || !project?.reportUrl) return
     setReportSrc(null)
     setReportLoaded(false)
     setReportExpanded(false)
+    setReportFullscreen(false)
     const root = scrollRef.current
     const target = reportRef.current
     if (!root || !target) return
@@ -88,7 +90,10 @@ export default function ProjectModal({ project, open, onClose }) {
   useEffect(() => {
     if (!open) return
     const onKey = (e) => {
-      if (e.key === 'Escape') handleClose()
+      if (e.key === 'Escape') {
+        if (reportFullscreen) setReportFullscreen(false)
+        else handleClose()
+      }
     }
     document.addEventListener('keydown', onKey)
     document.body.style.overflow = 'hidden'
@@ -325,6 +330,17 @@ export default function ProjectModal({ project, open, onClose }) {
                   <div className="flex items-center gap-2">
                     <button
                       type="button"
+                      onClick={() => setReportFullscreen(true)}
+                      className="inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-black/[0.04] px-3 py-1 text-[11px] font-medium text-ink-600 transition-colors hover:bg-black/[0.08] hover:text-ink-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20"
+                      aria-label={ui.modal.reportFullscreen}
+                    >
+                      {ui.modal.reportFullscreen}
+                      <svg width="12" height="12" viewBox="0 0 15 15" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M2 5.5V2.5H5.5M9.5 2.5H12.5V5.5M12.5 9.5V12.5H9.5M5.5 12.5H2.5V9.5" />
+                      </svg>
+                    </button>
+                    <button
+                      type="button"
                       onClick={() => setReportExpanded((v) => !v)}
                       className="inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-black/[0.04] px-3 py-1 text-[11px] font-medium text-ink-600 transition-colors hover:bg-black/[0.08] hover:text-ink-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20"
                       aria-label={reportExpanded ? ui.modal.reportCollapse : ui.modal.reportExpand}
@@ -376,6 +392,32 @@ export default function ProjectModal({ project, open, onClose }) {
             )}
             </motion.div>
           </motion.div>
+
+          {/* ── 报告全屏覆盖层：iframe 占满视口，看完整网页 ── */}
+          {reportFullscreen && project.reportUrl && (
+            <div className="fixed inset-0 z-[200] flex flex-col bg-black/85 backdrop-blur-sm">
+              <div className="flex shrink-0 items-center justify-between px-4 py-3 text-white md:px-6">
+                <span className="truncate pr-3 text-[13px] font-medium">
+                  {project.title} · {ui.modal.report}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setReportFullscreen(false)}
+                  className="inline-flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition-colors hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+                  aria-label={ui.modal.close}
+                >
+                  <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+                    <path d="M3 3L12 12M12 3L3 12" />
+                  </svg>
+                </button>
+              </div>
+              <iframe
+                src={project.reportUrl}
+                title={`${project.title} 完整报告`}
+                className="h-full w-full flex-1 border-0 bg-white"
+              />
+            </div>
+          )}
         </motion.div>
       )}
     </AnimatePresence>
