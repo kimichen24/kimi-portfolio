@@ -17,6 +17,7 @@ const Experience = lazy(() => import('./components/Experience'))
 const Projects = lazy(() => import('./components/Projects'))
 const Strengths = lazy(() => import('./components/Strengths'))
 const Contact = lazy(() => import('./components/Contact'))
+const ProjectDetail = lazy(() => import('./components/ProjectDetail'))
 
 // 页面映射
 const PAGE_MAP = {
@@ -25,6 +26,7 @@ const PAGE_MAP = {
   projects: Projects,
   strengths: Strengths,
   contact: Contact,
+  project: ProjectDetail,
 }
 
 /**
@@ -32,7 +34,7 @@ const PAGE_MAP = {
  * 切换页面时自动 scroll 到顶部
  */
 function PageRenderer() {
-  const { page } = usePage()
+  const { page, projectId } = usePage()
   const PageComp = PAGE_MAP[page] || SpaceTravel
 
   // 切换页面时 scroll 顶部（用 Lenis 实例归位，避免与平滑滚动打架）
@@ -61,7 +63,7 @@ function PageRenderer() {
   return (
     <AnimatePresence mode="wait">
       <motion.div
-        key={page}
+        key={projectId ? `${page}-${projectId}` : page}
         id={`page-${page}`}
         tabIndex={-1}
         initial={{ opacity: 0, y: 10, filter: 'blur(4px)' }}

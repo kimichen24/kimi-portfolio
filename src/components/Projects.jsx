@@ -4,7 +4,7 @@ import { useGSAP } from '@gsap/react'
 import PlaceholderImage from './ui/PlaceholderImage'
 import BackButton from './BackButton'
 import PageBackground from './ui/PageBackground'
-import ProjectModal from './ProjectModal'
+import { usePage } from '../context/PageContext'
 import Tilt from './ui/Tilt'
 import MagneticButton from './ui/MagneticButton'
 import CountUp from './ui/CountUp'
@@ -16,12 +16,12 @@ import { useContent, useUI } from '../data'
  *
  * - 轮播：scroll-snap 横向滑动，每屏一个项目（手机滑动 / 桌面箭头 + 圆点 + ←→ 键）
  * - 卡片：苹果展示卡 — 顶部色调标识线、封面 hero 化、大字号层次、数据药丸、微交互
- * - 点击「查看详情」打开详情弹窗（ProjectModal）
+ * - 点击「查看详情」进入独立项目详情页（#/project/<id>）
  */
 export default function Projects() {
   const { projects, vibeProjects } = useContent()
   const ui = useUI()
-  const [active, setActive] = useState(null)
+  const { navigate } = usePage()
   const [index, setIndex] = useState(0)
   const [filter, setFilter] = useState('all') // 'all' | 'project' | 'experiment'
   const scrollRef = useRef(null)
@@ -42,8 +42,7 @@ export default function Projects() {
     { scope },
   )
 
-  const openModal = useCallback((p) => setActive(p), [])
-  const closeModal = useCallback(() => setActive(null), [])
+  const openProject = useCallback((p) => navigate('project', p.id), [navigate])
 
   // 跳转到第 i 屏（边界保护）
   const goTo = useCallback((i) => {
@@ -296,7 +295,7 @@ export default function Projects() {
 
                         {/* CTA 按钮 — 浅底卡片上的深底按钮，强对比 */}
                         <MagneticButton
-                          onClick={() => openModal(p)}
+                          onClick={() => openProject(p)}
                           className="group/btn mt-6 inline-flex items-center gap-2 rounded-full bg-ink-900 px-5 py-2.5 text-xs font-medium text-white transition-all duration-300 hover:bg-ink-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20"
                         >
                           {ui.projects.detail}
@@ -433,9 +432,6 @@ export default function Projects() {
         </div>
         </div>
       </div>
-
-      {/* 详情弹窗 */}
-      <ProjectModal project={active} open={!!active} onClose={closeModal} />
     </section>
   )
 }

@@ -1,11 +1,12 @@
 /**
  * PageContext — 单页切换模式（带 URL 深链 #/page）
  *
- * 全局维护当前页（home / experience / projects / strengths / contact）
+ * 全局维护当前页（home / experience / projects / strengths / contact / project）
  * 通过 navigate(target) 切换，配合 AnimatePresence 做过渡。
+ * 项目详情为独立页：navigate('project', id) → #/project/<id>
  *
  * 深链：
- *   - 初始化时从 location.hash 读取（如 #/projects → projects），刷新保持当前页
+ *   - 初始化时从 location.hash 读取（如 #/projects → projects，#/project/intern-radar → project + id），刷新保持当前页
  *   - navigate 用 history.pushState 写入 #/page（不触发整页刷新，前进/后退可用）
  *   - 监听 hashchange，支持浏览器前进/后退与外部分享链接直达
  */
@@ -13,34 +14,42 @@ import { createContext, useContext, useState, useEffect, useCallback } from 'rea
 
 const PageContext = createContext(null)
 
-export const PAGES = ['home', 'experience', 'projects', 'strengths', 'contact']
+export const PAGES = ['home', 'experience', 'projects', 'strengths', 'contact', 'project']
 
-function readHashPage() {
-  const h = (window.location.hash || '').replace(/^#\/?/, '')
-  return PAGES.includes(h) ? h : 'home'
+function parseHash() {
+  const raw = (window.location.hash || '').replace(/^#\/?/, '')
+  if (raw.startsWith('project/')) {
+    const id = raw.slice('project/'.length)
+    if (id) return { page: 'project', projectId: id }
+  }
+  const page = PAGES.includes(raw) ? raw : 'home'
+  return { page, projectId: null }
 }
 
 export function PageProvider({ children }) {
-  const [page, setPage] = useState(() => readHashPage())
+  const [state, setState] = useState(() => parseHash())
 
-  const navigate = useCallback((target) => {
+  const navigate = useCallback((target, projectId = null) => {
     if (!PAGES.includes(target)) return
-    const next = `#/${target}`
+    const next =
+      target === 'project' && projectId ? `#/project/${projectId}` : `#/${target}`
     if (window.location.hash !== next) {
       window.history.pushState(null, '', next)
     }
-    setPage(target)
+    setState({ page: target, projectId })
   }, [])
 
   // 浏览器前进/后退、手动改 hash、外部链接直达
   useEffect(() => {
-    const onHashChange = () => setPage(readHashPage())
+    const onHashChange = () => setState(parseHash())
     window.addEventListener('hashchange', onHashChange)
     return () => window.removeEventListener('hashchange', onHashChange)
   }, [])
 
   return (
-    <PageContext.Provider value={{ page, setPage, navigate }}>
+    <PageContext.Provider
+      value={{ page: state.page, projectId: state.projectId, navigate }}
+    >
       {children}
     </PageContext.Provider>
   )
