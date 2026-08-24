@@ -28,6 +28,7 @@ export const ui = {
       viewAll: '查看全部作品',
     },
     back: '返回首页',
+    backToProjects: '返回作品集',
     experience: {
       eyebrow: 'Experience · 实践轨迹',
       title: '经历',
@@ -108,6 +109,7 @@ export const ui = {
       viewAll: 'View all work',
     },
     back: 'Back to Home',
+    backToProjects: 'Back to Projects',
     experience: {
       eyebrow: 'Experience · Trajectory',
       title: 'Experience',

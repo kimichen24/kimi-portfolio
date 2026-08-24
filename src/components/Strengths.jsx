@@ -287,11 +287,6 @@ export default function Strengths() {
                   {profile.englishName}
                 </p>
 
-                {/* 一句话定位 — 比 bioLine 更抓眼 */}
-                <p className="mt-2 text-[13px] font-medium tracking-wide text-ink-600 sm:text-[14px]">
-                  {ui.strengths.positioning}
-                </p>
-
                 {/* 分隔线 */}
                 <div className="mt-5 h-px w-full bg-gradient-to-r from-transparent via-black/10 to-transparent" />
 
