@@ -21,24 +21,33 @@ export default function ProjectDetail() {
   const project = projects.find((p) => p.id === projectId)
 
   const reportRef = useRef(null)
+  const reportLoadedRef = useRef(false)
   const [reportSrc, setReportSrc] = useState(null)
   const [reportLoaded, setReportLoaded] = useState(false)
+  const [reportTimedOut, setReportTimedOut] = useState(false)
+  const [reportKey, setReportKey] = useState(0)
 
   // 无效 id → 回 projects
   useEffect(() => {
     if (!project) navigate('projects')
   }, [project, navigate])
 
-  // 进入即加载报告（整页，不依赖滚动懒加载）
+  // 进入即加载报告；12s 未加载完即提示降级（重试 / 新标签页打开），不再无限转圈
   useEffect(() => {
-    if (project?.reportUrl) {
-      setReportSrc(project.reportUrl)
-    }
+    if (!project?.reportUrl) return
+    reportLoadedRef.current = false
+    setReportSrc(project.reportUrl)
+    setReportTimedOut(false)
+    const timer = setTimeout(() => {
+      if (!reportLoadedRef.current) setReportTimedOut(true)
+    }, 12000)
     return () => {
+      clearTimeout(timer)
       setReportSrc(null)
       setReportLoaded(false)
+      setReportTimedOut(false)
     }
-  }, [project])
+  }, [project, reportKey])
 
   if (!project) {
     return (
@@ -98,32 +107,12 @@ export default function ProjectDetail() {
           </div>
         </motion.div>
 
-        {/* ── 核心工作 ── */}
+        {/* ── 量化成果（前置）—— 首屏即给数字证据，不用滚动才看到含金量 ── */}
         <motion.section
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
           className="mt-8 md:mt-10"
-        >
-          <h3 className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-ink-500">
-            {ui.modal.coreWork}
-          </h3>
-          <ul className="space-y-3 rounded-2xl border border-black/[0.10] bg-ink-100 p-5 shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
-            {project.actions.map((a, i) => (
-              <li key={i} className="flex items-start gap-3 text-[14px] leading-[1.65] text-ink-700">
-                <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-black/40" />
-                <span>{a}</span>
-              </li>
-            ))}
-          </ul>
-        </motion.section>
-
-        {/* ── 量化成果 ── */}
-        <motion.section
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-7 md:mt-9"
         >
           <h3 className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-ink-500">
             {ui.modal.keyResults}
@@ -143,6 +132,26 @@ export default function ProjectDetail() {
               </div>
             ))}
           </div>
+        </motion.section>
+
+        {/* ── 核心工作 ── */}
+        <motion.section
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          className="mt-7 md:mt-9"
+        >
+          <h3 className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-ink-500">
+            {ui.modal.coreWork}
+          </h3>
+          <ul className="space-y-3 rounded-2xl border border-black/[0.10] bg-ink-100 p-5 shadow-[0_2px_12px_rgba(0,0,0,0.06)]">
+            {project.actions.map((a, i) => (
+              <li key={i} className="flex items-start gap-3 text-[14px] leading-[1.65] text-ink-700">
+                <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-black/40" />
+                <span>{a}</span>
+              </li>
+            ))}
+          </ul>
         </motion.section>
 
         {/* ── 补充材料（仅当项目有 extras）── */}
@@ -287,16 +296,48 @@ export default function ProjectDetail() {
               ref={reportRef}
               className="relative overflow-hidden rounded-2xl border border-black/10 bg-ink-100"
             >
-              {reportSrc && !reportLoaded && (
+              {/* 加载中转圈 — 超时后切换为降级提示 */}
+              {reportSrc && !reportLoaded && !reportTimedOut && (
                 <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-ink-100 text-ink-500">
                   <span className="h-5 w-5 animate-spin rounded-full border-2 border-black/10 border-t-ink-900" />
                   <span className="text-xs">{ui.modal.reportLoading}</span>
                 </div>
               )}
+              {/* 超时降级 — 网络太慢时给重试 + 外链，不再无限转圈 */}
+              {reportTimedOut && !reportLoaded && (
+                <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 bg-ink-100 px-6 text-center">
+                  <span className="text-sm text-ink-600">{ui.modal.reportSlow}</span>
+                  <div className="flex items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setReportKey((k) => k + 1)}
+                      className="inline-flex items-center gap-1.5 rounded-full bg-ink-900 px-4 py-2 text-[12px] font-medium text-white transition-all hover:bg-ink-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20"
+                    >
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M21 12a9 9 0 1 1-2.64-6.36" />
+                        <path d="M21 3v5h-5" />
+                      </svg>
+                      {ui.modal.reportRetry}
+                    </button>
+                    <a
+                      href={project.reportUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-black/[0.04] px-4 py-2 text-[12px] font-medium text-ink-700 transition-colors hover:bg-black/[0.08] hover:text-ink-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20"
+                    >
+                      {isExternalReport ? ui.modal.openExternal : ui.modal.openNew}
+                    </a>
+                  </div>
+                </div>
+              )}
               <iframe
+                key={reportKey}
                 src={reportSrc || undefined}
                 title={`${project.title} 完整报告`}
-                onLoad={() => setReportLoaded(true)}
+                onLoad={() => {
+                  reportLoadedRef.current = true
+                  setReportLoaded(true)
+                }}
                 className="h-[80vh] min-h-[560px] w-full border-0 bg-ink-100"
               />
             </div>

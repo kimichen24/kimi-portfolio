@@ -180,8 +180,7 @@ function FlipContactCard({ platform, platformLabel, handle, qr, accent }) {
         <span className="absolute inset-0 flex flex-col items-center justify-center gap-2.5 rounded-[14px] border border-black/[0.10] bg-black/[0.04] p-5 text-center [backface-visibility:hidden] [-webkit-backface-visibility:hidden] [transform:rotateY(180deg)] [-webkit-transform:rotateY(180deg)] group-hover:border-black/20">
           <img
             src={qr}
-            alt={`${platformLabel}二维码`}
-            loading="lazy"
+            alt={platform === 'wechat' ? '扫码添加 Kimi 的微信' : '扫码添加 Kimi 的 QQ'}
             decoding="async"
             className="h-[92px] w-[92px] rounded-lg object-contain ring-1 ring-black/10"
           />

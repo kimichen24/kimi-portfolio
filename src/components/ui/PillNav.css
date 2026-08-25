@@ -399,3 +399,48 @@
 .pill-nav.pill-nav--frosted .pill.is-active::after {
   background: #000000;
 }
+
+/* ==========================================================================
+   深色模式 — frosted 变体覆写（浅色玻璃 → 深色玻璃，选中态反转为浅底深字）
+   ========================================================================== */
+.dark .pill-nav.pill-nav--frosted .pill-nav-items {
+  background: rgba(20, 20, 24, 0.72);
+  border-color: rgba(255, 255, 255, 0.10);
+  box-shadow:
+    0 10px 34px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.dark .pill-nav.pill-nav--frosted .pill {
+  color: rgba(255, 255, 255, 0.62);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.dark .pill-nav.pill-nav--frosted .pill .pill-label {
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.dark .pill-nav.pill-nav--frosted .pill .hover-circle {
+  background: #f5f5f7;
+}
+
+.dark .pill-nav.pill-nav--frosted .pill .pill-label-hover {
+  color: #0a0a0f;
+}
+
+.dark .pill-nav.pill-nav--frosted .pill-active-bg {
+  background: #f5f5f7;
+}
+
+.dark .pill-nav.pill-nav--frosted .pill.is-active {
+  border-color: #f5f5f7;
+}
+
+.dark .pill-nav.pill-nav--frosted .pill.is-active .pill-label,
+.dark .pill-nav.pill-nav--frosted .pill.is-active .pill-label-hover {
+  color: #0a0a0f;
+}
+
+.dark .pill-nav.pill-nav--frosted .pill.is-active::after {
+  background: #f5f5f7;
+}

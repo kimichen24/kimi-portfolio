@@ -13,9 +13,9 @@ export const profile = {
     'University First-Class Scholarship',
   ],
   bioLine:
-    "Turning ideas into reality with code. I've worked on content operations, user research, and data-driven decisions — and now I want to build products that actually solve problems.",
+    "I've worked on content operations, user research, and data-driven decisions, and I use AI to automate the repetitive parts. Now I'm looking for a product-operations internship to apply my 0-to-1 content playbook at greater scale.",
   bio: [
-    'Undergraduate student majoring in Information Management and Information Systems; solid product and data foundation, with a structured mindset for breaking down operational problems.',
+    'Undergraduate student majoring in Software Engineering; solid product and data foundation, with a structured mindset for breaking down operational problems.',
     'Deep experience in content operations and user research — from building account systems 0-to-1, iterating strategy through data review, to turning research insights into actionable product plans.',
     'Fluent with AI tools across the full workflow — materials, copywriting, data analysis — having achieved an 81.7% efficiency gain on a single project.',
   ],
@@ -27,7 +27,7 @@ export const profile = {
   ],
   stats: [
     { value: '3', unit: '', label: 'Independent Projects', desc: 'Shipped 0 to 1' },
-    { value: '30K+', unit: '', label: 'Account Views', desc: 'Douyin organic traffic' },
+    { value: '106.6K+', unit: '', label: 'Account Views', desc: 'Douyin organic traffic' },
     { value: '73', unit: '%', label: 'Pain Coverage', desc: 'P0 plan hits' },
     { value: '81.7', unit: '%', label: 'Efficiency Gain', desc: 'AI workflow' },
   ],
@@ -46,11 +46,10 @@ export const experiences = [
       'Reviewed and iterated weekly based on Douyin backend data; built a topic reservoir',
     ],
     metrics: [
-      { value: '1000+', label: 'Likes on 5 videos' },
-      { value: '30K', label: '7-day organic views' },
-      { value: '20K', label: 'Top single-video views' },
-      { value: '792', label: 'Weekly profile visits' },
-      { value: '100+', label: 'Net new followers' },
+      { value: '106.6K', label: 'Total views' },
+      { value: '6K+', label: 'Total likes' },
+      { value: '50K', label: 'Top single-video views' },
+      { value: '320', label: 'Current followers' },
     ],
     link: { url: 'https://v.douyin.com/sZVo34eBJDM/', label: 'Douyin Profile' },
   },

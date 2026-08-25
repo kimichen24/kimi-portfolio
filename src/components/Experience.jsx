@@ -111,7 +111,7 @@ export default function Experience() {
             >
               {/* ── 左侧：年份大字号极淡 + 时间（宽屏右对齐，滚动时吸顶） ── */}
               <div className="lg:sticky lg:top-28 lg:self-start lg:pr-10 lg:text-right">
-                <div className="font-display text-[44px] font-semibold leading-none tracking-tight text-ink-900/[0.10] md:text-[56px]">
+                <div className="font-display text-[44px] font-semibold leading-none tracking-tight text-ink-400 md:text-[56px]">
                   {exp.period.split('-')[0]}
                 </div>
                 <div className="mt-2 text-[13px] font-medium tracking-wide text-ink-500">

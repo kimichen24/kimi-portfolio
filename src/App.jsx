@@ -6,6 +6,7 @@ import MobileBottomNav from './components/MobileBottomNav'
 import Footer from './components/Footer'
 import PageFrame from './components/PageFrame'
 import ErrorBoundary from './components/ErrorBoundary'
+import NotFound from './components/NotFound'
 import { PageProvider, usePage } from './context/PageContext'
 import { LanguageProvider } from './context/LanguageContext'
 import { ThemeProvider } from './context/ThemeContext'
@@ -19,7 +20,7 @@ const Strengths = lazy(() => import('./components/Strengths'))
 const Contact = lazy(() => import('./components/Contact'))
 const ProjectDetail = lazy(() => import('./components/ProjectDetail'))
 
-// 页面映射
+// 页面映射（not-found 为兜底页，体积小直接打包）
 const PAGE_MAP = {
   home: SpaceTravel,
   experience: Experience,
@@ -27,6 +28,7 @@ const PAGE_MAP = {
   strengths: Strengths,
   contact: Contact,
   project: ProjectDetail,
+  'not-found': NotFound,
 }
 
 /**
@@ -82,11 +84,18 @@ function PageRenderer() {
   )
 }
 
-// 懒加载占位 — 极简旋转指示，避免布局跳动
+// 懒加载占位 — 轻量骨架屏（标题条 + 内容卡轮廓），让等待看起来“有布局”而不是白屏
 function PageFallback() {
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <span className="h-6 w-6 animate-spin rounded-full border-2 border-black/10 border-t-ink-900" />
+    <div className="container-page min-h-screen pt-36" aria-hidden>
+      <div className="animate-pulse">
+        <div className="mb-4 h-2.5 w-24 rounded-full bg-ink-900/10" />
+        <div className="mb-12 h-10 w-64 max-w-full rounded-xl bg-ink-900/10" />
+        <div className="space-y-4">
+          <div className="h-32 rounded-2xl bg-ink-900/[0.05]" />
+          <div className="h-32 rounded-2xl bg-ink-900/[0.05]" />
+        </div>
+      </div>
     </div>
   )
 }

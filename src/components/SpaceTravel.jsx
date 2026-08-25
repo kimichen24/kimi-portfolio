@@ -200,6 +200,9 @@ function SpaceTravelHero() {
   const scope = useRef(null)
   const heroContentRef = useRef(null)
 
+  // 首屏价值速览 — 复用 profile.stats 的真实数据（账号播放 / 独立项目 / AI 效率提升）
+  const heroStats = [profile.stats[1], profile.stats[0], profile.stats[3]]
+
   // ── Hero 文字点击反馈：KIMI 解码 + slogan 轮播 + 全局按压 ──
   const [kimiText, setKimiText] = useState('KIMI')
   const [sloganIdx, setSloganIdx] = useState(0)
@@ -347,7 +350,7 @@ function SpaceTravelHero() {
         className="pointer-events-none absolute inset-0 z-[60] flex flex-col items-center justify-center"
         style={{
           background:
-            'radial-gradient(ellipse at 50% 32%, #ffffff 0%, transparent 62%), linear-gradient(180deg, #ffffff 0%, #f5f5f7 100%)',
+            'radial-gradient(ellipse at 50% 32%, rgb(var(--c-white)) 0%, transparent 62%), linear-gradient(180deg, rgb(var(--c-white)) 0%, rgb(var(--bg)) 100%)',
         }}
       >
         {/* 字母标 — 大 K，极低透明度，营造空间感 */}
@@ -392,6 +395,17 @@ function SpaceTravelHero() {
         >
           {ui.hero.eyebrow}
         </span>
+
+        {/* 求职状态徽章 — HR 第一眼就知道“我现在在做什么”（可到岗信息真实） */}
+        <div data-hero="sub" className="mb-6 sm:mb-7">
+          <span className="inline-flex items-center gap-2 rounded-full border border-black/[0.10] bg-black/[0.03] px-3.5 py-1.5 text-[11.5px] font-medium tracking-wide text-ink-700">
+            <span className="relative inline-flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ink-500 opacity-60" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-ink-700" />
+            </span>
+            {ui.hero.status}
+          </span>
+        </div>
 
         {/* 上方文案 — 用户指定的 slogan，可点击轮播 */}
         <span
@@ -469,6 +483,23 @@ function SpaceTravelHero() {
             {ui.hero.cta2}
             <IconArrowRight className="transition-transform duration-300 group-hover:translate-x-0.5" />
           </button>
+        </div>
+
+        {/* 右侧数据速览 — 填充右半屏空白，3 秒内给出“做过什么”的证据（lg+ 显示；移动端保持排版干净） */}
+        <div className="absolute right-6 top-1/2 hidden -translate-y-1/2 sm:right-12 lg:block lg:right-16 xl:right-20">
+          <div data-hero="sub" className="flex flex-col items-end gap-9 text-right">
+            {heroStats.map((s) => (
+              <div key={s.label}>
+                <div className="font-display text-[34px] font-semibold leading-none tracking-tight text-ink-900 xl:text-[40px]">
+                  {s.value}
+                  {s.unit}
+                </div>
+                <div className="mt-2 text-[11px] font-medium uppercase tracking-[0.18em] text-ink-500">
+                  {s.label}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 

@@ -3,6 +3,7 @@ node_modules/
 
 # Build output (rebuilt by CI / locally)
 dist/
+dist-prebuild-*/
 .build-tmp/
 .build-verify/
 .build-rel/

@@ -417,16 +417,37 @@ export default function Projects() {
                 </a>
               </div>
 
-              {/* 右：iframe 内嵌线上版预览 */}
-              <div className="card-apple overflow-hidden p-0">
-                <div className="relative h-[400px] w-full md:h-[560px]">
-                  <iframe
-                    src={v.url}
-                    title={`${v.title} · 在线预览`}
-                    className="h-full w-full border-0 bg-ink-100"
-                  />
+              {/* 右：可点击预览卡 — 外链打开线上版（避免外部 iframe 在微信 / 部分浏览器加载失败或拖慢首屏） */}
+              <a
+                href={v.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`打开 ${v.title} 线上版`}
+                className="group/prev card-apple relative flex h-[400px] w-full items-center justify-center overflow-hidden p-8 transition-colors duration-300 hover:bg-ink-100 md:h-[560px]"
+              >
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-black/[0.02] to-black/[0.05]" />
+                {/* 模拟浏览器窗口预览 */}
+                <div className="relative z-10 w-full max-w-[300px] overflow-hidden rounded-xl border border-black/10 bg-white/70 shadow-[0_20px_60px_rgba(0,0,0,0.12)] backdrop-blur">
+                  <div className="flex items-center gap-1.5 border-b border-black/[0.06] px-3 py-2">
+                    <span className="h-2 w-2 rounded-full bg-black/15" />
+                    <span className="h-2 w-2 rounded-full bg-black/15" />
+                    <span className="h-2 w-2 rounded-full bg-black/15" />
+                    <span className="ml-2 truncate text-[10px] text-ink-400">kimichen24.github.io</span>
+                  </div>
+                  <div className="flex aspect-[4/3] items-center justify-center bg-ink-100">
+                    <span className="font-display text-xl font-semibold tracking-tight text-ink-900/15">
+                      {v.title}
+                    </span>
+                  </div>
                 </div>
-              </div>
+                {/* 悬停浮现的打开提示 */}
+                <span className="absolute bottom-5 right-5 z-10 inline-flex items-center gap-1.5 rounded-full bg-ink-900 px-3.5 py-2 text-[11px] font-medium text-white opacity-0 transition-opacity duration-300 group-hover/prev:opacity-100">
+                  {ui.projects.openSite}
+                  <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M3 7H11M8 4L11 7L8 10" />
+                  </svg>
+                </span>
+              </a>
             </div>
           ))}
         </div>

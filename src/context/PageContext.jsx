@@ -22,7 +22,8 @@ function parseHash() {
     const id = raw.slice('project/'.length)
     if (id) return { page: 'project', projectId: id }
   }
-  const page = PAGES.includes(raw) ? raw : 'home'
+  // 空.hash → 首页；已注册页名 → 对应页；其余未知路径 → 404 兜底页（不再静默回首页）
+  const page = PAGES.includes(raw) ? raw : raw ? 'not-found' : 'home'
   return { page, projectId: null }
 }
 

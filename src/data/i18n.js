@@ -18,10 +18,17 @@ export const ui = {
     },
     hero: {
       eyebrow: '个人作品集 · Portfolio 2026',
+      status: '正在找产品运营实习 · 一周内可到岗',
       cta1: '查看作品',
       cta2: '联系我',
       scroll: '探索作品',
       name: '陈权峰 · Kimi Chen',
+    },
+    notFound: {
+      code: '404',
+      title: '页面不存在',
+      desc: '链接可能已失效或输入有误，回首页继续浏览吧。',
+      back: '返回首页',
     },
     home: {
       works: '精选作品',
@@ -80,6 +87,8 @@ export const ui = {
       reportExpand: '放大预览',
       reportCollapse: '收起预览',
       reportLoading: '报告加载中…',
+      reportSlow: '报告加载有点慢，可能是网络原因',
+      reportRetry: '重试',
     },
   },
   en: {
@@ -99,10 +108,17 @@ export const ui = {
     },
     hero: {
       eyebrow: 'Portfolio · 2026',
+      status: 'Open to product-operations internships · available within a week',
       cta1: 'View Work',
       cta2: 'Contact',
       scroll: 'Explore work',
       name: 'Chen Quanfeng · Kimi Chen',
+    },
+    notFound: {
+      code: '404',
+      title: 'Page not found',
+      desc: 'The link may be broken or mistyped — head back home to keep browsing.',
+      back: 'Back to Home',
     },
     home: {
       works: 'Selected Work',
@@ -161,6 +177,8 @@ export const ui = {
       reportExpand: 'Expand Preview',
       reportCollapse: 'Collapse Preview',
       reportLoading: 'Loading report…',
+      reportSlow: 'The report is taking a while — possibly a slow network',
+      reportRetry: 'Retry',
     },
   },
 }

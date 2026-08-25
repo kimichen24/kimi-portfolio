@@ -97,7 +97,7 @@ export default function Contact() {
       {/* 大字号极淡水印 — 强化「联系」语义，克制不抢戏 */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center"
+        className="pointer-events-none absolute inset-0 z-0 hidden items-center justify-center md:flex"
       >
         <span className="select-none whitespace-nowrap font-display text-[15vw] font-bold leading-none tracking-tightest text-ink-900/[0.05]">
           {ui.contact.letsTalk}
