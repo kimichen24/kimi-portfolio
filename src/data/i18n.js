@@ -18,7 +18,7 @@ export const ui = {
     },
     hero: {
       eyebrow: '个人作品集 · Portfolio 2026',
-      status: '正在找产品运营实习 · 一周内可到岗',
+      status: '内容运营 · 用户调研 · 数据决策',
       cta1: '查看作品',
       cta2: '联系我',
       scroll: '探索作品',
@@ -108,7 +108,7 @@ export const ui = {
     },
     hero: {
       eyebrow: 'Portfolio · 2026',
-      status: 'Open to product-operations internships · available within a week',
+      status: 'Content ops · user research · data-driven decisions',
       cta1: 'View Work',
       cta2: 'Contact',
       scroll: 'Explore work',

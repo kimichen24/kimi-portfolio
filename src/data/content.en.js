@@ -13,7 +13,7 @@ export const profile = {
     'University First-Class Scholarship',
   ],
   bioLine:
-    "I've worked on content operations, user research, and data-driven decisions, and I use AI to automate the repetitive parts. Now I'm looking for a product-operations internship to apply my 0-to-1 content playbook at greater scale.",
+    "I've worked on content operations, user research, and data-driven decisions, and I use AI to automate the repetitive parts — turning my 0-to-1 content playbook into reusable operational methods.",
   bio: [
     'Undergraduate student majoring in Software Engineering; solid product and data foundation, with a structured mindset for breaking down operational problems.',
     'Deep experience in content operations and user research — from building account systems 0-to-1, iterating strategy through data review, to turning research insights into actionable product plans.',
