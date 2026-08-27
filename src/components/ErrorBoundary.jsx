@@ -29,23 +29,24 @@ export default class ErrorBoundary extends Component {
     if (this.state.hasError) {
       return (
         <div className="flex min-h-screen flex-col items-center justify-center gap-5 px-6 text-center">
-          <h1 className="font-display text-3xl font-medium tracking-tight text-ink-900 md:text-4xl">
+          <p className="red-note text-[12px] uppercase tracking-widewide">Error</p>
+          <h1 className="font-serif text-3xl font-black tracking-tight text-ink md:text-4xl">
             这一页出了点问题
           </h1>
-          <p className="max-w-sm text-sm leading-relaxed text-ink-900/60">
+          <p className="max-w-sm text-sm leading-relaxed text-ink-soft">
             内容加载时发生异常，其余页面仍可正常访问。你可以重试这一页，或返回首页。
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
             <button
               type="button"
               onClick={this.handleRetry}
-              className="rounded-full bg-ink-900 px-5 py-2 text-sm font-medium text-white transition hover:opacity-90"
+              className="border border-paper-line bg-white/60 px-5 py-2 font-mono text-[12px] text-ink transition hover:border-red/40"
             >
               重新加载这一页
             </button>
             <a
-              href="/#/home"
-              className="rounded-full border border-black/10 px-5 py-2 text-sm font-medium text-ink-900 transition hover:bg-black/5"
+              href="#/"
+              className="border border-paper-line bg-white/60 px-5 py-2 font-mono text-[12px] text-ink transition hover:border-red/40"
             >
               返回首页
             </a>

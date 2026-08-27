@@ -9,8 +9,15 @@
  */
 import Lenis from 'lenis'
 import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { prefersReduced } from './animations'
+
+/** 是否开启「减少动效」偏好 */
+export function prefersReduced() {
+  return (
+    typeof window !== 'undefined' &&
+    typeof window.matchMedia === 'function' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  )
+}
 
 let lenis = null
 let rafCallback = null
@@ -23,21 +30,17 @@ export function initSmoothScroll() {
 
   lenis = new Lenis({
     duration: 1.1,
-    // expo.out：苹果式减速，越接近终点越从容
+    // expo.out：减速缓动，越接近终点越从容
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     smoothWheel: true,
     wheelMultiplier: 1,
     touchMultiplier: 1.4,
   })
 
-  // 单一循环：GSAP ticker 驱动 Lenis，并同步 ScrollTrigger
-  lenis.on('scroll', ScrollTrigger.update)
+  // 单一循环：GSAP ticker 驱动 Lenis（一个 rAF，不打架）
   rafCallback = (time) => lenis.raf(time * 1000)
   gsap.ticker.add(rafCallback)
   gsap.ticker.lagSmoothing(0)
-
-  // 图片 / 字体加载后位置可能变化，统一刷新一次
-  ScrollTrigger.refresh()
 
   return lenis
 }

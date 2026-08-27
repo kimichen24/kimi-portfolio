@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 /* ==========================================================================
-   全局基础
+   编码台 · 全局基础 — 纸面研究美学
+   灰=噪声 / 墨=信号 / 朱红=批注。字体加载完成前用系统宋体兜底。
    ========================================================================== */
 @layer base {
   html,
@@ -16,12 +17,10 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
-    overscroll-behavior: none;
-    color-scheme: light dark;
-    background-color: rgb(var(--bg));
+    background-color: #faf8f3;
   }
 
-  /* Lenis 平滑滚动必需样式 — 避免与 scroll-behavior 冲突、保证高度正确 */
+  /* Lenis 平滑滚动必需样式 */
   html.lenis,
   html.lenis body {
     height: auto;
@@ -35,437 +34,221 @@
   .lenis.lenis-stopped {
     overflow: hidden;
   }
-  .lenis.lenis-smooth iframe {
-    pointer-events: none;
-  }
 
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text',
-      'Helvetica Neue', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
-    background-color: rgb(var(--bg));
-    color: rgb(var(--ink-800));
-    line-height: 1.6;
+    font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'PingFang SC',
+      'Microsoft YaHei', sans-serif;
+    background-color: #faf8f3;
+    color: #1c1a17;
+    line-height: 1.7;
     min-height: 100%;
-    overscroll-behavior: none;
     -webkit-overflow-scrolling: touch;
   }
 
   ::selection {
-    background-color: rgb(var(--selection) / 0.22);
-    color: rgb(var(--ink-900));
+    background-color: rgba(200, 64, 31, 0.16);
+    color: #1c1a17;
   }
 
-  /* 苹果风滚动条 — 浅色版 */
+  /* 纸面滚动条 — 细、方，像装订边 */
   ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+    width: 8px;
   }
   ::-webkit-scrollbar-track {
-    background: transparent;
+    background: #f3f0e7;
   }
   ::-webkit-scrollbar-thumb {
-    background: rgb(var(--scrollbar-thumb) / 0.20);
-    border-radius: 10px;
-    border: 2px solid rgb(var(--bg));
+    background: #c4beb2;
+    border: 2px solid #f3f0e7;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: rgb(var(--scrollbar-thumb) / 0.32);
+    background: #9a948a;
+  }
+
+  :focus-visible {
+    outline: 2px solid #c8401f;
+    outline-offset: 3px;
+    border-radius: 2px;
   }
 }
 
 /* ==========================================================================
-   复用样式
+   组件层 — 编辑式排版原语
    ========================================================================== */
 @layer components {
-  /* 苹果风容器 — 最大版心 1700px */
-  .container-page {
-    @apply mx-auto w-full max-w-container px-8 md:px-12 lg:px-16 xl:px-20;
+  .container-codex {
+    @apply mx-auto w-full max-w-codex px-6 sm:px-10 lg:px-14;
   }
 
-  /* ── 全站统一 Apple 浅色背景：#f5f5f7，干净无渐变 ──
-     整站统一为浅灰底 + 深字，卡片纯白，极致克制。 */
-  .page-bg {
-    position: absolute;
-    inset: 0;
-    z-index: -10;
-    overflow: hidden;
-    pointer-events: none;
-    background: rgb(var(--bg));
+  /* 眉批 — 章节页眉的等宽小字，像研究笔记的编号 */
+  .eyebrow-mono {
+    @apply font-mono text-[11px] font-medium uppercase tracking-widewide text-ink-mute;
   }
 
-  /* 苹果风标题 — 浅色底默认近黑，暗色底自动变浅 */
-  .h-display {
-    @apply font-display font-semibold tracking-tightest;
-    color: rgb(var(--ink-800));
+  /* 章节大标题 — 宋体、重、紧 */
+  .h-codex {
+    @apply font-serif font-black tracking-tightest text-ink;
   }
 
-  /* 苹果风正文 — 浅色底默认中灰，暗色底自动变浅 */
-  .text-body {
-    @apply leading-[1.6];
-    color: rgb(var(--ink-600));
+  /* 批注红笔 */
+  .red-note {
+    color: #c8401f;
+    font-family: 'IBM Plex Mono', 'SF Mono', Menlo, Consolas, monospace;
   }
 
-  /* 磨砂玻璃导航栏 — 浅色版（暗色底自动转深色玻璃） */
-  .glass-nav {
-    background-color: rgb(var(--c-white) / 0.72);
-    backdrop-filter: saturate(180%) blur(20px);
-    -webkit-backdrop-filter: saturate(180%) blur(20px);
-    border: 1px solid rgb(var(--border) / 0.08);
+  /* 折痕分隔 — 章节之间的细线 + 短红刻度 */
+  .rule-fold {
+    @apply relative h-px w-full bg-paper-line;
+  }
+  .rule-fold::before {
+    content: '';
+    @apply absolute left-0 top-0 h-px w-16 bg-red;
   }
 
-  .glass-nav-scrolled {
-    background-color: rgb(var(--c-white) / 0.84);
-    backdrop-filter: saturate(180%) blur(24px);
-    -webkit-backdrop-filter: saturate(180%) blur(24px);
-    border-bottom: 1px solid rgb(var(--border) / 0.08);
+  /* 索引行 — S3 方法清单的行样式 */
+  .index-row {
+    @apply relative grid grid-cols-[auto_1fr] items-baseline gap-x-5 border-t border-paper-line py-6 transition-colors duration-300 hover:bg-paper-deep/60 sm:gap-x-8 md:py-8;
   }
 
-  /* 苹果风按钮 — 主按钮：黑底白字，hover 轻微变灰 */
-  .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5
-           text-sm font-medium text-white transition-all duration-300
-           hover:scale-[1.015] active:scale-[0.985]
-           focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20;
-    background-color: rgb(var(--c-black));
-    border: 1px solid transparent;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 6px 16px rgba(0, 0, 0, 0.1);
+  /* 案卷卡 — S2 项目条目：纸片、左红索引线 */
+  .case-file {
+    @apply relative border border-paper-line bg-white/60 shadow-press transition-all duration-300 hover:-translate-y-0.5 hover:shadow-sheet;
   }
-  .btn-primary:hover {
-    background-color: rgb(var(--c-black) / 0.85);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1), 0 6px 16px rgba(0, 0, 0, 0.08);
+  .case-file::before {
+    content: '';
+    @apply absolute left-0 top-0 h-full w-[3px] bg-red/0 transition-colors duration-300;
   }
-
-  /* 次按钮：透明 + 深字浅边，hover 翻浅灰底 */
-  .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5
-           text-sm font-medium text-ink-900 transition-all duration-300
-           active:scale-[0.985]
-           focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20;
-    border: 1px solid rgb(var(--border) / 0.16);
-    background-color: transparent;
+  .case-file:hover::before {
+    @apply bg-red;
   }
-  .btn-secondary:hover {
-    background-color: rgb(var(--border) / 0.05);
-    color: rgb(var(--ink-900));
-    border-color: rgb(var(--border) / 0.28);
-  }
-
-  /* Hero 专用按钮 — 苹果极简风（黑底白字） */
-  .btn-hero-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5
-           text-sm font-medium text-white transition-all duration-300
-           hover:scale-[1.015] active:scale-[0.985]
-           focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20;
-    background-color: rgb(var(--c-black));
-    border: 1px solid transparent;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 8px 24px rgba(0, 0, 0, 0.1);
-  }
-  .btn-hero-primary:hover {
-    background-color: rgb(var(--c-black) / 0.85);
-    color: #ffffff;
-    border-color: rgb(var(--c-black) / 0.85);
-  }
-
-  .btn-hero-ghost {
-    @apply inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5
-           text-sm font-medium text-ink-900 transition-all duration-300
-           border border-black/10 bg-white
-           hover:bg-ink-100 hover:border-black/20 hover:text-black
-           active:scale-[0.985]
-           focus:outline-none focus-visible:ring-2 focus-visible:ring-black/20;
-  }
-
-  /* 苹果风卡片 — 纯白底 + 浅灰边 + 精致阴影（浅色背景） */
-  .card-apple {
-    @apply rounded-3xl transition-all duration-300;
-    color: rgb(var(--ink-800));
-    background: rgb(var(--surface));
-    border: 1px solid rgb(var(--border) / 0.08);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 4px 16px rgba(0, 0, 0, 0.04);
-  }
-  .card-apple:hover {
-    transform: translateY(-2px);
-    border-color: rgb(var(--border) / 0.12);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05), 0 8px 28px rgba(0, 0, 0, 0.07);
-  }
-
-  /* ── 大号展示卡片 — 纯白底 + 浅发丝边框 + 轻微浮起 ── */
-  .card-apple-xl {
-    @apply relative overflow-hidden rounded-[28px] transition-all duration-300;
-    color: rgb(var(--ink-800));
-    background: rgb(var(--surface));
-    border: 1px solid rgb(var(--border) / 0.08);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 8px 32px rgba(0, 0, 0, 0.05);
-  }
-  .card-apple-xl:hover {
-    transform: translateY(-3px);
-    border-color: rgb(var(--border) / 0.12);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05), 0 14px 44px rgba(0, 0, 0, 0.08);
-  }
-
-  /* ── 卡片顶部色调标识线（由 JS 通过 --tone 变量着色） ── */
-  .card-accent-line {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: var(--tone-color, rgba(0, 0, 0, 0.2));
-    opacity: 0.9;
-  }
-
-  /* ── 数据指标药丸 — 浅灰底 + 左侧深标识条 ── */
-  .metric-pill {
-    @apply flex flex-col items-center gap-0.5 rounded-[14px] px-4 py-2.5 transition-all duration-300;
-    background: rgb(var(--surface));
-    border: 1px solid rgb(var(--border) / 0.08);
-    border-left: 2.5px solid var(--tone-color, rgb(var(--border) / 0.35));
-    min-width: 72px;
-  }
-  .metric-pill:hover {
-    background: rgb(var(--surface));
-    border-color: rgb(var(--border) / 0.12);
-    transform: translateY(-1px);
-  }
-
-  /* 隐藏轮播轨道滚动条（保留滑动能力）*/
-  .hide-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .hide-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-
-  /* 模块小标题 — Eyebrow */
-  .eyebrow {
-    @apply text-xs font-medium uppercase tracking-[0.18em];
-    color: rgb(var(--ink-500));
-  }
-
-  /* 卡片悬浮上浮（替代 framer whileHover，由 GSAP 揭示结束后接管） */
-  .glow-card-hover {
-    transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: transform;
-  }
-  .glow-card-hover:hover {
-    transform: translate3d(0, -6px, 0);
-  }
-
-  /* 联系卡片 3D 翻转 — 丝滑缓动，尊重减弱动效偏好 */
-  .flip-inner {
-    transform-style: preserve-3d;
-    -webkit-transform-style: preserve-3d;
-    transition: transform 0.72s cubic-bezier(0.2, 0.8, 0.2, 1);
-    will-change: transform;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .flip-inner { transition-duration: 0.001ms; }
-  }
-}
-
-/* 首屏加载期间隐藏导航栏（Apple 风格：加载完成前不显示任何 UI 元素） */
-body[data-loading] .fixed.z-50,
-body[data-loading] [class*="z-50"] {
-  opacity: 0 !important;
-  pointer-events: none !important;
-  transform: translateY(-200%) !important;
-}
-
-/* 主题切换瞬间的颜色缓动（class 由 ThemeContext.toggleTheme 在切换时短暂添加，~360ms 后移除）。
-   只缓动颜色相关属性，不碰 transform，避免与 hover / 揭示动画冲突。 */
-.theme-transition,
-.theme-transition *,
-.theme-transition *::before,
-.theme-transition *::after {
-  transition: background-color 0.3s ease, border-color 0.3s ease,
-    color 0.3s ease, fill 0.3s ease, box-shadow 0.3s ease !important;
-  transition-delay: 0s !important;
 }
 
 /* ==========================================================================
-   自定义动画
+   工具层
    ========================================================================== */
 @layer utilities {
-  /* 滚动渐入 */
-  .reveal {
-    opacity: 0;
-    transform: translateY(32px);
-    transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: opacity, transform;
+  /* 标题墨线揭示 — 唯一的进场动画（clip 擦除，非淡入上移） */
+  .ink-wipe {
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 1.1s cubic-bezier(0.16, 1, 0.3, 1);
   }
-  .reveal.is-visible {
+  .ink-wipe.is-in {
+    clip-path: inset(0 0 0 0);
+  }
+
+  /* 朱红下划线 — 链接 hover 的批注感 */
+  .link-annotate {
+    @apply relative;
+    background-image: linear-gradient(#c8401f, #c8401f);
+    background-size: 0% 1.5px;
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    transition: background-size 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .link-annotate:hover {
+    background-size: 100% 1.5px;
+  }
+}
+
+/* ==========================================================================
+   稿纸底纹 — 极淡方格 + 左缘装订红线（固定层，不随滚动）
+   ========================================================================== */
+.manuscript {
+  background-image:
+    linear-gradient(to right, rgba(200, 64, 31, 0.1) 1px, transparent 1px),
+    linear-gradient(to right, rgba(28, 26, 23, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(28, 26, 23, 0.035) 1px, transparent 1px);
+  background-size:
+    96px 96px,
+    32px 32px,
+    32px 32px;
+  background-position:
+    56px 0,
+    56px 0,
+    0 0;
+}
+@media (max-width: 1023px) {
+  .manuscript {
+    /* 移动端去掉装订红线，只留方格 */
+    background-image:
+      linear-gradient(to right, rgba(28, 26, 23, 0.035) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(28, 26, 23, 0.035) 1px, transparent 1px);
+    background-size: 32px 32px, 32px 32px;
+  }
+}
+
+/* ==========================================================================
+   红笔批注系统 — 核心体验装置
+   落笔动画：起笔快、收笔稳；vector-effect 保证笔画粗细均匀
+   ========================================================================== */
+.redpen path {
+  fill: none;
+  stroke: #c8401f;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 0.65s cubic-bezier(0.5, 0.05, 0.2, 1);
+}
+.redpen.is-drawn > path {
+  stroke-dashoffset: 0;
+}
+/* hover 落笔：祖先带 .group 时，红笔随时可以再画一遍 */
+.group:hover .redpen > path {
+  stroke-dashoffset: 0;
+}
+
+/* ==========================================================================
+   页面进场 — 切页时轻起笔（非滚动 reveal，仅路由切换）
+   ========================================================================== */
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
     opacity: 1;
     transform: translateY(0);
   }
-
-  /* 颗粒纹理叠加（Hero 背景） */
-  .grain-overlay {
-    position: relative;
-  }
-  .grain-overlay::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    opacity: 0.4;
-    mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.18 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-  }
-
-  /* 动态渐变背景 */
-  .aurora-bg {
-    background: linear-gradient(
-      120deg,
-      #1a1a22 0%,
-      #10243a 25%,
-      #1a2238 50%,
-      #102a3a 75%,
-      #1a1a22 100%
-    );
-    background-size: 300% 300%;
-    animation: gradient-shift 18s ease infinite;
-  }
-
-  /* 弱化文字渐变（用于浅色底部 CTA，暗色底自动变浅） */
-  .text-gradient-light {
-    background: linear-gradient(180deg, rgb(var(--ink-900)) 0%, rgb(var(--ink-900) / 0.55) 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  /* hover 时图片缩放 */
-  .hover-zoom img,
-  .hover-zoom .placeholder-img {
-    transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .hover-zoom:hover img,
-  .hover-zoom:hover .placeholder-img {
-    transform: scale(1.04);
-  }
-
-  /* 首页滚动指示器 — 竖线光点循环下落 */
-  .animate-scroll-line {
-    animation: scroll-line 2.2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
-  }
+}
+.page-enter {
+  animation: page-in 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-@keyframes scroll-line {
-  0% {
-    transform: translateY(-100%);
-    opacity: 0;
+/* ==========================================================================
+   引语缓流 — 首屏底部的真实原声（极慢、克制）
+   ========================================================================== */
+@keyframes quote-drift {
+  from {
+    transform: translateX(0);
   }
-  25% {
-    opacity: 0.7;
-  }
-  75% {
-    opacity: 0.7;
-  }
-  100% {
-    transform: translateY(260%);
-    opacity: 0;
+  to {
+    transform: translateX(-50%);
   }
 }
-
-/* 首页 KIMI 字标 — 进场后的极轻微呼吸浮动，增强记忆点（克制、不破坏 GSAP 开场） */
-.hero-kimi-float {
-  animation: hero-kimi-float 8s ease-in-out infinite;
+.quote-track {
+  animation: quote-drift 90s linear infinite;
   will-change: transform;
 }
 
-@keyframes hero-kimi-float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-6px);
-  }
-}
-
-/* 首页滚动叙事钩子 — 下箭头轻微弹跳 */
-.scroll-bounce {
-  animation: scroll-bounce 1.8s ease-in-out infinite;
-  color: rgb(var(--ink-500));
-}
-@keyframes scroll-bounce {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(5px);
-  }
-}
-
-/* 尊重减少动效偏好 */
+/* 减弱动效：关闭一切过渡与动画，保留静态布局 */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.001ms !important;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
   }
-  .reveal {
-    opacity: 1;
-    transform: none;
+  .ink-wipe {
+    clip-path: none;
   }
-  /* 减少动效偏好下：主题切换也直接硬切，不做颜色缓动 */
-  .theme-transition,
-  .theme-transition *,
-  .theme-transition *::before,
-  .theme-transition *::after {
-    transition: none !important;
+  .quote-track {
+    animation: none;
   }
-}
-
-/* ==========================================================================
-   主题变量 — 亮 / 暗 双套
-   ink-N 数值越大越“深”；暗模式下整体反转（浅字 + 深表面）
-   散落的 bg-black / text-white / bg-white 等通过 black/white 变量自动适配
-   ========================================================================== */
-:root {
-  --ink-50: 250 250 250;
-  --ink-100: 245 245 247;
-  --ink-200: 232 232 237;
-  --ink-300: 210 210 215;
-  --ink-400: 161 161 166;
-  --ink-500: 134 134 139;
-  --ink-600: 110 110 115;
-  --ink-700: 66 66 69;
-  --ink-800: 29 29 31;
-  --ink-900: 0 0 0;
-
-  --c-black: 0 0 0;
-  --c-white: 255 255 255;
-
-  --bg: 245 245 247;
-  --surface: 255 255 255;
-  --border: 0 0 0;
-  --selection: 0 113 227;
-  --scrollbar-thumb: 0 0 0;
-}
-
-.dark {
-  --ink-50: 10 10 15;
-  --ink-100: 28 28 30;
-  --ink-200: 44 44 46;
-  --ink-300: 58 58 60;
-  --ink-400: 99 99 102;
-  --ink-500: 142 142 147;
-  --ink-600: 174 174 178;
-  --ink-700: 209 209 214;
-  --ink-800: 229 229 234;
-  --ink-900: 245 245 247;
-
-  --c-black: 245 245 247;
-  --c-white: 10 10 15;
-
-  --bg: 10 10 15;
-  --surface: 28 28 30;
-  --border: 255 255 255;
-  --selection: 10 132 255;
-  --scrollbar-thumb: 255 255 255;
+  .redpen path {
+    stroke-dashoffset: 0;
+  }
 }

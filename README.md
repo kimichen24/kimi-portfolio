@@ -1,197 +1,49 @@
-# Kimi · 个人作品集官网
+# 陈权峰 Kimi · 产品运营作品集
 
-> 陈权峰 · 个人作品集 · 内容运营 / 用户调研 / 数据驱动 / AI 增效
+> 产品运营方向求职中 · 内容增长 / 社群提效 / 用户调研 — 三组实战案卷，数字真实可查证
 
-一个参考苹果官网设计语言的个人作品集站点 — **高级、克制、大留白、有科技感**。
-使用 **React 18 + Vite + Tailwind CSS v3** 构建，零运行时图标依赖，所有插画均为内联 SVG 占位。
+一张正在被红笔批注的稿纸：整站铺极淡的稿纸方格与左缘装订红线，
+关键内容被朱红笔迹标注——数字被画上下划线、承诺被圈注、
+结论被打上对勾。首页底部一行缓慢流动的真实用户原话，
+是所有项目出发的地方。
 
----
+## 核心体验装置 · 红笔批注
 
-## 🚀 快速启动
+- **落笔**：关键数字进入视口时被红笔画上下划线（stagger 错峰）
+- **圈注**：首屏核心主张、联系页「随时到岗」被手绘红圈圈出
+- **查证**：数字旁的「✓ 真实数据」页边批注，链接到案卷证据
+- **hover 再画**：案卷卡片标题悬停时红笔重新落笔，提起再画
+- **引语缓流**：首页底部 90s 一轮的真实用户原声横流（reduced-motion 定格）
+
+## 网站结构
+
+- `#/` — 首页：定位、核心主张、四个真实数据、精选案卷
+- `#/work` — 作品：三组案卷 + Vibe Coding 附卷
+- `#/about` — 关于：简介、经历时间线、方法索引、工具
+- `#/contact` — 联系：求职状态、邮箱、微信二维码
+- `#/project/<id>` — 案卷详情（campus-trade / doubao-research / intern-radar）
+
+## 技术栈
+
+React 18 + Vite 5 + Tailwind CSS v3 + Lenis（GSAP ticker 驱动的平滑滚动）
+零三方动画库 / 零 Canvas——红笔为纯 SVG `stroke-dashoffset` 描边动画。
+
+## 快速启动
 
 ```bash
 npm install
-npm run dev
-```
-
-默认运行在 `http://localhost:5173`
-
-### 构建生产版本
-
-```bash
-npm run build
+npm run dev        # http://localhost:5173
+npm run build      # 生产构建
 npm run preview
 ```
 
----
+## 可访问性与性能
 
-## 📁 项目结构
+- `prefers-reduced-motion`：红笔直接呈现终态、引语定格、Lenis 停用
+- 键盘可用：导航与卡片均有朱红焦点态
+- 移动端：导航四项收进一行；稿纸底纹降级为纯方格
+- 图片懒加载（微信二维码）；主包 gzip < 20KB
 
-```
-portfolio/
-├── index.html                       # 入口 HTML
-├── package.json                     # 依赖与脚本
-├── vite.config.js                   # Vite 配置（端口 / 主机）
-├── tailwind.config.js               # Tailwind 配置（字体 / 色板 / 动画）
-├── postcss.config.js                # PostCSS 配置
-├── public/
-│   └── favicon.svg                  # 网站图标
-└── src/
-    ├── main.jsx                     # React 入口
-    ├── App.jsx                      # 主应用 — 组合所有模块
-    ├── index.css                    # 全局样式 + Tailwind 指令
-    ├── data/
-    │   └── content.js               # 集中管理所有文案与数据
-    └── components/
-        ├── NavBar.jsx               # 固定顶部导航 + 磨砂玻璃
-        ├── Hero.jsx                 # 全屏首屏
-        ├── Experience.jsx           # 个人经历 + 核心数据
-        ├── Projects.jsx             # 精选项目 — 3 张大卡片
-        ├── Strengths.jsx            # 核心能力 — 4 张卡片 2×2
-        ├── Contact.jsx              # 整屏深色联系模块
-        ├── Footer.jsx               # 底部版权
-        └── ui/
-            ├── RevealOnScroll.jsx   # 滚动渐入通用组件
-            ├── PlaceholderImage.jsx # 占位图 + 头像占位
-            └── Icon.jsx             # 内联 SVG 图标库
-```
+## 部署
 
----
-
-## 🧩 模块说明
-
-| 模块 | 文件 | 功能 |
-| --- | --- | --- |
-| 导航栏 | `NavBar.jsx` | 固定顶部、滚动磨砂玻璃、锚点 active 状态 |
-| 首屏 | `Hero.jsx` | 柔和动态渐变背景 + 颗粒纹理 + 居中大标题 |
-| 个人经历 | `Experience.jsx` | 左右分栏：头像 + 4 项核心数据 / 简介 + 邮箱 |
-| 精选项目 | `Projects.jsx` | 3 张大卡片，对应简历三个项目 |
-| 核心能力 | `Strengths.jsx` | 4 张 2×2 卡片：内容 / 数据 / 调研 / AI |
-| 联系模块 | `Contact.jsx` | 整屏深色，邮箱大字展示 |
-| 页脚 | `Footer.jsx` | 版权信息 |
-
----
-
-## 🖼 替换占位图 / 头像
-
-所有图片占位都使用内联 SVG + 渐变色块，**不依赖任何在线 placeholder 服务**。
-
-### 替换项目截图
-
-`src/components/Projects.jsx` 中，把 `<PlaceholderImage tone={p.cover.tone} />` 替换为：
-
-```jsx
-<img
-  src={`/assets/projects/${p.id}.png`}
-  alt={p.title}
-  className="aspect-[16/10] w-full rounded-2xl object-cover transition-transform duration-700 hover:scale-105"
-/>
-```
-
-把真实图片放到 `public/assets/projects/` 目录下即可。
-
-### 替换头像
-
-`src/components/Experience.jsx` 中，把 `<AvatarPlaceholder name="K" />` 替换为：
-
-```jsx
-<img
-  src="/assets/avatar.jpg"
-  alt={profile.name}
-  className="aspect-square w-full max-w-[280px] rounded-full object-cover ring-1 ring-ink-200/60 shadow-soft"
-/>
-```
-
----
-
-## 🎨 设计系统
-
-### 色板（`tailwind.config.js`）
-
-| 名称 | 用途 |
-| --- | --- |
-| `ink-50 ~ 900` | 中性灰阶 — 文字 / 背景 / 分隔线 |
-| `accent` (`#0071e3`) | 苹果蓝 — 强调色 / 主按钮 / 链接 |
-
-### 字体
-
-优先使用系统字体：
-- macOS: SF Pro Display / SF Pro Text
-- Windows: PingFang SC / Microsoft YaHei
-
-### 容器
-
-最大版心 `1700px`，通过 `max-w-container` 类使用。
-
-### 关键样式类
-
-| 类 | 作用 |
-| --- | --- |
-| `container-page` | 标准居中容器 |
-| `glass-nav` / `glass-nav-scrolled` | 磨砂玻璃导航栏 |
-| `btn-primary` / `btn-secondary` | 主 / 次按钮 |
-| `card-apple` | 通用卡片（hover 上浮 + 阴影变化） |
-| `aurora-bg` | 动态渐变背景（首屏使用） |
-| `grain-overlay` | 颗粒纹理叠加（首屏使用） |
-| `reveal` / `is-visible` | 滚动渐入（由 `RevealOnScroll` 自动管理） |
-
----
-
-## 🔧 交互细节
-
-- ✅ 平滑滚动 — `html { scroll-behavior: smooth }`
-- ✅ 锚点跳转 — `<a href="#section">`
-- ✅ 导航栏滚动磨砂玻璃 — `IntersectionObserver` + 滚动监听
-- ✅ 锚点 active 高亮 — `IntersectionObserver`
-- ✅ 卡片 hover 上浮 + 阴影增强 — Tailwind transition
-- ✅ 卡片图片 hover 微缩放 — `hover-zoom` 工具类
-- ✅ 滚动渐入 — `RevealOnScroll` 组件 + `IntersectionObserver`
-- ✅ 动态渐变背景 — `gradient-shift` keyframes
-- ✅ 装饰光晕缓慢漂浮 — `float-slow` keyframes
-- ✅ 尊重 `prefers-reduced-motion` — 减少动效时禁用动画
-
----
-
-## 📦 依赖
-
-仅 3 个运行时 + 5 个开发依赖，**没有任何重型框架**：
-
-**运行时**
-- `react@18.3`
-- `react-dom@18.3`
-
-**开发**
-- `vite@5`
-- `@vitejs/plugin-react@4`
-- `tailwindcss@3.4`
-- `postcss@8`
-- `autoprefixer@10`
-
-零 Framer Motion、零 GSAP、零图标库 — 所有动画都用 CSS / 原生 API 实现，加载极快。
-
----
-
-## 📝 替换文案
-
-所有文案集中在 `src/data/content.js` 中：
-
-```js
-export const profile = {
-  name: '陈权峰',
-  englishName: 'Kimi',
-  role: 'Content · Research · Data · AI',
-  tagline: '从 0 到 1 做内容 · 用数据驱动优化 · 靠 AI 提效落地',
-  email: 'kimichen224@163.com',
-  // ... 修改这里即可同步到所有页面
-}
-```
-
-项目数据在 `projects` 数组中，能力数据在 `strengths` 数组中。
-
----
-
-## 📄 许可
-
-本项目仅作为个人作品集使用。
-
-Designed & Built with care · 用心设计 · 用代码呈现。
+GitHub Pages（gh-pages 分支，见 `scripts/deploy-ghpages.sh`）。

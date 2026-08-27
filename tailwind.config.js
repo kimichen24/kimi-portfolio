@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+// 「编码台」设计系统 — 纸面研究美学
+// 三色语义：噪声=灰、信号=墨、批注=朱红。没有第四种颜色。
 export default {
   darkMode: 'class',
   content: [
@@ -7,103 +9,59 @@ export default {
   ],
   theme: {
     extend: {
-      // 苹果风的字体系统
+      // 字体系统：宋体（标题·人的判断）+ IBM Plex Mono（数据·机器的编码）
       fontFamily: {
+        serif: [
+          '"Noto Serif SC"',
+          '"Songti SC"',
+          '"STSong"',
+          'SimSun',
+          'serif',
+        ],
+        mono: [
+          '"IBM Plex Mono"',
+          '"SF Mono"',
+          'Menlo',
+          'Consolas',
+          'monospace',
+        ],
         sans: [
+          '"Noto Sans SC"',
           '-apple-system',
           'BlinkMacSystemFont',
-          '"SF Pro Display"',
-          '"SF Pro Text"',
-          '"Helvetica Neue"',
-          'Helvetica',
           '"PingFang SC"',
-          '"Hiragino Sans GB"',
-          '"Microsoft YaHei"',
-          'Arial',
-          'sans-serif',
-        ],
-        display: [
-          '-apple-system',
-          'BlinkMacSystemFont',
-          '"SF Pro Display"',
-          '"SF Pro Text"',
-          '"PingFang SC"',
-          '"Hiragino Sans GB"',
           '"Microsoft YaHei"',
           'sans-serif',
         ],
-        // SpaceTravel 使用的字体
-        heading: ['"Instrument Serif"', 'serif'],
-        body: ['Barlow', 'sans-serif'],
       },
-      // SpaceTravel — bare rounded → pill
-      borderRadius: {
-        DEFAULT: '9999px',
-      },
-      // 苹果风的色板 — 全部由 CSS 变量驱动，.dark 类切换即整体换肤
       colors: {
+        // 纸与墨
+        paper: {
+          DEFAULT: '#faf8f3', // 暖白纸底
+          deep: '#f3f0e7', // 沉纸（分区底）
+          line: '#e4dfd2', // 折痕线
+        },
         ink: {
-          50: 'rgb(var(--ink-50) / <alpha-value>)',
-          100: 'rgb(var(--ink-100) / <alpha-value>)',
-          200: 'rgb(var(--ink-200) / <alpha-value>)',
-          300: 'rgb(var(--ink-300) / <alpha-value>)',
-          400: 'rgb(var(--ink-400) / <alpha-value>)',
-          500: 'rgb(var(--ink-500) / <alpha-value>)',
-          600: 'rgb(var(--ink-600) / <alpha-value>)',
-          700: 'rgb(var(--ink-700) / <alpha-value>)',
-          800: 'rgb(var(--ink-800) / <alpha-value>)',
-          900: 'rgb(var(--ink-900) / <alpha-value>)',
+          DEFAULT: '#1c1a17', // 墨黑（信号）
+          soft: '#57524a', // 次级墨
+          mute: '#9a948a', // 灰（噪声）
+          faint: '#c4beb2', // 浅灰（尘）
         },
-        accent: {
-          DEFAULT: '#0071e3',
-          hover: '#0077ed',
-          soft: '#f5f8ff',
+        red: {
+          DEFAULT: '#c8401f', // 朱红批注
+          soft: '#e8d5cd', // 朱红淡底
         },
-        // black/white 语义化：亮=标准，暗=反转（主按钮浅底深字、描边变浅）
-        black: 'rgb(var(--c-black) / <alpha-value>)',
-        white: 'rgb(var(--c-white) / <alpha-value>)',
       },
-      // 最大版心宽度
       maxWidth: {
-        container: '1700px',
-      },
-      // 自定义动画
-      keyframes: {
-        'fade-up': {
-          '0%': { opacity: '0', transform: 'translateY(24px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
-        },
-        'fade-in': {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
-        },
-        'gradient-shift': {
-          '0%, 100%': { backgroundPosition: '0% 50%' },
-          '50%': { backgroundPosition: '100% 50%' },
-        },
-        'float-slow': {
-          '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-8px)' },
-        },
-      },
-      animation: {
-        'fade-up': 'fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-        'fade-in': 'fade-in 1.2s ease-out forwards',
-        'gradient-shift': 'gradient-shift 16s ease infinite',
-        'float-slow': 'float-slow 6s ease-in-out infinite',
-      },
-      // 苹果风的精致阴影
-      boxShadow: {
-        soft: '0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.06)',
-        card: '0 1px 3px rgba(0,0,0,0.04), 0 20px 40px rgba(0,0,0,0.08)',
-        cardHover: '0 4px 12px rgba(0,0,0,0.06), 0 30px 60px rgba(0,0,0,0.12)',
-        glow: '0 0 0 1px rgba(0,0,0,0.04), 0 8px 32px rgba(0,113,227,0.08)',
+        codex: '1080px', // 编码台版心（比 1700 收窄，编辑感）
       },
       letterSpacing: {
         tightest: '-0.04em',
+        widewide: '0.32em',
       },
-      backdropBlur: {
-        glass: '20px',
+      boxShadow: {
+        press: '0 1px 0 rgba(28,26,23,0.06)',
+        sheet: '0 12px 40px rgba(28,26,23,0.08)',
       },
     },
   },

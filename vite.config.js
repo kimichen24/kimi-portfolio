@@ -17,15 +17,12 @@ export default defineConfig({
   },
   build: {
     // 把体积大、变动少的第三方库拆成独立 vendor chunk，
-    // 提升长效缓存命中率、缩小主包、加快二次访问。
-    // 注意：three 已通过 PageBackground 的 React.lazy 动态导入，
-    // 会自动形成独立异步 chunk（不进首屏关键路径）。
+    // 提升长效缓存命中率、缩小主包、加速二次访问。
     rollupOptions: {
       output: {
         manualChunks: {
           react: ['react', 'react-dom'],
-          gsap: ['gsap', '@gsap/react'],
-          motion: ['framer-motion'],
+          gsap: ['gsap', 'lenis'],
         },
       },
     },
