@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { profile, projects, quotes } from '../data'
+import { profile, projects, quotes, now } from '../data'
 import { RedCircle, RedUnderline, MarginNote } from '../components/RedPen'
 import QuoteTicker from '../components/QuoteTicker'
 import { useCountUp } from '../lib/reveal'
@@ -38,7 +38,7 @@ export default function Home() {
         <div className="container-codex flex flex-1 flex-col justify-center py-16 sm:py-20">
           <p className="eyebrow-mono flex items-center gap-2.5">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-red" />
-            产品运营 · 求职中 · 长沙 · 可即刻到岗
+            Kimi 的个人网站 · 长沙
           </p>
 
           <h1 className="mt-7 font-serif text-[clamp(3.6rem,11vw,8rem)] font-black leading-[1.02] tracking-tightest text-ink">
@@ -76,7 +76,7 @@ export default function Home() {
               ))}
             </div>
             <p className="mt-7">
-              <MarginNote>数字均来自真实项目，点开案卷即可查证</MarginNote>
+              <MarginNote>每个数字背后，都有一份可以翻开的案卷</MarginNote>
             </p>
           </div>
         </div>
@@ -85,8 +85,21 @@ export default function Home() {
         <QuoteTicker quotes={quotes} />
       </section>
 
+      {/* ── 此刻 · Now — 让站点保持呼吸的三行 ── */}
+      <section className="w-full border-b border-paper-line bg-paper-deep/40">
+        <div className="container-codex grid gap-x-10 gap-y-4 py-8 sm:grid-cols-[auto_1fr_1fr_1fr] sm:items-baseline">
+          <p className="eyebrow-mono sm:pt-0.5">此刻 · Now</p>
+          {now.map((n) => (
+            <p key={n.label} className="flex flex-wrap items-baseline gap-x-2.5">
+              <span className="red-note shrink-0 text-[11px]">{n.label}</span>
+              <span className="text-[13px] leading-relaxed text-ink-soft">{n.value}</span>
+            </p>
+          ))}
+        </div>
+      </section>
+
       {/* ── 精选作品 ── */}
-      <section className="w-full border-t border-paper-line py-20 sm:py-24">
+      <section className="w-full py-20 sm:py-24">
         <div className="container-codex">
           <div className="flex items-end justify-between gap-6">
             <div>

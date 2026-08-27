@@ -5,10 +5,11 @@ import ProjectDetail from './components/ProjectDetail'
 import NotFound from './components/NotFound'
 import ErrorBoundary from './components/ErrorBoundary'
 import Home from './pages/Home'
+import Notes from './pages/Notes'
 import Work from './pages/Work'
 import About from './pages/About'
 import Contact from './pages/Contact'
-import { initSmoothScroll, destroySmoothScroll, scrollToTop } from './lib/smoothScroll'
+import { initSmoothScroll, destroySmoothScroll, scrollToTop, getLenis } from './lib/smoothScroll'
 
 /**
  * App — 稿纸作品集（个人网站结构）
@@ -24,7 +25,10 @@ function parseHash() {
   const h = window.location.hash || '#/'
   const m = h.match(/^#\/project\/([a-z0-9-]+)/i)
   if (m) return { route: 'project', projectId: m[1] }
+  const n = h.match(/^#\/notes\/(no-[a-z0-9]+)/i)
+  if (n) return { route: 'notes', noteId: n[1] }
   if (h === '#/' || h === '#' || h === '' || h === '#/home') return { route: 'home' }
+  if (h.startsWith('#/notes')) return { route: 'notes' }
   if (h.startsWith('#/work')) return { route: 'work' }
   if (h.startsWith('#/about')) return { route: 'about' }
   if (h.startsWith('#/contact')) return { route: 'contact' }
@@ -46,12 +50,26 @@ export default function App() {
     return () => destroySmoothScroll()
   }, [])
 
-  // 切页回顶部
+  // 切页回顶部；带手记子锚点时滚到对应一篇（等进场渲染完成）
   useEffect(() => {
+    if (loc.noteId) {
+      const t = setTimeout(() => {
+        const el = document.getElementById(loc.noteId)
+        const lenis = getLenis()
+        if (el && lenis) lenis.scrollTo(el, { offset: -84 })
+        else if (el) el.scrollIntoView({ behavior: 'instant', block: 'start' })
+      }, 60)
+      return () => clearTimeout(t)
+    }
     scrollToTop(true)
-  }, [loc.route, loc.projectId])
+  }, [loc.route, loc.projectId, loc.noteId])
 
-  const pageKey = loc.route === 'project' ? `project-${loc.projectId}` : loc.route
+  const pageKey =
+    loc.route === 'project'
+      ? `project-${loc.projectId}`
+      : loc.noteId
+        ? `notes-${loc.noteId}`
+        : loc.route
 
   return (
     <ErrorBoundary>
@@ -63,6 +81,7 @@ export default function App() {
       <div className="relative z-10 pt-14">
         <div key={pageKey} className="page-enter">
           {loc.route === 'home' && <Home />}
+          {loc.route === 'notes' && <Notes />}
           {loc.route === 'work' && <Work />}
           {loc.route === 'about' && <About />}
           {loc.route === 'contact' && <Contact />}

@@ -2,6 +2,7 @@ import { RedUnderline } from './RedPen'
 
 const LINKS = [
   { route: 'home', hash: '#/', label: '首页' },
+  { route: 'notes', hash: '#/notes', label: '手记' },
   { route: 'work', hash: '#/work', label: '作品' },
   { route: 'about', hash: '#/about', label: '关于' },
   { route: 'contact', hash: '#/contact', label: '联系' },
@@ -24,7 +25,7 @@ export default function TopNav({ route }) {
             Kimi Chen
           </span>
         </a>
-        <nav aria-label="主导航" className="flex items-center gap-5 sm:gap-8">
+        <nav aria-label="主导航" className="flex items-center gap-4 sm:gap-7">
           {LINKS.map((l) => {
             const active = route === l.route || (l.route === 'work' && route === 'project')
             return (

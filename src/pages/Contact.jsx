@@ -83,7 +83,7 @@ export default function Contact() {
 
         {/* 结尾批注 */}
         <p className="mt-16 border-t border-paper-line pt-6 font-mono text-[11px] leading-relaxed text-ink-mute">
-          三组案卷的证据都在「作品」页——欢迎带着数字来对质。
+          案卷在「作品」页，手记在「手记」页——欢迎随便翻，也欢迎写信聊聊。
         </p>
       </div>
     </main>
