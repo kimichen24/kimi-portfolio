@@ -5,23 +5,23 @@ import QuoteTicker from '../components/QuoteTicker'
 import SelfPortrait from '../components/SelfPortrait'
 import { useCountUp } from '../lib/reveal'
 
-/** 数据格 — 红笔重点：数字 + 落笔下划线 + 查证批注 */
+/** 数据点 — 横排注脚：红数字 + 红笔下划线 + 灰标签 */
 function Stat({ value, label, desc, delay }) {
   const ref = useRef(null)
   useCountUp(ref, value)
   return (
     <div className="relative">
-      <div
-        ref={ref}
-        className="font-mono text-[clamp(1.5rem,3.4vw,2.3rem)] font-semibold leading-none text-red"
-      >
-        {value}
+      <div className="flex items-baseline gap-2">
+        <span
+          ref={ref}
+          className="font-mono text-[clamp(1.2rem,2.6vw,1.6rem)] font-semibold leading-none text-red"
+        >
+          {value}
+        </span>
+        <span className="font-mono text-[11px] text-ink-mute">{label}</span>
       </div>
-      <RedUnderline delay={delay} className="-bottom-2.5 h-[7px]" />
-      <p className="mt-3.5 font-mono text-[10px] uppercase tracking-widewide text-ink-mute">
-        {label}
-        <span className="mt-0.5 block normal-case tracking-normal text-ink-faint">{desc}</span>
-      </p>
+      <RedUnderline delay={delay} className="-bottom-2 h-[6px]" />
+      <p className="mt-3 font-mono text-[10px] tracking-normal text-ink-faint">{desc}</p>
     </div>
   )
 }
@@ -74,14 +74,14 @@ export default function Home() {
             </a>
           </div>
 
-          {/* 数据速览 — 红笔批注的重点 */}
-          <div className="mt-16 sm:mt-20">
-            <div className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-4 sm:gap-x-10">
+          {/* 数字速览 — 降为注脚级横排：个人站气质优先，数字为证 */}
+          <div className="mt-16 border-t border-paper-line pt-7 sm:mt-20">
+            <div className="flex flex-wrap items-baseline gap-x-10 gap-y-4">
               {profile.stats.map((s, i) => (
                 <Stat key={s.label} value={s.value} label={s.label} desc={s.desc} delay={i * 150} />
               ))}
             </div>
-            <p className="mt-7">
+            <p className="mt-6">
               <MarginNote>每个数字背后，都有一份可以翻开的案卷</MarginNote>
             </p>
           </div>

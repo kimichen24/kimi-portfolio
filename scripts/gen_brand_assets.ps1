@@ -53,23 +53,26 @@ $rp.Dispose()
 
 # 眉标（mono）
 $fMono = New-Object System.Drawing.Font($monoName, 24, [System.Drawing.FontStyle]::Regular)
-$g.DrawString('KIMI CHEN · PORTFOLIO 2026', $fMono, (New-Object System.Drawing.SolidBrush($MUTE)), 124.0, 92.0)
+$g.DrawString('PERSONAL SITE ' + [char]0x00B7 + ' EST. 2026', $fMono, (New-Object System.Drawing.SolidBrush($MUTE)), 124.0, 92.0)
 
-# 大名（宋体·墨）— 字号 110：三字宽约 560px，与右侧数据栏（x=820）留足间距
-$fName = New-Object System.Drawing.Font($serifName, 110, [System.Drawing.FontStyle]::Regular)
-$g.DrawString([string]::Concat([char]0x9648, [char]0x6743, [char]0x5CF0), $fName, (New-Object System.Drawing.SolidBrush($INK)), 120.0, 160.0)
+# 大名（衬线英文 Kimi Chen · 墨）
+$fName = New-Object System.Drawing.Font($serifName, 108, [System.Drawing.FontStyle]::Bold)
+$g.DrawString('Kimi Chen', $fName, (New-Object System.Drawing.SolidBrush($INK)), 118.0, 150.0)
+# 中文署名（mono 小字）
+$fSign = New-Object System.Drawing.Font($sansName, 26, [System.Drawing.FontStyle]::Regular)
+$g.DrawString([string]::Concat([char]0x9648, [char]0x6743, [char]0x5CF0, ' ', [char]0x00B7, ' ', [char]0x4E2A, [char]0x4EBA, [char]0x7F51, [char]0x7AD9), $fSign, (New-Object System.Drawing.SolidBrush($MUTE)), 124.0, 292.0)
 
 # 红笔下划线（贝塞尔手绘感）
 $pen = New-Object System.Drawing.Pen($RED, 7)
 $pen.StartCap = [System.Drawing.Drawing2D.LineCap]::Round
 $pen.EndCap = [System.Drawing.Drawing2D.LineCap]::Round
-$g.DrawBezier($pen, 124, 322, 300, 310, 480, 330, 600, 314)
+$g.DrawBezier($pen, 124, 352, 300, 340, 480, 360, 620, 344)
 $pen.Dispose()
 
-# 副标（sans·次墨）
+# 宣言（sans·次墨）— 与首页同句
 $fSub = New-Object System.Drawing.Font($sansName, 30, [System.Drawing.FontStyle]::Regular)
-$g.DrawString([string]::Concat([char]0x4EA7, [char]0x54C1, [char]0x8FD0, [char]0x8425, ' · ', [char]0x6C42, [char]0x804C, [char]0x4E2D), $fSub, (New-Object System.Drawing.SolidBrush($SOFT)), 124.0, 388.0)
-$g.DrawString([string]::Concat([char]0x5185, [char]0x5BB9, [char]0x589E, [char]0x957F, ' / ', [char]0x793E, [char]0x7FA4, [char]0x63D0, [char]0x6548, ' / ', [char]0x7528, [char]0x6237, [char]0x8C03, [char]0x7814), $fSub, (New-Object System.Drawing.SolidBrush($MUTE)), 124.0, 438.0)
+$g.DrawString([string]::Concat([char]0x5199, [char]0x70B9, [char]0x4E1C, [char]0x897F, [char]0xFF0C, [char]0x505A, [char]0x70B9, [char]0x8FD0, [char]0x8425, [char]0xFF0C, [char]0x8BA4, [char]0x771F, [char]0x542C, [char]0x7528, [char]0x6237, [char]0x8BF4, [char]0x8BDD, [char]0x3002), $fSub, (New-Object System.Drawing.SolidBrush($SOFT)), 124.0, 392.0)
+$g.DrawString([string]::Concat([char]0x6848, [char]0x5377, ' / ', [char]0x624B, [char]0x8BB0, ' / ', [char]0x91C7, [char]0x6837, [char]0x7B14, [char]0x8BB0), $fSub, (New-Object System.Drawing.SolidBrush($MUTE)), 124.0, 442.0)
 
 # 右侧数据栏（红）— 平行数组，避免 PowerShell 嵌套数组展平陷阱
 $fNum = New-Object System.Drawing.Font($sansName, 46, [System.Drawing.FontStyle]::Bold)
