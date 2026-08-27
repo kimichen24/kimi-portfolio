@@ -41,17 +41,20 @@ export default function Home() {
         <div className="container-codex flex flex-1 flex-col justify-center py-16 sm:py-20">
           <p className="eyebrow-mono flex items-center gap-2.5">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-red" />
-            Kimi 的个人网站 · 长沙
+            Personal Site · Est. 2026
           </p>
 
-          <h1 className="mt-7 font-serif text-[clamp(3.6rem,11vw,8rem)] font-black leading-[1.02] tracking-tightest text-ink">
-            {profile.name}
+          <h1 className="mt-7 font-serif text-[clamp(3.2rem,9vw,7rem)] font-black leading-[1.02] tracking-tightest text-ink">
+            Kimi Chen
           </h1>
+          <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.32em] text-ink-mute">
+            {profile.name} · {profile.location}
+          </p>
 
-          <p className="mt-6 max-w-2xl font-serif text-[clamp(1.02rem,2.4vw,1.45rem)] leading-[1.9] text-ink-soft">
-            把内容做出来，把社群管起来，
+          <p className="mt-7 max-w-2xl font-serif text-[clamp(1.05rem,2.5vw,1.5rem)] leading-[1.9] text-ink-soft">
+            写点东西，做点运营，认真
             <RedCircle delay={1500} className="font-semibold text-ink">
-              把用户声音变成产品动作
+              听用户说话
             </RedCircle>
             。
           </p>
@@ -67,7 +70,7 @@ export default function Home() {
               href="#/contact"
               className="border border-ink/20 px-7 py-3 font-mono text-[13px] text-ink transition-colors duration-300 hover:border-red hover:text-red"
             >
-              联系我
+              写封信
             </a>
           </div>
 

@@ -18,11 +18,9 @@ export default function TopNav({ route }) {
     <header className="fixed inset-x-0 top-0 z-50 border-b border-paper-line bg-paper/85 backdrop-blur-md">
       <div className="container-codex flex h-14 items-center justify-between">
         <a href="#/" className="flex items-baseline gap-2.5" aria-label="回到首页">
-          <span className="font-serif text-[17px] font-bold tracking-tight text-ink">
+          <span className="font-serif text-[17px] font-bold tracking-tight text-ink">Kimi Chen</span>
+          <span className="hidden font-mono text-[10px] tracking-[0.22em] text-ink-mute sm:inline">
             陈权峰
-          </span>
-          <span className="hidden font-mono text-[10px] uppercase tracking-[0.22em] text-ink-mute sm:inline">
-            Kimi Chen
           </span>
         </a>
         <nav aria-label="主导航" className="flex items-center gap-4 sm:gap-7">
