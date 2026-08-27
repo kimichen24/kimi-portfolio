@@ -14,7 +14,8 @@ import { useEffect, useRef, useState } from 'react'
  *  - 祖先带 .group 的元素 hover 时强制画出（提起再落笔的反馈）
  */
 
-function useInViewOnce(ref, threshold = 0.5) {
+/** 进入视口一次即置真（reduced-motion 直接终态）— 导出给自画像/手绘图复用 */
+export function useInViewOnce(ref, threshold = 0.5) {
   const [inView, setInView] = useState(false)
   useEffect(() => {
     const el = ref.current

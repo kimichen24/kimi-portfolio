@@ -45,6 +45,31 @@ export const now = [
   { label: '正在找', value: '产品运营实习 / 校招 · 可即刻到岗' },
 ]
 
+// ── 采样笔记 ──
+// 首页「采样笔记」区块：曲目 ← 原曲 ← 原曲的原曲。
+// 这是全站唯一「只有我能写」的内容——随手记，随时换。
+// 下面三条是经典采样链示例，替换成自己账号解析过的存货即可。
+export const samplingNotes = [
+  {
+    track: 'Kanye West 《Stronger》',
+    chain: '← Daft Punk 《Harder, Better, Faster, Stronger》',
+    root: '← Edwin Birdsong 《Cola Bottle Baby》 · 1979',
+    note: '一条放克贝斯线，养活了两代神曲。',
+  },
+  {
+    track: 'M.I.A. 《Paper Planes》',
+    chain: '← The Clash 《Straight to Hell》 · 1982',
+    root: null,
+    note: '朋克的遗产，变成街头的圣歌。',
+  },
+  {
+    track: 'Drake 《Hotline Bling》',
+    chain: '← Timmy Thomas 《Why Can\'t We Live Together》 · 1972',
+    root: null,
+    note: '一台鼓机撑起半个世纪的叹息。',
+  },
+]
+
 // ── 真实原声 ──
 // 全部取自真实项目原始素材：二手群聊消息、豆包访谈原话、招聘平台走查记录。
 // 用于首页底部的引语缓流（QuoteTicker）。
@@ -92,6 +117,7 @@ export const experiences = [
       '搭建采样溯源 + 原作对比 + 创作解析的标准化内容框架',
       '独立负责选题策划、文案撰写、剪映剪辑全流程产出',
       '每周基于抖音后台数据复盘迭代，建立曲目选题储备池',
+      '单条爆款逻辑已验证（5 万播放）；粉丝留存是当前正在攻的命题——已定位到更新频率与系列化不足，正在调整选题节奏',
     ],
     metrics: [
       { value: '10.66万', label: '总播放量' },
@@ -138,6 +164,14 @@ export const projects = [
       {
         title: '基线诊断 · 3 天群聊全量盘点',
         subtitle: '优化前，500+ 条消息逐条编码',
+        chart: {
+          caption: '日均 820 条消息，只沉淀出 18 单成交——断崖在这里',
+          items: [
+            { label: '日均消息', value: 820, display: '820' },
+            { label: '重复刷屏', value: 86, display: '86' },
+            { label: '成交确认', value: 18, display: '18' },
+          ],
+        },
         columns: ['日期', '出售', '求购', '成交', '刷屏', '总量'],
         rows: [
           ['周一', '247', '43', '18', '89', '820'],
@@ -193,6 +227,14 @@ export const projects = [
       {
         title: '访谈原始数据 · 15 人痛点聚类',
         subtitle: '三级编码后收敛为 3 类核心问题',
+        chart: {
+          caption: '15 人里，6 个提到搜索不准、5 个嫌啰嗦、4 个被文件识别坑过',
+          items: [
+            { label: '搜索不准确', value: 6, display: '6/15' },
+            { label: '回答太啰嗦', value: 5, display: '5/15' },
+            { label: '文件识别差', value: 4, display: '4/15' },
+          ],
+        },
         items: [
           { label: '搜索不准确 · 6/15', value: '返回过时内容且无时效标注（Python API 停在 2021 版、竞品财报给 2022 年数据）、相关性排序失效（罕见病临床指南排在科普文之后）、专业术语误译（"话语分析" 译成 speech analysis）' },
           { label: '回答太啰嗦 · 5/15', value: '铺垫过长不给结论（问《春江花月夜》创作背景，先讲生平再讲流派）、两千字里关键差异只占三处；用户普遍要求"先结论后展开 + 支持追问"' },

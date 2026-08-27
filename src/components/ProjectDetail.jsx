@@ -6,6 +6,7 @@
  */
 import { useEffect } from 'react'
 import { projects } from '../data'
+import HandBars from './HandChart'
 
 export default function ProjectDetail({ projectId }) {
   const project = projects.find((p) => p.id === projectId)
@@ -101,6 +102,8 @@ export default function ProjectDetail({ projectId }) {
                       {extra.subtitle}
                     </p>
                   )}
+
+                  {extra.chart && <HandBars chart={extra.chart} />}
 
                   {extra.columns ? (
                     <div className="mt-5 overflow-x-auto">

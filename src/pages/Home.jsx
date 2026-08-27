@@ -1,7 +1,8 @@
 import { useRef } from 'react'
-import { profile, projects, quotes, now } from '../data'
+import { profile, projects, quotes, now, samplingNotes } from '../data'
 import { RedCircle, RedUnderline, MarginNote } from '../components/RedPen'
 import QuoteTicker from '../components/QuoteTicker'
+import SelfPortrait from '../components/SelfPortrait'
 import { useCountUp } from '../lib/reveal'
 
 /** 数据格 — 红笔重点：数字 + 落笔下划线 + 查证批注 */
@@ -35,6 +36,8 @@ export default function Home() {
     <main className="w-full">
       {/* ── Hero ── */}
       <section className="relative flex min-h-[calc(100svh-3.5rem)] w-full flex-col">
+        {/* 自画像 — 红笔把作者画出来（桌面右侧） */}
+        <SelfPortrait className="absolute right-10 top-1/2 z-10 hidden w-44 -translate-y-1/2 xl:block 2xl:w-52" />
         <div className="container-codex flex flex-1 flex-col justify-center py-16 sm:py-20">
           <p className="eyebrow-mono flex items-center gap-2.5">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-red" />
@@ -98,8 +101,58 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── 精选作品 ── */}
+      {/* ── 采样笔记 — 只有我能写的内容 ── */}
       <section className="w-full py-20 sm:py-24">
+        <div className="container-codex">
+          <div className="flex items-end justify-between gap-6">
+            <div>
+              <p className="eyebrow-mono">采样笔记 · Sampling Notes</p>
+              <h2 className="mt-3 font-serif text-[clamp(1.7rem,4vw,2.6rem)] font-black tracking-tightest text-ink">
+                一首歌的祖谱
+              </h2>
+            </div>
+            <a
+              href="https://v.douyin.com/sZVo34eBJDM/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden shrink-0 font-mono text-[12px] text-ink-soft transition-colors hover:text-red sm:block"
+            >
+              采样解析账号 ↗
+            </a>
+          </div>
+          <p className="mt-4 max-w-xl text-[13.5px] leading-[1.9] text-ink-soft">
+            做采样解析账号攒下的私人笔记：你听到的那首歌，往往还有一首更老的歌。
+          </p>
+
+          <div className="mt-9">
+            {samplingNotes.map((s) => (
+              <div
+                key={s.track}
+                className="grid gap-1.5 border-t border-paper-line py-6 md:grid-cols-[minmax(220px,340px)_1fr] md:gap-8"
+              >
+                <div>
+                  <p className="font-serif text-[16px] font-bold tracking-tight text-ink md:text-[17px]">
+                    {s.track}
+                  </p>
+                  <p className="mt-1.5 font-mono text-[11px] leading-relaxed text-ink-mute">
+                    {s.chain}
+                  </p>
+                  {s.root && (
+                    <p className="font-mono text-[11px] leading-relaxed text-ink-faint">{s.root}</p>
+                  )}
+                </div>
+                <p className="self-center text-[13.5px] leading-[1.85] text-ink-soft">
+                  <span className="red-note mr-2">✎</span>
+                  {s.note}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── 精选作品 ── */}
+      <section className="w-full border-t border-paper-line py-20 sm:py-24">
         <div className="container-codex">
           <div className="flex items-end justify-between gap-6">
             <div>
