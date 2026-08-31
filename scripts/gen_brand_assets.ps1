@@ -51,32 +51,37 @@ $rp = New-Object System.Drawing.Pen([System.Drawing.Color]::FromArgb(26, 200, 64
 $g.DrawLine($rp, 88, 0, 88, 630)
 $rp.Dispose()
 
-# 眉标（mono）
-$fMono = New-Object System.Drawing.Font($monoName, 24, [System.Drawing.FontStyle]::Regular)
-$g.DrawString('PERSONAL SITE ' + [char]0x00B7 + ' EST. 2026', $fMono, (New-Object System.Drawing.SolidBrush($MUTE)), 124.0, 92.0)
+# 眉标（mono）— 全部用 char 码拼接，避开编码陷阱
+# 注意：Font 默认单位是 Point（96DPI 下 1pt=1.33px），全部显式指定 Pixel
+$PX = [System.Drawing.GraphicsUnit]::Pixel
+$fMono = New-Object System.Drawing.Font($monoName, 24, [System.Drawing.FontStyle]::Regular, $PX)
+$eyebrowText = 'PERSONAL SITE ', [string][char]0x00B7, ' EST. 2026' -join ''
+$g.DrawString($eyebrowText, $fMono, (New-Object System.Drawing.SolidBrush($MUTE)), 124.0, 92.0)
 
 # 大名（衬线英文 Kimi Chen · 墨）
-$fName = New-Object System.Drawing.Font($serifName, 108, [System.Drawing.FontStyle]::Bold)
-$g.DrawString('Kimi Chen', $fName, (New-Object System.Drawing.SolidBrush($INK)), 118.0, 150.0)
-# 中文署名（mono 小字）
-$fSign = New-Object System.Drawing.Font($sansName, 26, [System.Drawing.FontStyle]::Regular)
-$g.DrawString([string]::Concat([char]0x9648, [char]0x6743, [char]0x5CF0, ' ', [char]0x00B7, ' ', [char]0x4E2A, [char]0x4EBA, [char]0x7F51, [char]0x7AD9), $fSign, (New-Object System.Drawing.SolidBrush($MUTE)), 124.0, 292.0)
+$fName = New-Object System.Drawing.Font($serifName, 108, [System.Drawing.FontStyle]::Bold, $PX)
+$g.DrawString('Kimi Chen', $fName, (New-Object System.Drawing.SolidBrush($INK)), 118.0, 140.0)
 
-# 红笔下划线（贝塞尔手绘感）
+# 红笔下划线（贝塞尔手绘感）— 紧贴大字底部
 $pen = New-Object System.Drawing.Pen($RED, 7)
 $pen.StartCap = [System.Drawing.Drawing2D.LineCap]::Round
 $pen.EndCap = [System.Drawing.Drawing2D.LineCap]::Round
-$g.DrawBezier($pen, 124, 352, 300, 340, 480, 360, 620, 344)
+$g.DrawBezier($pen, 124, 282, 300, 272, 480, 290, 620, 276)
 $pen.Dispose()
 
+# 中文署名（sans 小字）— 全部用 char 码拼接，避开编码陷阱
+$fSign = New-Object System.Drawing.Font($sansName, 26, [System.Drawing.FontStyle]::Regular, $PX)
+$signText = ([char]0x9648, [char]0x6743, [char]0x5CF0, ' ', [char]0x00B7, ' ', [char]0x4E2A, [char]0x4EBA, [char]0x7F51, [char]0x7AD9) -join ''
+$g.DrawString([string]$signText, $fSign, (New-Object System.Drawing.SolidBrush($MUTE)), 124.0, 300.0)
+
 # 宣言（sans·次墨）— 与首页同句
-$fSub = New-Object System.Drawing.Font($sansName, 30, [System.Drawing.FontStyle]::Regular)
+$fSub = New-Object System.Drawing.Font($sansName, 30, [System.Drawing.FontStyle]::Regular, $PX)
 $g.DrawString([string]::Concat([char]0x5199, [char]0x70B9, [char]0x4E1C, [char]0x897F, [char]0xFF0C, [char]0x505A, [char]0x70B9, [char]0x8FD0, [char]0x8425, [char]0xFF0C, [char]0x8BA4, [char]0x771F, [char]0x542C, [char]0x7528, [char]0x6237, [char]0x8BF4, [char]0x8BDD, [char]0x3002), $fSub, (New-Object System.Drawing.SolidBrush($SOFT)), 124.0, 392.0)
 $g.DrawString([string]::Concat([char]0x6848, [char]0x5377, ' / ', [char]0x624B, [char]0x8BB0, ' / ', [char]0x91C7, [char]0x6837, [char]0x7B14, [char]0x8BB0), $fSub, (New-Object System.Drawing.SolidBrush($MUTE)), 124.0, 442.0)
 
 # 右侧数据栏（红）— 平行数组，避免 PowerShell 嵌套数组展平陷阱
-$fNum = New-Object System.Drawing.Font($sansName, 46, [System.Drawing.FontStyle]::Bold)
-$fLab = New-Object System.Drawing.Font($sansName, 20, [System.Drawing.FontStyle]::Regular)
+$fNum = New-Object System.Drawing.Font($sansName, 46, [System.Drawing.FontStyle]::Bold, $PX)
+$fLab = New-Object System.Drawing.Font($sansName, 20, [System.Drawing.FontStyle]::Regular, $PX)
 $nums = @(
   ('10.66' + [char]0x4E07 + '+')
   '81.7%'
@@ -97,7 +102,7 @@ for ($i = 0; $i -lt 4; $i++) {
 }
 
 # 底部小字（mono·淡）
-$fFoot = New-Object System.Drawing.Font($monoName, 20, [System.Drawing.FontStyle]::Regular)
+$fFoot = New-Object System.Drawing.Font($monoName, 20, [System.Drawing.FontStyle]::Regular, $PX)
 $g.DrawString('kimichen24.github.io', $fFoot, (New-Object System.Drawing.SolidBrush($FAINT)), 124.0, 556.0)
 
 # 外缘细框
@@ -117,7 +122,7 @@ $bmp2 = $list2[0]; $g2 = $list2[1]
 
 Draw-Grid $g2 180 180 18 8
 
-$fGlyph = New-Object System.Drawing.Font($serifName, 96, [System.Drawing.FontStyle]::Regular)
+$fGlyph = New-Object System.Drawing.Font($serifName, 96, [System.Drawing.FontStyle]::Regular, $PX)
 $sz = $g2.MeasureString([string][char]0x5CF0, $fGlyph)
 $g2.DrawString([string][char]0x5CF0, $fGlyph, (New-Object System.Drawing.SolidBrush($INK)), ((180 - $sz.Width) / 2), ((180 - $sz.Height) / 2 - 8))
 
