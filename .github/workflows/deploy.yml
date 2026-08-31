@@ -8,9 +8,7 @@ on:
   workflow_dispatch: # 允许在 Actions 页手动触发
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write # 最后一步用 GITHUB_TOKEN force-push gh-pages，必须可写
 
 concurrency:
   group: pages
