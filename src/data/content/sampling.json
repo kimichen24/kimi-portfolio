@@ -1,0 +1,20 @@
+[
+  {
+    "track": "Kanye West 《Stronger》",
+    "chain": "← Daft Punk 《Harder, Better, Faster, Stronger》",
+    "root": "← Edwin Birdsong 《Cola Bottle Baby》 · 1979",
+    "note": "一条放克贝斯线，养活了两代神曲。"
+  },
+  {
+    "track": "M.I.A. 《Paper Planes》",
+    "chain": "← The Clash 《Straight to Hell》 · 1982",
+    "root": null,
+    "note": "朋克的遗产，变成街头的圣歌。"
+  },
+  {
+    "track": "Drake 《Hotline Bling》",
+    "chain": "← Timmy Thomas 《Why Can't We Live Together》 · 1972",
+    "root": null,
+    "note": "一台鼓机撑起半个世纪的叹息。"
+  }
+]

@@ -1,0 +1,43 @@
+# 自动部署：push 到 main 即构建并发布 gh-pages
+# 之后更新内容的流程 = 改 content/*.json → push → 2 分钟后自动上线
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # 允许在 Actions 页手动触发
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build
+
+      # gh-pages 走 force-push 方案（与本地 deploy-ghpages.sh 一致），
+      # 不依赖 Pages 的 artifact 流程，Settings 里无需改任何配置
+      - name: Deploy to gh-pages branch
+        run: |
+          cd dist
+          git init -q
+          git config user.name "deploy-bot"
+          git config user.email "deploy-bot@users.noreply.github.com"
+          git add -A
+          git commit -qm "deploy ${GITHUB_SHA::7}"
+          git push --force "https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" HEAD:gh-pages
