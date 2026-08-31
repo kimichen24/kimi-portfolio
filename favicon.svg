@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- 稿纸 favicon：纸底 + 墨字「峰」+ 红笔下划线 -->
+  <rect width="64" height="64" rx="10" fill="#faf8f3"/>
+  <rect x="0" y="0" width="64" height="64" rx="10" fill="none" stroke="#e4dfd2" stroke-width="2"/>
+  <text x="32" y="42" text-anchor="middle" font-family="'Noto Serif SC','Songti SC',serif" font-weight="900" font-size="32" fill="#1c1a17">峰</text>
+  <path d="M14 50 Q 26 46.5, 38 49 T 51 47.5" fill="none" stroke="#c8401f" stroke-width="3" stroke-linecap="round"/>
+</svg>
