@@ -1,27 +1,111 @@
-import { useRef } from 'react'
+import { useState, useRef } from 'react'
 import { profile, projects, quotes, now, samplingNotes } from '../data'
 import { RedCircle, RedUnderline, MarginNote } from '../components/RedPen'
 import QuoteTicker from '../components/QuoteTicker'
-import SelfPortrait from '../components/SelfPortrait'
 import { useCountUp } from '../lib/reveal'
+import { playPaperTap } from '../lib/audio'
 
-/** 数据点 — 横排注脚：红数字 + 红笔下划线 + 灰标签 */
-function Stat({ value, label, desc, delay }) {
+/** 数据点 — 横排注脚 + 悬浮调卷预览（Micro-inspection） */
+function Stat({ stat, delay, index }) {
+  const { value, label, desc, caseTag, previewTitle, previewSnippet, targetUrl, targetLabel } = stat
   const ref = useRef(null)
   useCountUp(ref, value)
+  const [isOpen, setIsOpen] = useState(false)
+  const timerRef = useRef(null)
+
+  const handleOpen = () => {
+    if (timerRef.current) clearTimeout(timerRef.current)
+    setIsOpen(true)
+    playPaperTap(0.25)
+  }
+
+  const handleClose = () => {
+    timerRef.current = setTimeout(() => {
+      setIsOpen(false)
+    }, 150)
+  }
+
+  // 后两项在右侧对其，避免小屏或宽屏右边缘溢出
+  const isRightAligned = index >= 2
+
   return (
-    <div className="relative">
-      <div className="flex items-baseline gap-2">
+    <div
+      className="relative group inline-block"
+      onMouseEnter={handleOpen}
+      onMouseLeave={handleClose}
+      onFocus={handleOpen}
+      onBlur={handleClose}
+    >
+      <div className="flex items-baseline gap-1.5 cursor-pointer transition-transform duration-200 group-hover:-translate-y-0.5 select-none">
         <span
           ref={ref}
-          className="font-mono text-[clamp(1.2rem,2.6vw,1.6rem)] font-semibold leading-none text-red"
+          className="font-mono text-[clamp(1.2rem,2.6vw,1.6rem)] font-semibold leading-none text-red group-hover:text-red transition-colors"
         >
           {value}
         </span>
-        <span className="font-mono text-[11px] text-ink-mute">{label}</span>
+        <span className="font-mono text-[11px] text-ink-mute group-hover:text-ink transition-colors">
+          {label}
+        </span>
+        <span className="font-mono text-[10px] text-red/60 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+          ↗
+        </span>
       </div>
       <RedUnderline delay={delay} className="-bottom-2 h-[6px]" />
-      <p className="mt-3 font-mono text-[10px] tracking-normal text-ink-faint">{desc}</p>
+      <p className="mt-3 font-mono text-[10px] tracking-normal text-ink-faint group-hover:text-ink-mute transition-colors">
+        {desc}
+      </p>
+
+      {/* 悬浮调卷预览卡片 (Specimen / Dossier Micro-inspection) */}
+      {previewTitle && (
+        <div
+          className={`absolute bottom-full mb-3.5 z-40 w-72 md:w-80 border border-ink/20 bg-paper/95 p-4 shadow-press backdrop-blur-md transition-all duration-200 ${
+            isRightAligned ? 'right-0' : 'left-0'
+          } ${
+            isOpen
+              ? 'opacity-100 translate-y-0 visible pointer-events-auto'
+              : 'opacity-0 translate-y-2 invisible pointer-events-none'
+          }`}
+          role="tooltip"
+        >
+          {/* 卡片顶栏：案卷编号/标签 */}
+          <div className="flex items-center justify-between border-b border-paper-line pb-2">
+            <span className="red-note text-[10.5px] font-mono font-bold tracking-wide">
+              {caseTag || '物证回溯'}
+            </span>
+            <span className="font-mono text-[9.5px] text-ink-mute uppercase tracking-wider">
+              INSPECTION · 调卷核验
+            </span>
+          </div>
+
+          {/* 标题与核心证据摘录 */}
+          <h4 className="mt-2.5 font-serif text-[13px] font-bold tracking-tight text-ink leading-snug">
+            {previewTitle}
+          </h4>
+          <p className="mt-1.5 text-[12px] leading-[1.7] text-ink-soft">
+            {previewSnippet}
+          </p>
+
+          {/* 直达案卷链接 */}
+          {targetUrl && (
+            <a
+              href={targetUrl}
+              onClick={() => playPaperTap(0.5)}
+              className="mt-3 flex items-center justify-between border-t border-dashed border-paper-line pt-2.5 font-mono text-[11px] font-medium text-red hover:underline group/link"
+            >
+              <span>{targetLabel || '翻开案卷查证 →'}</span>
+              <span className="text-[12px] transition-transform group-hover/link:translate-x-0.5">→</span>
+            </a>
+          )}
+
+          {/* 装饰性折纸小角标 */}
+          <div
+            className={`absolute -bottom-1.5 h-3 w-3 rotate-45 border-b border-r border-ink/20 bg-paper ${
+              isRightAligned ? 'right-8' : 'left-8'
+            }`}
+            aria-hidden="true"
+          />
+        </div>
+      )}
     </div>
   )
 }
@@ -36,8 +120,6 @@ export default function Home() {
     <main className="w-full">
       {/* ── Hero ── */}
       <section className="relative flex min-h-[calc(100svh-3.5rem)] w-full flex-col">
-        {/* 自画像 — 红笔把作者画出来（桌面右侧） */}
-        <SelfPortrait className="absolute right-10 top-1/2 z-10 hidden w-44 -translate-y-1/2 xl:block 2xl:w-52" />
         <div className="container-codex flex flex-1 flex-col justify-center py-16 sm:py-20">
           <p className="eyebrow-mono flex items-center gap-2.5">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-red" />
@@ -78,11 +160,11 @@ export default function Home() {
           <div className="mt-16 border-t border-paper-line pt-7 sm:mt-20">
             <div className="flex flex-wrap items-baseline gap-x-10 gap-y-4">
               {profile.stats.map((s, i) => (
-                <Stat key={s.label} value={s.value} label={s.label} desc={s.desc} delay={i * 150} />
+                <Stat key={s.label} stat={s} delay={i * 150} index={i} />
               ))}
             </div>
             <p className="mt-6">
-              <MarginNote>每个数字背后，都有一份可以翻开的案卷</MarginNote>
+              <MarginNote>每个数字背后，都有一份可以翻开的案卷（悬浮调卷查证）</MarginNote>
             </p>
           </div>
         </div>

@@ -74,8 +74,8 @@ export default function HandBars({ chart }) {
                 y={top - 10}
                 textAnchor="middle"
                 className="fill-red font-mono"
-                fontSize="17"
-                fontWeight="600"
+                fontSize="19"
+                fontWeight="700"
               >
                 {it.display}
               </text>
@@ -85,7 +85,8 @@ export default function HandBars({ chart }) {
                 y={baseY + 24}
                 textAnchor="middle"
                 className="fill-ink-mute font-mono"
-                fontSize="11"
+                fontSize="12.5"
+                fontWeight="500"
               >
                 {it.label}
               </text>

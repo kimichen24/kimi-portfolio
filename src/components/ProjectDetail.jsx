@@ -4,11 +4,15 @@
  * 报告以「新标签页打开」呈现（不再内嵌 iframe：修复交互被
  * Lenis 样式禁用的 bug，同时避免重型 iframe 拖累加载）。
  */
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { projects } from '../data'
 import HandBars from './HandChart'
+import EvidenceViewer from './EvidenceViewer'
+import DossierReader from './DossierReader'
+import { playPaperSlide, playPaperTap } from '../lib/audio'
 
 export default function ProjectDetail({ projectId }) {
+  const [readerOpen, setReaderOpen] = useState(false)
   const project = projects.find((p) => p.id === projectId)
 
   // 无效 id → 回作品列表
@@ -184,33 +188,87 @@ export default function ProjectDetail({ projectId }) {
           </section>
         )}
 
+        {/* 现场物证展台 */}
+        {project.evidence && <EvidenceViewer evidence={project.evidence} />}
+
         {/* 完整报告 */}
         {project.reportUrl && (
-          <section className="mt-12">
+          <section className="mt-14 border-t border-paper-line pt-10">
             <h2 className="eyebrow-mono">完整报告 / Full Report</h2>
-            <a
-              href={project.reportUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group mt-5 flex items-center justify-between gap-4 border border-paper-line bg-white/60 p-6 transition-colors hover:border-red/40 md:p-8"
-            >
-              <div>
-                <p className="font-serif text-[16px] font-bold text-ink md:text-[18px]">
-                  {project.title} · 完整调研报告
-                </p>
-                <p className="mt-1 font-mono text-[11px] text-ink-mute">
-                  HTML · 新标签页打开 · 含原始数据
-                </p>
-              </div>
-              <span className="red-note shrink-0 text-[13px] font-semibold">
-                <span className="link-annotate">打开 ↗</span>
-              </span>
-            </a>
+            <div className="mt-5 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+              <button
+                type="button"
+                onClick={() => {
+                  playPaperSlide(0.8)
+                  setReaderOpen(true)
+                }}
+                className="group flex-1 flex items-center justify-between gap-4 border-2 border-ink/20 bg-white/80 p-6 transition-all hover:border-red hover:shadow-sheet md:p-8 text-left cursor-pointer"
+              >
+                <div>
+                  <p className="font-serif text-[16px] font-bold text-ink md:text-[18px]">
+                    {project.title} · 完整调研报告
+                  </p>
+                  <p className="mt-1.5 font-mono text-[11px] text-ink-mute">
+                    站内沉浸式抽屉阅读 · 无缝浏览指标矩阵与完整推导
+                  </p>
+                </div>
+                <span className="red-note shrink-0 font-mono text-[13px] font-semibold">
+                  <span className="link-annotate">展开卷宗 →</span>
+                </span>
+              </button>
+
+              <a
+                href={project.reportUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center border border-paper-line bg-paper-deep/50 px-5 py-6 font-mono text-[12px] text-ink-mute hover:text-red hover:border-red/40 transition-colors"
+                title="在独立新标签页打开"
+              >
+                <span>独立标签页 ↗</span>
+              </a>
+            </div>
           </section>
         )}
 
+        {/* 连续阅读心流：上一份 / 下一份案卷 */}
+        <section className="mt-14 border-t border-paper-line pt-8">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            {i > 0 ? (
+              <a
+                href={`#/project/${projects[i - 1].id}`}
+                onClick={() => playPaperTap(0.6)}
+                className="group flex flex-col"
+              >
+                <span className="font-mono text-[10px] uppercase tracking-widewide text-ink-mute">
+                  ← 上一份案卷 ({String(i).padStart(2, '0')})
+                </span>
+                <span className="font-serif text-[14px] font-bold text-ink group-hover:text-red transition-colors mt-0.5">
+                  {projects[i - 1].title}
+                </span>
+              </a>
+            ) : (
+              <div />
+            )}
+
+            {i < projects.length - 1 && (
+              <a
+                href={`#/project/${projects[i + 1].id}`}
+                onClick={() => playPaperTap(0.6)}
+                className="group flex flex-col text-right ml-auto"
+              >
+                <span className="font-mono text-[10px] uppercase tracking-widewide text-ink-mute">
+                  下一份案卷 ({String(i + 2).padStart(2, '0')}) →
+                </span>
+                <span className="font-serif text-[14px] font-bold text-ink group-hover:text-red transition-colors mt-0.5">
+                  {projects[i + 1].title}
+                </span>
+              </a>
+            )}
+          </div>
+        </section>
+
         {/* 卷尾联络 */}
-        <footer className="mt-16 border-t border-paper-line pt-8">
+        <footer className="mt-14 border-t border-paper-line pt-8">
           <p className="font-mono text-[11px] text-ink-mute">
             想聊这份案卷？
             <a href="#/contact" className="link-annotate ml-2 text-red">
@@ -218,6 +276,13 @@ export default function ProjectDetail({ projectId }) {
             </a>
           </p>
         </footer>
+
+        {/* 站内沉浸式案卷报告抽屉 */}
+        <DossierReader
+          project={project}
+          isOpen={readerOpen}
+          onClose={() => setReaderOpen(false)}
+        />
       </div>
     </main>
   )

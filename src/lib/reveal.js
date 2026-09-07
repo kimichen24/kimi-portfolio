@@ -11,6 +11,19 @@ export function useInkWipe(ref) {
     if (!root) return
     const els = root.querySelectorAll('[data-ink-wipe]')
     if (!els.length) return
+
+    // 首屏保底：如果已经在视口内，立即加上 .is-in，杜绝首屏名字隐形 Bug
+    const checkInView = () => {
+      els.forEach((el) => {
+        const rect = el.getBoundingClientRect()
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          el.classList.add('is-in')
+        }
+      })
+    }
+    checkInView()
+    const timer = setTimeout(checkInView, 80)
+
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((en) => {
@@ -20,10 +33,13 @@ export function useInkWipe(ref) {
           }
         })
       },
-      { threshold: 0.4 },
+      { threshold: 0.1 },
     )
     els.forEach((el) => io.observe(el))
-    return () => io.disconnect()
+    return () => {
+      clearTimeout(timer)
+      io.disconnect()
+    }
   }, [ref])
 }
 

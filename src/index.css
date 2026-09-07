@@ -43,10 +43,12 @@
     line-height: 1.7;
     min-height: 100%;
     -webkit-overflow-scrolling: touch;
+    text-wrap: pretty;
+    hanging-punctuation: first last;
   }
 
   ::selection {
-    background-color: rgba(200, 64, 31, 0.16);
+    background-color: rgba(200, 64, 31, 0.18);
     color: #1c1a17;
   }
 
@@ -155,31 +157,39 @@
    ========================================================================== */
 .manuscript {
   background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E"),
     linear-gradient(to right, rgba(200, 64, 31, 0.1) 1px, transparent 1px),
     linear-gradient(to right, rgba(28, 26, 23, 0.035) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(28, 26, 23, 0.035) 1px, transparent 1px);
   background-size:
+    180px 180px,
     96px 96px,
     32px 32px,
     32px 32px;
   background-position:
+    0 0,
     56px 0,
     56px 0,
     0 0;
 }
 @media (max-width: 1023px) {
   .manuscript {
-    /* 移动端去掉装订红线，只留方格 */
+    /* 移动端去掉装订红线，只留方格与纸张纤维 */
     background-image:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E"),
       linear-gradient(to right, rgba(28, 26, 23, 0.035) 1px, transparent 1px),
       linear-gradient(to bottom, rgba(28, 26, 23, 0.035) 1px, transparent 1px);
-    background-size: 32px 32px, 32px 32px;
+    background-size:
+      180px 180px,
+      32px 32px,
+      32px 32px;
   }
 }
 
 /* ==========================================================================
    红笔批注系统 — 核心体验装置
    落笔动画：起笔快、收笔稳；vector-effect 保证笔画粗细均匀
+   配合 SVG #ink-bleed 滤镜呈现真墨渗纸微毛刺
    ========================================================================== */
 .redpen path {
   fill: none;
@@ -190,6 +200,7 @@
   vector-effect: non-scaling-stroke;
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
+  filter: url(#ink-bleed);
   transition: stroke-dashoffset 0.65s cubic-bezier(0.5, 0.05, 0.2, 1);
 }
 .redpen.is-drawn > path {
@@ -210,10 +221,23 @@
   vector-effect: non-scaling-stroke;
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
+  filter: url(#ink-bleed);
   transition: stroke-dashoffset 0.65s cubic-bezier(0.5, 0.05, 0.2, 1);
 }
 .is-drawn .redpen-path {
   stroke-dashoffset: 0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.animate-fade-in {
+  animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 /* ==========================================================================
@@ -226,7 +250,7 @@
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: none;
   }
 }
 .page-enter {
@@ -271,5 +295,34 @@
   .redpen path,
   .redpen-path {
     stroke-dashoffset: 0;
+  }
+}
+
+/* 打印样式优化：将网页整洁转换为极简黑白纸质求职档案 */
+@media print {
+  header,
+  footer,
+  .quote-wrap,
+  button,
+  .print\:hidden {
+    display: none !important;
+  }
+  body,
+  .manuscript {
+    background: #ffffff !important;
+    background-image: none !important;
+    color: #000000 !important;
+  }
+  .case-file {
+    box-shadow: none !important;
+    border: 1px solid #d1d5db !important;
+    background: #ffffff !important;
+  }
+  .container-codex {
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+  .ink-wipe {
+    clip-path: none !important;
   }
 }

@@ -10,6 +10,7 @@ import Work from './pages/Work'
 import About from './pages/About'
 import Contact from './pages/Contact'
 import { initSmoothScroll, destroySmoothScroll, scrollToTop, getLenis } from './lib/smoothScroll'
+import { playPaperSlide } from './lib/audio'
 
 /**
  * App — 稿纸作品集（个人网站结构）
@@ -52,6 +53,7 @@ export default function App() {
 
   // 切页回顶部；带手记子锚点时滚到对应一篇（等进场渲染完成）
   useEffect(() => {
+    playPaperSlide(0.35)
     if (loc.noteId) {
       const t = setTimeout(() => {
         const el = document.getElementById(loc.noteId)
@@ -73,8 +75,18 @@ export default function App() {
 
   return (
     <ErrorBoundary>
-      {/* 稿纸底纹 — 固定层：极淡方格 + 左缘装订红线 */}
+      {/* 稿纸底纹 — 固定层：极淡方格 + 左缘装订红线 + 纸张微肌理 */}
       <div aria-hidden="true" className="manuscript pointer-events-none fixed inset-0 z-0" />
+
+      {/* 全局 SVG 滤镜定义：墨水微渗纸毛细晕染 (Ink Bleed) */}
+      <svg className="sr-only pointer-events-none fixed" aria-hidden="true" width="0" height="0">
+        <defs>
+          <filter id="ink-bleed" x="-10%" y="-10%" width="120%" height="120%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.04 0.95" numOctaves="2" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.3" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+        </defs>
+      </svg>
 
       <TopNav route={loc.route} />
 

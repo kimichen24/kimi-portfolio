@@ -1,4 +1,5 @@
 import { RedUnderline } from './RedPen'
+import { playPaperTap } from '../lib/audio'
 
 const LINKS = [
   { route: 'home', hash: '#/', label: '首页' },
@@ -17,7 +18,12 @@ export default function TopNav({ route }) {
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-paper-line bg-paper/85 backdrop-blur-md">
       <div className="container-codex flex h-14 items-center justify-between">
-        <a href="#/" className="flex items-baseline gap-2.5" aria-label="回到首页">
+        <a
+          href="#/"
+          onClick={() => playPaperTap(0.6)}
+          className="flex items-baseline gap-2.5"
+          aria-label="回到首页"
+        >
           <span className="font-serif text-[17px] font-bold tracking-tight text-ink">Kimi Chen</span>
           <span className="hidden font-mono text-[10px] tracking-[0.22em] text-ink-mute sm:inline">
             陈权峰
@@ -30,6 +36,7 @@ export default function TopNav({ route }) {
               <a
                 key={l.route}
                 href={l.hash}
+                onClick={() => playPaperTap(0.6)}
                 aria-current={active ? 'page' : undefined}
                 className={`relative font-mono text-[13px] transition-colors duration-300 ${
                   active ? 'text-red' : 'text-ink-soft hover:text-ink'

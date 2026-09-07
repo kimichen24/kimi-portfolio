@@ -40,6 +40,7 @@ campus_new.css
 
 # Local debug & verification artifacts (not part of the site)
 *.png
+!public/images/**
 crop_qr.py
 doubao_new.css
 strengths_live.js
