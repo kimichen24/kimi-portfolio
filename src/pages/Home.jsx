@@ -1,14 +1,15 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { profile, projects, quotes, now, samplingNotes } from '../data'
 import { RedCircle, RedUnderline, MarginNote } from '../components/RedPen'
 import QuoteTicker from '../components/QuoteTicker'
 import { useCountUp } from '../lib/reveal'
 import { playPaperTap } from '../lib/audio'
 
-/** 数据点 — 横排注脚 + 悬浮调卷预览（Micro-inspection） */
+/** 数据点 — 横排注脚 + 悬浮/轻触调卷预览（Micro-inspection with Mobile Touch） */
 function Stat({ stat, delay, index }) {
   const { value, label, desc, caseTag, previewTitle, previewSnippet, targetUrl, targetLabel } = stat
   const ref = useRef(null)
+  const containerRef = useRef(null)
   useCountUp(ref, value)
   const [isOpen, setIsOpen] = useState(false)
   const timerRef = useRef(null)
@@ -25,16 +26,40 @@ function Stat({ stat, delay, index }) {
     }, 150)
   }
 
-  // 后两项在右侧对其，避免小屏或宽屏右边缘溢出
+  // 移动端触屏轻触切换
+  const handleToggle = (e) => {
+    if (e.target.closest('a') || e.target.closest('button')) return
+    setIsOpen((prev) => {
+      const next = !prev
+      if (next) playPaperTap(0.25)
+      return next
+    })
+  }
+
+  // 移动端点击卡片外部收起
+  useEffect(() => {
+    if (!isOpen) return
+    const handleOutside = (e) => {
+      if (containerRef.current && !containerRef.current.contains(e.target)) {
+        setIsOpen(false)
+      }
+    }
+    document.addEventListener('pointerdown', handleOutside)
+    return () => document.removeEventListener('pointerdown', handleOutside)
+  }, [isOpen])
+
+  // 后两项在桌面端右对齐，避免宽屏右溢出
   const isRightAligned = index >= 2
 
   return (
     <div
+      ref={containerRef}
       className="relative group inline-block"
       onMouseEnter={handleOpen}
       onMouseLeave={handleClose}
       onFocus={handleOpen}
       onBlur={handleClose}
+      onClick={handleToggle}
     >
       <div className="flex items-baseline gap-1.5 cursor-pointer transition-transform duration-200 group-hover:-translate-y-0.5 select-none">
         <span
@@ -46,7 +71,8 @@ function Stat({ stat, delay, index }) {
         <span className="font-mono text-[11px] text-ink-mute group-hover:text-ink transition-colors">
           {label}
         </span>
-        <span className="font-mono text-[10px] text-red/60 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+        {/* 移动端常态微弱透出 ↗ 提示可点，桌面端悬停显现 */}
+        <span className="font-mono text-[10px] text-red opacity-40 transition-opacity duration-200 group-hover:opacity-100 sm:opacity-0">
           ↗
         </span>
       </div>
@@ -55,26 +81,37 @@ function Stat({ stat, delay, index }) {
         {desc}
       </p>
 
-      {/* 悬浮调卷预览卡片 (Specimen / Dossier Micro-inspection) */}
+      {/* 悬浮/轻触调卷预览卡片 (Specimen / Dossier Micro-inspection) */}
       {previewTitle && (
         <div
-          className={`absolute bottom-full mb-3.5 z-40 w-72 md:w-80 border border-ink/20 bg-paper/95 p-4 shadow-press backdrop-blur-md transition-all duration-200 ${
-            isRightAligned ? 'right-0' : 'left-0'
+          className={`absolute bottom-full mb-3.5 z-40 w-[calc(100vw-3rem)] max-w-xs sm:max-w-sm border border-ink/20 bg-paper/95 p-4 shadow-press backdrop-blur-md transition-all duration-200 ${
+            isRightAligned ? 'right-0 sm:right-0 sm:left-auto' : 'left-0'
           } ${
             isOpen
               ? 'opacity-100 translate-y-0 visible pointer-events-auto'
               : 'opacity-0 translate-y-2 invisible pointer-events-none'
           }`}
           role="tooltip"
+          onClick={(e) => e.stopPropagation()}
         >
-          {/* 卡片顶栏：案卷编号/标签 */}
+          {/* 卡片顶栏：案卷编号/标签 + 移动端关闭叉 */}
           <div className="flex items-center justify-between border-b border-paper-line pb-2">
             <span className="red-note text-[10.5px] font-mono font-bold tracking-wide">
               {caseTag || '物证回溯'}
             </span>
-            <span className="font-mono text-[9.5px] text-ink-mute uppercase tracking-wider">
-              INSPECTION · 调卷核验
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="font-mono text-[9px] text-ink-mute uppercase tracking-wider hidden sm:inline">
+                INSPECTION · 调卷核验
+              </span>
+              <button
+                type="button"
+                onClick={() => setIsOpen(false)}
+                className="text-ink-mute hover:text-red p-0.5 text-[13px] leading-none transition-colors sm:hidden"
+                aria-label="关闭预览"
+              >
+                ✕
+              </button>
+            </div>
           </div>
 
           {/* 标题与核心证据摘录 */}
@@ -99,7 +136,7 @@ function Stat({ stat, delay, index }) {
 
           {/* 装饰性折纸小角标 */}
           <div
-            className={`absolute -bottom-1.5 h-3 w-3 rotate-45 border-b border-r border-ink/20 bg-paper ${
+            className={`absolute -bottom-1.5 h-3 w-3 rotate-45 border-b border-r border-ink/20 bg-paper hidden sm:block ${
               isRightAligned ? 'right-8' : 'left-8'
             }`}
             aria-hidden="true"
@@ -164,7 +201,7 @@ export default function Home() {
               ))}
             </div>
             <p className="mt-6">
-              <MarginNote>每个数字背后，都有一份可以翻开的案卷（悬浮调卷查证）</MarginNote>
+              <MarginNote>每个数字背后，都有一份可以翻开的案卷（悬浮或轻触调卷查证）</MarginNote>
             </p>
           </div>
         </div>

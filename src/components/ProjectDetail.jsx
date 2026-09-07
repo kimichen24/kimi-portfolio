@@ -13,12 +13,30 @@ import { playPaperSlide, playPaperTap } from '../lib/audio'
 
 export default function ProjectDetail({ projectId }) {
   const [readerOpen, setReaderOpen] = useState(false)
+  const [scrollProgress, setScrollProgress] = useState(0)
   const project = projects.find((p) => p.id === projectId)
 
   // 无效 id → 回作品列表
   useEffect(() => {
     if (projectId && !project) window.location.hash = '#/work'
   }, [projectId, project])
+
+  // 计算案卷阅读进度百分比（红墨水浸润标尺）
+  useEffect(() => {
+    const handleScroll = () => {
+      const el = document.documentElement
+      const total = el.scrollHeight - window.innerHeight
+      if (total > 0) {
+        const p = Math.min(100, Math.max(0, (window.scrollY / total) * 100))
+        setScrollProgress(p)
+      } else {
+        setScrollProgress(0)
+      }
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll()
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [projectId])
 
   if (!project) {
     return (
@@ -32,6 +50,28 @@ export default function ProjectDetail({ projectId }) {
 
   return (
     <main className="relative min-h-screen w-full">
+      {/* 案卷深度阅读标尺 — 顶栏墨水浸润进度条 */}
+      <div
+        className="fixed left-0 top-14 z-40 h-[2px] w-full bg-paper-line/30 pointer-events-none"
+        aria-hidden="true"
+      >
+        <div
+          className="h-full bg-red transition-[width] duration-75 ease-out shadow-[0_0_8px_rgba(200,30,30,0.35)]"
+          style={{ width: `${scrollProgress}%` }}
+        />
+      </div>
+
+      {/* 桌面端浮动微型进度指示标（滚过卷首后轻柔显现） */}
+      {scrollProgress > 3 && (
+        <aside
+          className="fixed right-6 top-[62px] z-30 hidden md:flex items-center gap-1.5 border border-paper-line bg-paper/85 px-2 py-0.5 font-mono text-[9.5px] uppercase tracking-widest text-ink-mute backdrop-blur-sm pointer-events-none select-none"
+          aria-label={`案卷阅读进度 ${Math.round(scrollProgress)}%`}
+        >
+          <span className="inline-block h-1.5 w-1.5 rounded-full bg-red" />
+          <span>进度 {Math.round(scrollProgress)}%</span>
+        </aside>
+      )}
+
       <div className="mx-auto w-full max-w-codex px-6 pb-16 pt-6 sm:px-10 sm:pt-10 lg:px-14">
         {/* 返回 */}
         <a
