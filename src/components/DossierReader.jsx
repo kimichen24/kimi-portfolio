@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { playPaperSlide, playPaperTap } from '../lib/audio'
 import { getLenis } from '../lib/smoothScroll'
@@ -9,18 +9,28 @@ import { getLenis } from '../lib/smoothScroll'
  * 1. 使用 createPortal 挂载到 body，避开 transform/stacking context 影响
  * 2. 停用 Lenis 主滚动引擎，并在内部启用原生独立滚动
  * 3. 顶栏提供卷宗编号、新标签页打开备用链接、ESC/关闭按钮
+ * 4. 键盘无障碍焦点管理：打开聚焦关闭按钮，关闭归还焦点
  */
 
 export default function DossierReader({ project, isOpen, onClose }) {
   const [loading, setLoading] = useState(true)
+  const closeBtnRef = useRef(null)
+  const prevFocusRef = useRef(null)
 
   useEffect(() => {
     if (isOpen) {
+      prevFocusRef.current = document.activeElement
       playPaperSlide(0.8)
       setLoading(true)
       const lenis = getLenis()
       if (lenis) lenis.stop()
       document.body.style.overflow = 'hidden'
+
+      // 延迟微任务聚焦，确保 DOM 已经挂载
+      requestAnimationFrame(() => {
+        closeBtnRef.current?.focus()
+      })
+
       const onKeyDown = (e) => {
         if (e.key === 'Escape') {
           handleClose()
@@ -32,6 +42,9 @@ export default function DossierReader({ project, isOpen, onClose }) {
         if (lenis) lenis.start()
         document.body.style.overflow = ''
         window.removeEventListener('keydown', onKeyDown)
+        if (prevFocusRef.current && typeof prevFocusRef.current.focus === 'function') {
+          prevFocusRef.current.focus()
+        }
       }
     }
   }, [isOpen])
@@ -84,9 +97,11 @@ export default function DossierReader({ project, isOpen, onClose }) {
 
             {/* 关闭按钮 */}
             <button
+              ref={closeBtnRef}
               type="button"
               onClick={handleClose}
-              className="flex items-center gap-1.5 border border-paper-line bg-white/60 px-3 py-1 text-ink-soft transition-colors hover:border-red hover:text-red"
+              className="flex items-center gap-1.5 border border-paper-line bg-white/60 px-3 py-1 text-ink-soft transition-colors hover:border-red hover:text-red focus:outline-none focus-visible:ring-1 focus-visible:ring-red/60"
+              aria-label="收起案卷阅读器 (Esc)"
             >
               <span>收起卷宗</span>
               <span className="font-sans text-[11px] text-ink-faint">✕</span>

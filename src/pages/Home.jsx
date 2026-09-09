@@ -54,12 +54,25 @@ function Stat({ stat, delay, index }) {
   return (
     <div
       ref={containerRef}
-      className="relative group inline-block"
+      className="relative group inline-block focus:outline-none focus-visible:ring-1 focus-visible:ring-red/50 rounded-sm"
+      tabIndex={0}
+      role="button"
+      aria-expanded={isOpen}
+      aria-label={`${value} ${label}: ${desc}，点击或按回车查看查证详情`}
       onMouseEnter={handleOpen}
       onMouseLeave={handleClose}
       onFocus={handleOpen}
       onBlur={handleClose}
       onClick={handleToggle}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          handleToggle(e)
+        } else if (e.key === 'Escape' && isOpen) {
+          e.preventDefault()
+          setIsOpen(false)
+        }
+      }}
     >
       <div className="flex items-baseline gap-1.5 cursor-pointer transition-transform duration-200 group-hover:-translate-y-0.5 select-none">
         <span
@@ -82,14 +95,10 @@ function Stat({ stat, delay, index }) {
       </p>
 
       {/* 悬浮/轻触调卷预览卡片 (Specimen / Dossier Micro-inspection) */}
-      {previewTitle && (
+      {previewTitle && isOpen && (
         <div
-          className={`absolute bottom-full mb-3.5 z-40 w-[calc(100vw-3rem)] max-w-xs sm:max-w-sm border border-ink/20 bg-paper/95 p-4 shadow-press backdrop-blur-md transition-all duration-200 ${
+          className={`absolute bottom-full mb-3.5 z-40 w-[calc(100vw-3rem)] max-w-xs sm:max-w-sm border border-ink/20 bg-paper/95 p-4 shadow-press backdrop-blur-md animate-in fade-in slide-in-from-bottom-1 duration-200 ${
             isRightAligned ? 'right-0 sm:right-0 sm:left-auto' : 'left-0'
-          } ${
-            isOpen
-              ? 'opacity-100 translate-y-0 visible pointer-events-auto'
-              : 'opacity-0 translate-y-2 invisible pointer-events-none'
           }`}
           role="tooltip"
           onClick={(e) => e.stopPropagation()}

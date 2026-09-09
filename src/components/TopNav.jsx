@@ -29,7 +29,7 @@ export default function TopNav({ route }) {
             陈权峰
           </span>
         </a>
-        <nav aria-label="主导航" className="flex items-center gap-4 sm:gap-7">
+        <nav aria-label="主导航" className="flex items-center gap-2 sm:gap-6">
           {LINKS.map((l) => {
             const active = route === l.route || (l.route === 'work' && route === 'project')
             return (
@@ -38,12 +38,12 @@ export default function TopNav({ route }) {
                 href={l.hash}
                 onClick={() => playPaperTap(0.6)}
                 aria-current={active ? 'page' : undefined}
-                className={`relative font-mono text-[13px] transition-colors duration-300 ${
+                className={`relative inline-flex items-center justify-center py-2.5 px-2 font-mono text-[13px] transition-colors duration-300 focus:outline-none focus-visible:ring-1 focus-visible:ring-red/50 ${
                   active ? 'text-red' : 'text-ink-soft hover:text-ink'
                 }`}
               >
                 {l.label}
-                {active && <RedUnderline key={route} when delay={120} className="-bottom-[7px]" />}
+                {active && <RedUnderline key={route} when delay={120} className="bottom-0.5" />}
               </a>
             )
           })}

@@ -113,7 +113,7 @@ export default function About() {
                 </span>
               </div>
               <p className="mt-3 text-[14px] leading-[2.05] text-ink-soft selection:bg-red/10 sm:text-[14.5px]">
-                AI 是我的第二双手——初稿交给它跑，判断留给自己。单项目提效 81.7%，省下来的时间用来做第二版、第三版迭代。这个网站本身就是「先做完，再做好」的产物。
+                AI 是我的第二双手——初稿交给它跑，判断留给自己。省下来的时间用来做第二版、第三版迭代。这个网站本身就是「先做完，再做好」的产物。
               </p>
             </article>
           </div>
