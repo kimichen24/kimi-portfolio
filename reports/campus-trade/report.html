@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>校园二手交易群信息流通效率优化 · 项目报告</title>
+<style>
+:root{
+  --bg:#F5F5F7; --surface:#FFFFFF; --surface-2:#FAFAFC;
+  --ink:#1D1D1F; --ink-2:#6E6E73; --ink-3:#86868B;
+  --line:#E5E5E7; --line-soft:#F0F0F2;
+  --blue:#007AFF;
+  --green:#2E9E6B; --red:#C0564B; --orange:#C77F33;
+  --radius:14px; --radius-sm:10px;
+  --shadow-sm:0 1px 8px rgba(0,0,0,.04);
+  --shadow-md:0 6px 22px rgba(0,0,0,.06);
+  --maxw:860px; --ease:cubic-bezier(.16,1,.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth; scroll-padding-top:72px; -webkit-text-size-adjust:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:var(--bg); color:var(--ink); line-height:1.7;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+/* 顶部滚动进度条 */
+#progress{position:fixed;top:0;left:0;height:2px;width:0;z-index:102;
+  background:var(--blue);transition:width .12s linear}
+/* 导航 — 半透明磨砂毛玻璃 */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;height:52px;
+  display:flex;align-items:center;gap:18px;padding:0 28px;
+  background:rgba(245,245,247,.72);backdrop-filter:blur(22px);
+  -webkit-backdrop-filter:blur(22px);
+  border-bottom:1px solid var(--line)}
+.nav .brand{font-weight:600;font-size:15px;letter-spacing:-.01em;color:var(--ink);margin-right:auto;white-space:nowrap}
+.nav .links{display:flex;align-items:center;gap:2px;overflow-x:auto;scrollbar-width:none}
+.nav .links::-webkit-scrollbar{display:none}
+.nav a{color:var(--ink-2);text-decoration:none;font-size:13px;padding:6px 12px;border-radius:8px;
+  white-space:nowrap;transition:color .2s,background .2s}
+.nav a:hover{color:var(--blue);background:rgba(0,122,255,.06)}
+.nav a.active{color:var(--blue);background:rgba(0,122,255,.10)}
+/* Hero — 极简浅灰渐变，低对比度 */
+.hero{position:relative;overflow:hidden;text-align:center;padding:120px 28px 80px;
+  background:linear-gradient(180deg,#FBFBFD 0%,#F5F5F7 100%)}
+.hero h1{position:relative;font-size:clamp(28px,5vw,46px);font-weight:700;letter-spacing:-.03em;line-height:1.14;color:var(--ink)}
+.hero .sub{position:relative;margin:18px auto 0;max-width:660px;font-size:clamp(14px,2.3vw,18px);color:var(--ink-2);line-height:1.7}
+.hero .meta{position:relative;margin-top:24px;display:flex;justify-content:center;flex-wrap:wrap;gap:10px 24px;font-size:13px;color:var(--ink-3);font-weight:300}
+.hero .meta span{display:inline-flex;align-items:center;gap:8px}
+.hero .meta span::before{content:"";width:4px;height:4px;border-radius:50%;background:var(--blue);opacity:.5}
+/* 容器 — 加宽内边距、超大留白 */
+.container{max-width:var(--maxw);margin:0 auto;padding:0 28px 100px}
+section{margin-top:88px;scroll-margin-top:72px}
+.kicker{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:12px}
+.section-title{font-size:clamp(22px,3.6vw,32px);font-weight:700;letter-spacing:-.02em;color:var(--ink);line-height:1.25}
+.section-sub{font-size:15px;color:var(--ink-2);margin-top:10px;max-width:680px;line-height:1.7}
+/* 卡片网格 */
+.grid{display:grid;gap:16px;margin-top:28px}
+.grid-4{grid-template-columns:repeat(4,1fr)}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  padding:24px 22px;box-shadow:var(--shadow-sm);transition:transform .4s var(--ease),box-shadow .4s var(--ease)}
+.card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.card .label{font-size:12px;color:var(--ink-3);font-weight:400;letter-spacing:.02em;margin-bottom:10px}
+.card .value{font-size:clamp(26px,4vw,34px);font-weight:700;letter-spacing:-.025em;color:var(--ink);line-height:1}
+.card .delta{display:inline-block;font-size:11.5px;margin-top:9px;font-weight:500;padding:3px 9px;border-radius:20px}
+.d-neg{color:#2E9E6B;background:rgba(46,158,107,.10)} .d-pos{color:#C0564B;background:rgba(192,86,75,.08)} .d-neutral{color:var(--blue);background:rgba(0,122,255,.08)}
+/* 图表 */
+.chart-fig{margin-top:28px}
+.chart{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  padding:24px 22px 16px;box-shadow:var(--shadow-sm)}
+.chart h4{font-size:14px;font-weight:600;color:var(--ink-2);margin-bottom:16px}
+.chart svg{width:100%;height:auto;display:block;overflow:visible}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:16px;padding:0 4px}
+.legend span{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--ink-2)}
+.legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+/* SVG 动画 */
+.grid-line{stroke:var(--line-soft);stroke-width:1}
+.bar{transform:scaleY(0);transform-box:fill-box;transform-origin:bottom;
+  transition:transform .95s var(--ease)}
+.chart.in-view .bar{transform:scaleY(1)}
+.bl{font-size:11px;font-weight:500;fill:var(--ink);text-anchor:middle;opacity:0;transition:opacity .5s ease .35s}
+.chart.in-view .bl{opacity:1}
+.cl{font-size:12px;fill:var(--ink-3);text-anchor:middle}
+.area{opacity:0;transition:opacity .9s ease .2s}
+.chart.in-view .area{opacity:1}
+.line-path{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
+  transition:stroke-dashoffset 1.25s var(--ease)}
+.dot{opacity:0;transform:scale(0);transform-box:fill-box;transform-origin:center;
+  transition:opacity .4s ease,transform .4s var(--ease)}
+.chart.in-view .dot{opacity:1;transform:scale(1)}
+.ll{font-size:10.5px;font-weight:500;text-anchor:middle;opacity:0;transition:opacity .4s ease .5s}
+.chart.in-view .ll{opacity:1}
+/* 洞察框 — 干净白卡，无厚重渐变与彩色边 */
+.insight{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;margin-top:28px;box-shadow:var(--shadow-sm)}
+.insight.green{background:var(--surface);border-color:var(--line)}
+.insight h3{font-size:15px;font-weight:600;color:var(--blue);margin-bottom:8px}
+.insight.green h3{color:var(--blue)}
+.insight p{font-size:14px;color:var(--ink-2);line-height:1.75}
+.insight strong{color:var(--ink);font-weight:600}
+/* 模板 */
+.template{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  padding:8px 24px;margin-top:28px;box-shadow:var(--shadow-sm)}
+.tf{display:flex;align-items:flex-start;gap:16px;padding:16px 0;border-bottom:1px solid var(--line-soft)}
+.tf:last-child{border-bottom:none}
+.tf .name{width:84px;flex-shrink:0;font-weight:600;font-size:13.5px;color:var(--ink);padding-top:1px}
+.tf .val{font-size:14px;color:var(--ink-2);flex:1;line-height:1.7}
+.tag-req{display:inline-block;background:var(--blue);color:#fff;font-size:10px;font-weight:600;
+  padding:2px 9px;border-radius:20px;margin-left:8px;vertical-align:middle}
+/* 引用 */
+.quote{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  padding:16px 20px;margin-top:14px;box-shadow:var(--shadow-sm);transition:transform .35s var(--ease),box-shadow .35s var(--ease)}
+.quote:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.quote .q{font-size:14.5px;color:var(--ink);line-height:1.7}
+.quote .a{display:flex;align-items:center;gap:9px;margin-top:10px;font-size:12px;color:var(--ink-3)}
+.quote .a .t{font-size:11px;font-weight:600;padding:2px 9px;border-radius:6px}
+.t-buyer{background:rgba(0,122,255,.10);color:var(--blue)} .t-seller{background:rgba(192,86,75,.08);color:#C0564B}
+/* A/B */
+.ab{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:28px}
+.ab .ab-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow-sm)}
+.ab .ab-card.a{border-top:2px solid var(--line)} .ab .ab-card.b{border-top:2px solid var(--blue)}
+.ab .ab-card h3{font-size:15px;font-weight:600;margin-bottom:16px}
+.ab .ab-card h3.r{color:var(--ink-2)} .ab .ab-card h3.g{color:var(--blue)}
+.ab .m{display:flex;justify-content:space-between;align-items:center;padding:9px 0;font-size:13px;border-bottom:1px solid var(--line-soft)}
+.ab .ab-card .m:last-child{border-bottom:none}
+.ab .m .k{color:var(--ink-2)} .ab .m .v{font-weight:600;color:var(--ink)}
+/* 优先级 */
+.prio{list-style:none;counter-reset:p;margin-top:28px;display:grid;gap:14px}
+.prio li{counter-increment:p;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+  padding:20px 24px;display:flex;gap:18px;align-items:flex-start;box-shadow:var(--shadow-sm);transition:transform .35s var(--ease)}
+.prio li:hover{transform:translateY(-3px)}
+.prio li::before{content:counter(p);font-size:22px;font-weight:700;color:var(--blue);opacity:.28;flex-shrink:0;width:30px;text-align:center}
+.prio li h4{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:5px}
+.prio li p{font-size:13px;color:var(--ink-2);line-height:1.7}
+/* 表格 */
+.table-wrap{margin-top:28px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{background:var(--surface-2);padding:13px 18px;text-align:left;font-weight:600;color:var(--ink-2);font-size:12px;letter-spacing:.02em;border-bottom:1px solid var(--line)}
+td{padding:13px 18px;border-bottom:1px solid var(--line-soft);color:var(--ink-2);line-height:1.7}
+tr:last-child td{border-bottom:none}
+td .up{color:var(--green);font-weight:600} td .down{color:var(--red);font-weight:600}
+/* 页脚 */
+.footer{text-align:center;padding:48px 28px;color:var(--ink-3);font-size:12px;border-top:1px solid var(--line);margin-top:80px;line-height:1.8;font-weight:300}
+/* 进入动画 */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s var(--ease),transform .7s var(--ease);transition-delay:var(--d,0s)}
+.reveal.in{opacity:1;transform:none}
+/* 打印优化 */
+@media print{
+  .nav,#progress{display:none!important}
+  body{background:#fff}
+  .hero{background:#fff;padding:40px 0 20px}
+  .card,.chart,.insight,.template,.quote,.ab .ab-card,.table-wrap,.prio li{box-shadow:none!important;border-color:#E5E5E7!important}
+  section{margin-top:40px}
+  *{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+}
+@media (max-width:640px){
+  .grid-4{grid-template-columns:repeat(2,1fr)} .grid-2{grid-template-columns:1fr}
+  .ab{grid-template-columns:1fr}
+  .hero{padding:96px 20px 64px}
+  .container{padding:0 20px 80px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .reveal{opacity:1!important;transform:none!important}
+  .bar{transform:none!important} .bl,.ll,.dot,.area{opacity:1!important;transform:none!important}
+  .line-path{stroke-dashoffset:0!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<nav class="nav">
+  <span class="brand">CampusTrade</span>
+  <div class="links">
+    <a href="#bg">背景</a>
+    <a href="#baseline">基线</a>
+    <a href="#template">模板</a>
+    <a href="#compare">对比</a>
+    <a href="#ab">A/B</a>
+    <a href="#interview">访谈</a>
+    <a href="#proposal">方案</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <h1>校园二手交易群<br>信息流通效率优化</h1>
+  <p class="sub">基于真实 QQ / 微信群 3 天蹲点数据 + A/B 测试 + 用户访谈的产品优化方案</p>
+  <div class="meta">
+    <span>2026 年 5 月</span>
+    <span>南华大学船山学院</span>
+    <span>样本群 3 个 · 访谈 10 人</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <section id="bg">
+    <div class="reveal"><div class="kicker">01 / 背景</div><h2 class="section-title">背景与核心问题</h2>
+    <p class="section-sub">校园二手交易群日均消息量 800+ 条，出售帖 6–12 分钟即沉。买卖双方信息匹配严重低效。</p></div>
+    <div class="insight reveal">
+      <h3>核心痛点</h3>
+      <p>校园二手交易群日均消息量 800+ 条，出售帖发出后平均 <strong>6–12 分钟即被刷出可见区</strong>。买家找一件物品平均需要翻看 <strong>23 分钟</strong> 历史记录，卖家平均 <strong>68%</strong> 的咨询来自已反复刷屏的重复发布。信息结构缺失导致供需匹配效率极低，大量有效交易被信息噪音淹没。</p>
+    </div>
+    <div class="grid grid-4">
+      <div class="card reveal" style="--d:.05s"><div class="label">群日均消息量</div><div class="value" data-count="824">0</div><div class="delta d-neutral">条 / 天</div></div>
+      <div class="card reveal" style="--d:.1s"><div class="label">帖子可见窗口</div><div class="value" data-count="9">0</div><div class="delta d-pos">分钟即沉</div></div>
+      <div class="card reveal" style="--d:.15s"><div class="label">买家搜索耗时</div><div class="value" data-count="23">0</div><div class="delta d-pos">分钟</div></div>
+      <div class="card reveal" style="--d:.2s"><div class="label">重复刷屏率</div><div class="value" data-count="35">0</div><div class="delta d-pos">一次卖不掉</div></div>
+    </div>
+  </section>
+
+  <section id="baseline">
+    <div class="reveal"><div class="kicker">02 / 基线</div><h2 class="section-title">3 天基线数据采集</h2>
+    <p class="section-sub">蹲点 3 个微信群 / QQ 群，逐条统计 746 条出售帖、132 条求购帖、259 次重复刷屏。</p></div>
+    <div class="grid grid-4">
+      <div class="card reveal" style="--d:.05s"><div class="label">出售帖总量</div><div class="value" data-count="746">0</div><div class="delta d-neutral">日均 249 条</div></div>
+      <div class="card reveal" style="--d:.1s"><div class="label">求购帖总量</div><div class="value" data-count="132">0</div><div class="delta d-neutral">日均 44 条</div></div>
+      <div class="card reveal" style="--d:.15s"><div class="label">成交确认</div><div class="value" data-count="55">0</div><div class="delta d-pos">仅 7.4%</div></div>
+      <div class="card reveal" style="--d:.2s"><div class="label">重复刷屏</div><div class="value" data-count="259">0</div><div class="delta d-pos">占 34.7%</div></div>
+    </div>
+    <figure class="chart-fig reveal"><div class="chart" id="c1"></div><div class="legend" id="c1-leg"></div></figure>
+    <figure class="chart-fig reveal"><div class="chart" id="c2"></div><div class="legend" id="c2-leg"></div></figure>
+    <div class="insight reveal">
+      <h3>关键发现</h3>
+      <p>超过三分之一的出售帖需要重复发布才能获得关注，成交确认率仅 <strong>7.4%</strong>。求购帖数量虽少但回复率明显高于出售帖，说明 <strong>信息结构化程度直接影响匹配效率</strong>。</p>
+    </div>
+  </section>
+
+  <section id="template">
+    <div class="reveal"><div class="kicker">03 / 模板</div><h2 class="section-title">标准化发布模板</h2>
+    <p class="section-sub">基于 5 位卖家的反馈迭代，覆盖买家最关心的 5 个决策因子。</p></div>
+    <div class="template reveal">
+      <div class="tf"><div class="name">物品名称</div><div class="val">高等数学（第七版）同济大学 <span class="tag-req">必填</span></div></div>
+      <div class="tf"><div class="name">成色</div><div class="val">85 新 ｜ 轻微笔记，无缺页无涂鸦 <span class="tag-req">必填</span></div></div>
+      <div class="tf"><div class="name">价格</div><div class="val">15 元（原价 46.7 元，省 31.7 元） <span class="tag-req">必填</span></div></div>
+      <div class="tf"><div class="name">取货地点</div><div class="val">北区宿舍 3 号楼 / 可送至教学楼 A 区 <span class="tag-req">必填</span></div></div>
+      <div class="tf"><div class="name">实拍图</div><div class="val">正面、侧面、瑕疵特写（至少 3 张清晰实拍） <span class="tag-req">必填</span></div></div>
+      <div class="tf"><div class="name">补充说明</div><div class="val">考试重点已标注，附赠复习笔记</div></div>
+      <div class="tf"><div class="name">联系方式</div><div class="val">群内优先私聊，QQ：123456789</div></div>
+    </div>
+    <div class="insight reveal">
+      <h3>设计原则</h3>
+      <p>模板核心思路是 <strong>消除信息不对称</strong>——买家在点开消息的 3 秒内就能做出判断。必填字段覆盖"是什么、多新、多少钱、在哪、长什么样"五个决策因子，减少来回私聊的无效沟通。</p>
+    </div>
+  </section>
+
+  <section id="compare">
+    <div class="reveal"><div class="kicker">04 / 对比</div><h2 class="section-title">模板 vs 随手帖 效果对比</h2>
+    <p class="section-sub">5 位卖家各发 2 条：一次用模板、一次用常规方式。</p></div>
+    <div class="grid grid-4">
+      <div class="card reveal" style="--d:.05s"><div class="label">首次回复时间</div><div class="value" data-count="12">0</div><div class="delta d-neg">-74.5% vs 47min</div></div>
+      <div class="card reveal" style="--d:.1s"><div class="label">成交时间</div><div class="value" data-count="4.2" data-dec="1">0</div><div class="delta d-neg">-81.7% vs 23h</div></div>
+      <div class="card reveal" style="--d:.15s"><div class="label">咨询转化率</div><div class="value" data-count="38">0</div><div class="delta d-neg">+216.7% vs 12%</div></div>
+      <div class="card reveal" style="--d:.2s"><div class="label">平均咨询量</div><div class="value" data-count="8.4">0</div><div class="delta d-neg">+171% vs 3.1</div></div>
+    </div>
+    <figure class="chart-fig reveal"><div class="chart" id="c3"></div><div class="legend" id="c3-leg"></div></figure>
+    <div class="table-wrap reveal">
+      <table>
+        <thead><tr><th>指标</th><th>标准化模板</th><th>随手帖</th><th>提升</th></tr></thead>
+        <tbody>
+          <tr><td>首次回复时间</td><td>12 分钟</td><td>47 分钟</td><td class="down">-74.5%</td></tr>
+          <tr><td>成交时间</td><td>4.2 小时</td><td>23.0 小时</td><td class="down">-81.7%</td></tr>
+          <tr><td>咨询到成交转化率</td><td>38%</td><td>12%</td><td class="up">+216.7%</td></tr>
+          <tr><td>平均咨询量</td><td>8.4 人次</td><td>3.1 人次</td><td class="up">+171%</td></tr>
+          <tr><td>信息完整度评分</td><td>4.6 / 5.0</td><td>2.1 / 5.0</td><td class="up">+119%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="ab">
+    <div class="reveal"><div class="kicker">05 / A·B</div><h2 class="section-title">A/B 对照测试</h2>
+    <p class="section-sub">同一物品（高等数学教材），同一时段发布。</p></div>
+    <div class="ab">
+      <div class="ab-card a reveal" style="--d:.05s"><h3 class="r">A 版本：常规方式</h3>
+        <div class="m"><span class="k">发布形式</span><span class="v">模糊图 + 一句话</span></div>
+        <div class="m"><span class="k">咨询量</span><span class="v" style="color:var(--red)">3 次</span></div>
+        <div class="m"><span class="k">成交数</span><span class="v">1 单</span></div>
+        <div class="m"><span class="k">首次回复</span><span class="v">38 分钟</span></div>
+        <div class="m"><span class="k">成交耗时</span><span class="v">6.5 小时</span></div>
+      </div>
+      <div class="ab-card b reveal" style="--d:.12s"><h3 class="g">B 版本：标准化模板</h3>
+        <div class="m"><span class="k">发布形式</span><span class="v">清晰图 + 完整信息</span></div>
+        <div class="m"><span class="k">咨询量</span><span class="v" style="color:var(--green)">11 次</span></div>
+        <div class="m"><span class="k">成交数</span><span class="v">2 单</span></div>
+        <div class="m"><span class="k">首次回复</span><span class="v">7 分钟</span></div>
+        <div class="m"><span class="k">成交耗时</span><span class="v">1.5 小时</span></div>
+      </div>
+    </div>
+    <figure class="chart-fig reveal"><div class="chart" id="c4"></div><div class="legend" id="c4-leg"></div></figure>
+    <div class="insight green reveal">
+      <h3>结论</h3>
+      <p>同一物品，B 版本（模板）比 A 版本（常规）咨询量高 <strong>267%</strong>、成交速度快 <strong>77%</strong>。信息密度直接转化为信任度——买家更愿意联系信息完整的卖家。</p>
+    </div>
+  </section>
+
+  <section id="interview">
+    <div class="reveal"><div class="kicker">06 / 访谈</div><h2 class="section-title">用户访谈摘要</h2>
+    <p class="section-sub">5 位买家 + 5 位卖家，半结构化访谈。</p></div>
+    <h3 style="font-size:16px;font-weight:600;margin:8px 0 4px">买家侧："最近一次在群里找东西找了多久？"</h3>
+    <div class="quote reveal" style="--d:.04s"><div class="q">刷了半小时才翻到三天前的记录，中间全是表情包和闲聊。</div><div class="a"><span class="t t-buyer">买家</span> 买家 A · 耗时 30 分钟</div></div>
+    <div class="quote reveal" style="--d:.08s"><div class="q">找一本教材翻了快一个小时，最后发现人家早卖了也没说一声。</div><div class="a"><span class="t t-buyer">买家</span> 买家 B · 耗时 45 分钟</div></div>
+    <div class="quote reveal" style="--d:.12s"><div class="q">还好是热门物品几分钟就看到了，但图片糊得根本看不清品相。</div><div class="a"><span class="t t-buyer">买家</span> 买家 C · 耗时 8 分钟</div></div>
+    <div class="quote reveal" style="--d:.16s"><div class="q">断断续续刷了二十分钟，好几次看到一半被新消息冲走了。</div><div class="a"><span class="t t-buyer">买家</span> 买家 D · 耗时 20 分钟</div></div>
+    <div class="quote reveal" style="--d:.2s"><div class="q">刷了十几分钟受不了了，去闲鱼搜了，至少能搜能筛选。</div><div class="a"><span class="t t-buyer">买家</span> 买家 E · 12 分钟后放弃</div></div>
+    <div class="grid grid-4" style="margin-top:18px">
+      <div class="card reveal" style="--d:.05s"><div class="label">平均搜索耗时</div><div class="value" data-count="23">0</div><div class="delta d-pos">分钟</div></div>
+      <div class="card reveal" style="--d:.1s"><div class="label">最长耗时</div><div class="value" data-count="45">0</div><div class="delta d-pos">分钟</div></div>
+      <div class="card reveal" style="--d:.15s"><div class="label">放弃率</div><div class="value" data-count="20">0</div><div class="delta d-pos">1/5 放弃</div></div>
+      <div class="card reveal" style="--d:.2s"><div class="label">不满意率</div><div class="value" data-count="80">0</div><div class="delta d-pos">4/5 困难重重</div></div>
+    </div>
+    <h3 style="font-size:16px;font-weight:600;margin:34px 0 4px">卖家侧："挂了几天？中间有人问了不买吗？"</h3>
+    <div class="quote reveal" style="--d:.04s"><div class="q">挂了 3 天。有 3 个人问完说"再看看"就没下文了。</div><div class="a"><span class="t t-seller">卖家</span> 卖家 A · 3 天 / 3 人终止</div></div>
+    <div class="quote reveal" style="--d:.08s"><div class="q">2 天卖掉。有个人反复问细节，每张图都要现拍给他。</div><div class="a"><span class="t t-seller">卖家</span> 卖家 B · 2 天 / 1 人反复</div></div>
+    <div class="quote reveal" style="--d:.12s"><div class="q">5 天。约了两次面交都被放鸽子。</div><div class="a"><span class="t t-seller">卖家</span> 卖家 C · 5 天 / 2 次鸽子</div></div>
+    <div class="quote reveal" style="--d:.16s"><div class="q">1 天就卖了。写了价格和型号，买家直接就能判断。</div><div class="a"><span class="t t-seller">卖家</span> 卖家 D · 1 天 / 0 人终止</div></div>
+    <div class="quote reveal" style="--d:.2s"><div class="q">4 天。5 个人来问，最后只有 1 个成交，其他问问就走了。</div><div class="a"><span class="t t-seller">卖家</span> 卖家 E · 4 天 / 成交率 20%</div></div>
+    <div class="grid grid-4" style="margin-top:18px">
+      <div class="card reveal" style="--d:.05s"><div class="label">平均挂售天数</div><div class="value" data-count="3" data-dec="1">0</div><div class="delta d-pos">天</div></div>
+      <div class="card reveal" style="--d:.1s"><div class="label">"问了不买"率</div><div class="value" data-count="80">0</div><div class="delta d-pos">4/5 遇到</div></div>
+      <div class="card reveal" style="--d:.15s"><div class="label">无效咨询占比</div><div class="value" data-count="68">0</div><div class="delta d-pos">问而未成交</div></div>
+      <div class="card reveal" style="--d:.2s"><div class="label">放鸽子率</div><div class="value" data-count="20">0</div><div class="delta d-pos">1/5 遇到</div></div>
+    </div>
+  </section>
+
+  <section id="proposal">
+    <div class="reveal"><div class="kicker">07 / 方案</div><h2 class="section-title">优化方案 & MVP 建议</h2>
+    <p class="section-sub">从问题诊断到产品方案。</p></div>
+    <div class="insight reveal">
+      <h3>核心瓶颈：信息流无结构</h3>
+      <p>所有消息以时间线平铺，缺乏分类、搜索、筛选、状态追踪。导致三重浪费：卖家重复刷屏（34.7%）、买家低效翻找（23 分钟）、无效沟通（68%）。标准化模板解决了单条信息结构化，系统性方案需要工具支撑。</p>
+    </div>
+    <h3 style="font-size:16px;font-weight:600;margin:32px 0 4px">MVP 功能优先级排序</h3>
+    <ol class="prio">
+      <li class="reveal" style="--d:.05s"><div><h4>分类浏览 + 关键词搜索</h4><p>按品类结构化展示，支持关键词模糊搜索。直接消除买家最大的时间成本。买家侧痛点最痛，投入产出比最高。</p></div></li>
+      <li class="reveal" style="--d:.12s"><div><h4>模板化发布 + 信息校验</h4><p>强制走标准模板，未填完不允发布。数据结构化是搜索的前提，模板本身就是卖家效率工具。</p></div></li>
+      <li class="reveal" style="--d:.19s"><div><h4>交易状态标签</h4><p>在售 / 已预订 / 已售出一键切换。消除 68% 无效咨询，建立平台信任。</p></div></li>
+    </ol>
+    <figure class="chart-fig reveal"><div class="chart" id="c5"></div><div class="legend" id="c5-leg"></div></figure>
+    <div class="insight green reveal">
+      <h3>延伸思考</h3>
+      <p>校园二手交易的商业价值不在抽成，而在 <strong>流量入口 + 用户习惯</strong>。可延伸至毕业生清仓专场、教材循环代销（平台抽佣 5%–10%）、校园本地化广告。MVP 阶段核心指标：<strong>日活在售物品数</strong> 和 <strong>搜索到联系转化率</strong>。</p>
+    </div>
+  </section>
+
+  <section id="summary">
+    <div class="reveal"><div class="kicker">08 / 总结</div><h2 class="section-title">项目总结</h2></div>
+    <div class="table-wrap reveal">
+      <table>
+        <thead><tr><th>阶段</th><th>方法</th><th>核心产出</th></tr></thead>
+        <tbody>
+          <tr><td>问题诊断</td><td>3 天群消息逐条统计</td><td>日均 249 条出售帖、34.7% 重复刷屏率、7.4% 成交确认率</td></tr>
+          <tr><td>方案设计</td><td>模板 + 5 人验证</td><td>回复速度 -74.5%、成交时间 -81.7%</td></tr>
+          <tr><td>实验验证</td><td>A/B 对照测试</td><td>咨询量 +267%、成交速度 +77%</td></tr>
+          <tr><td>用户研究</td><td>10 人半结构化访谈</td><td>搜索耗时 23min、68% 无效咨询</td></tr>
+          <tr><td>产品方案</td><td>MVP 优先级排序</td><td>P0: 分类搜索 &gt; P1: 模板发布 &gt; P2: 状态追踪</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</div>
+<div class="footer">校园二手交易群信息流通效率优化 · 2026 年 5 月 · 数据来源：3 个交易群 / 10 位访谈用户</div>
+
+<script>
+(function(){
+  "use strict";
+  var C={blue:'#5E9FD6',green:'#86C3AC',red:'#D89A92',orange:'#D9C28C',gray:'#B0B4BC'};
+  var NS='http://www.w3.org/2000/svg';
+  function el(tag,attrs){var e=document.createElementNS(NS,tag);for(var k in attrs)e.setAttribute(k,attrs[k]);return e;}
+
+  // 分组柱状图（多系列）
+  function buildBar(id,cfg){
+    var host=document.getElementById(id); if(!host) return;
+    var leg=document.getElementById(id+'-leg');
+    var W=760,H=340,pad={l:46,r:16,t:22,b:42};
+    var pw=W-pad.l-pad.r, ph=H-pad.t-pad.b;
+    var cats=cfg.categories, nC=cats.length, nS=cfg.series.length;
+    var gw=pw/nC, barW=Math.min(52,(gw*0.6)/nS), gap=nS>1?6:0;
+    var max=cfg.max||Math.ceil(Math.max.apply(null,cfg.series.map(function(s){return Math.max.apply(null,s.values);}))*1.15/10)*10;
+    var svg=el('svg',{viewBox:'0 0 '+W+' '+H,preserveAspectRatio:'xMidYMid meet',role:'img','aria-label':cfg.aria||'chart'});
+    for(var k=0;k<=4;k++){var gy=pad.t+ph/4*k; svg.appendChild(el('line',{class:'grid-line',x1:pad.l,y1:gy,x2:W-pad.r,y2:gy}));}
+    cfg.series.forEach(function(s,si){
+      s.values.forEach(function(v,i){
+        var gx=pad.l+gw*(i+0.5);
+        var total=nS*barW+(nS-1)*gap, start=gx-total/2;
+        var x=start+si*(barW+gap);
+        var bh=v/max*ph, y=pad.t+ph-bh;
+        var delay=(i*0.06+si*0.05).toFixed(2);
+        svg.appendChild(el('rect',{class:'bar',x:x,y:y,width:barW,height:bh,rx:5,fill:s.color,style:'transition-delay:'+delay+'s'}));
+        var t=el('text',{class:'bl',x:x+barW/2,y:y-7,style:'transition-delay:'+(parseFloat(delay)+0.2).toFixed(2)+'s'}); t.textContent=v;
+        svg.appendChild(t);
+      });
+    });
+    cats.forEach(function(c,i){var gx=pad.l+gw*(i+0.5);var t=el('text',{class:'cl',x:gx,y:pad.t+ph+20});t.textContent=c;svg.appendChild(t);});
+    host.appendChild(svg);
+    if(leg){leg.innerHTML=cfg.series.map(function(s){return '<span><i style="background:'+s.color+'"></i>'+s.name+'</span>';}).join('');}
+  }
+
+  // 折线图（含面积）
+  function buildLine(id,cfg){
+    var host=document.getElementById(id); if(!host) return;
+    var leg=document.getElementById(id+'-leg');
+    var W=760,H=340,pad={l:46,r:16,t:22,b:42};
+    var pw=W-pad.l-pad.r, ph=H-pad.t-pad.b;
+    var cats=cfg.categories, nC=cats.length;
+    var max=cfg.max||Math.ceil(Math.max.apply(null,cfg.series.map(function(s){return Math.max.apply(null,s.values);}))*1.15/10)*10;
+    var svg=el('svg',{viewBox:'0 0 '+W+' '+H,preserveAspectRatio:'xMidYMid meet',role:'img','aria-label':cfg.aria||'chart'});
+    var defs=el('defs',{});
+    cfg.series.forEach(function(s,i){var g=el('linearGradient',{id:id+'-g'+i,x1:0,y1:0,x2:0,y2:1});
+      g.appendChild(el('stop',{offset:'0',['stop-color']:s.color,'stop-opacity':0.18}));
+      g.appendChild(el('stop',{offset:'1',['stop-color']:s.color,'stop-opacity':0}));
+      defs.appendChild(g);});
+    svg.appendChild(defs);
+    for(var k=0;k<=4;k++){var gy=pad.t+ph/4*k; svg.appendChild(el('line',{class:'grid-line',x1:pad.l,y1:gy,x2:W-pad.r,y2:gy}));}
+    var pts=cfg.series.map(function(s){return s.values.map(function(v,i){return [pad.l+pw/(nC-1)*i, pad.t+ph-v/max*ph];});});
+    cfg.series.forEach(function(s,i){
+      var p=pts[i];
+      var area='M'+p[0][0]+','+(pad.t+ph)+' L'+p.map(function(q){return q[0]+','+q[1];}).join(' L')+' L'+p[p.length-1][0]+','+(pad.t+ph)+' Z';
+      svg.appendChild(el('path',{class:'area',d:area,fill:'url(#'+id+'-g'+i+')'}));
+      var d='M'+p.map(function(q){return q[0]+','+q[1];}).join(' L');
+      svg.appendChild(el('path',{class:'line-path',d:d,stroke:s.color}));
+    });
+    cfg.series.forEach(function(s,i){pts[i].forEach(function(q,vi){
+      var c=el('circle',{class:'dot',cx:q[0],cy:q[1],r:4,fill:s.color,stroke:'#fff','stroke-width':1.5,style:'transition-delay:'+(0.3+vi*0.06+i*0.05).toFixed(2)+'s'});
+      svg.appendChild(c);
+      var t=el('text',{class:'ll',x:q[0],y:q[1]-10,fill:s.color,style:'transition-delay:'+(0.3+vi*0.06+i*0.05).toFixed(2)+'s'}); t.textContent=s.values[vi];
+      svg.appendChild(t);
+    });});
+    cats.forEach(function(c,i){var t=el('text',{class:'cl',x:pad.l+pw/(nC-1)*i,y:pad.t+ph+20});t.textContent=c;svg.appendChild(t);});
+    host.appendChild(svg);
+    // 设置虚线动画长度
+    var paths=host.querySelectorAll('.line-path');
+    paths.forEach(function(pa){var len=pa.getTotalLength();pa.style.strokeDasharray=len;pa.style.strokeDashoffset=len;});
+    if(leg){leg.innerHTML=cfg.series.map(function(s){return '<span><i style="background:'+s.color+'"></i>'+s.name+'</span>';}).join('');}
+  }
+
+  buildBar('c1',{categories:['Day1','Day2','Day3'],
+    series:[{name:'出售帖',color:C.blue,values:[247,231,268]},{name:'求购帖',color:C.green,values:[43,51,38]},{name:'成交确认',color:C.orange,values:[18,22,15]},{name:'重复刷屏',color:C.red,values:[89,76,94]}],
+    aria:'每日消息类型分布'});
+  buildLine('c2',{categories:['Day1','Day2','Day3'],
+    series:[{name:'出售帖',color:C.blue,values:[247,231,268]},{name:'重复刷屏',color:C.red,values:[89,76,94]},{name:'成交确认',color:C.green,values:[18,22,15]}],
+    aria:'3 天趋势对比'});
+  buildBar('c3',{categories:['首次回复(min)','成交时间(h)','转化率(%)','咨询量(人次)'],
+    series:[{name:'标准化模板',color:C.green,values:[12,4.2,38,8.4]},{name:'随手帖',color:C.gray,values:[47,23,12,3.1]}],
+    aria:'核心指标对比'});
+  buildBar('c4',{categories:['咨询量','成交数','首次回复(min)','成交耗时(h)'],
+    series:[{name:'A 版本（常规）',color:C.red,values:[3,1,38,6.5]},{name:'B 版本（模板）',color:C.green,values:[11,2,7,1.5]}],
+    aria:'A/B 测试核心指标对比'});
+  buildBar('c5',{categories:['搜索耗时(min)','刷屏率(%)','成交确认率(%)','无效咨询(%)'],
+    series:[{name:'当前群聊',color:C.gray,values:[23,34.7,7.4,68]},{name:'MVP 后预估',color:C.green,values:[3,8,28,25]}],
+    aria:'MVP 上线后核心指标预估'});
+
+  // 数字滚动
+  function countUp(node){
+    var target=parseFloat(node.getAttribute('data-count'));
+    var dec=parseInt(node.getAttribute('data-dec')||'0',10);
+    var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduce){node.textContent=target.toFixed(dec);return;}
+    var dur=1150, start=null;
+    function tick(t){if(!start)start=t;var p=Math.min(1,(t-start)/dur);var e=1-Math.pow(1-p,3);
+      node.textContent=(target*e).toFixed(dec);
+      if(p<1)requestAnimationFrame(tick);else node.textContent=target.toFixed(dec);}
+    requestAnimationFrame(tick);
+  }
+
+  // 进入视口观察
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if(!e.isIntersecting) return;
+      var el=e.target;
+      if(el.classList.contains('chart')) el.classList.add('in-view');
+      if(el.classList.contains('reveal')) el.classList.add('in');
+      if(el.hasAttribute('data-count')) countUp(el);
+      io.unobserve(el);
+    });
+  },{threshold:0.12,rootMargin:'0px 0px -7% 0px'});
+  document.querySelectorAll('.reveal, .chart, [data-count]').forEach(function(n){io.observe(n);});
+
+  // 顶部滚动进度
+  var prog=document.getElementById('progress');
+  function onScroll(){var d=document.documentElement;var h=d.scrollHeight-window.innerHeight;
+    prog.style.width=(h>0?(window.scrollY/h*100):0)+'%';}
+  window.addEventListener('scroll',onScroll,{passive:true}); onScroll();
+
+  // 导航高亮
+  var links=[].slice.call(document.querySelectorAll('.nav a'));
+  var spy=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){
+    var id='#'+e.target.id; links.forEach(function(l){l.classList.toggle('active',l.getAttribute('href')===id);});}});},
+    {rootMargin:'-45% 0px -50% 0px'});
+  links.forEach(function(l){var s=document.querySelector(l.getAttribute('href'));if(s)spy.observe(s);});
+})();
+</script>
+</body>
+</html>
