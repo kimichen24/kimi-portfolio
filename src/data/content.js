@@ -26,6 +26,7 @@ export const profile = {
   englishName: 'Kimi Chen',
   // 一句话定位 — 个人网站的自我介绍（分享体，非求职体）
   role: '产品运营 · 求职中',
+  valueProposition: '用用户研究驱动产品增长，用数据与流程沉淀确定性。',
   tagline: '这里是 Kimi 的个人网站——案卷、手记、采样笔记，和一些随手造的小东西。',
   // 首屏宣言：带画面感的个人句子（「听」是红笔圈注的落点）
   manifesto: '写点东西，做点运营，认真听用户说话。',
@@ -47,28 +48,31 @@ export const profile = {
   stats: [
     {
       value: '10.66万+',
-      label: '账号播放',
-      desc: '抖音自然流量',
+      label: '自然播放',
+      desc: '零成本冷启动做起账号',
+      dimension: '内容与增长',
       caseTag: '经历 · 抖音音乐 0-1',
       previewTitle: '音乐采样溯源与创作解析',
-      previewSnippet: '单条最高 5 万播放，通过采样对比与创作解析验证差异化垂类内容模型。',
+      previewSnippet: '零成本冷启动，单条最高 5 万播放，通过采样对比与创作解析验证差异化垂类内容模型。',
       targetUrl: '#/about',
       targetLabel: '查证经历手记 →',
     },
     {
       value: '81.7%',
-      label: '效率提升',
-      desc: '二手群成交周期砍掉',
+      label: '效率优化',
+      desc: '二手群成交耗时 23h→4.2h',
+      dimension: '流程与提效',
       caseTag: '案卷 01 · 校园二手群',
       previewTitle: '成交周期 23.0h 压缩至 4.2h',
-      previewSnippet: '采集 3 天 2,400+ 条群聊基线，设计结构化发布模版与确认帖防鸽机制。',
+      previewSnippet: '采集 3 天 2,471 条群聊基线，设计结构化发布模版与确认帖防鸽机制。',
       targetUrl: '#/project/campus-trade',
       targetLabel: '翻开案卷查证 →',
     },
     {
       value: '38%',
-      label: '转化率',
-      desc: '二手群 12%→38%',
+      label: '转化跃升',
+      desc: '咨询到成交 12%→38%',
+      dimension: '转化与验证',
       caseTag: '案卷 01 · 校园二手群',
       previewTitle: '咨询到成交转化率提升 216%',
       previewSnippet: '同物品 A/B 实测：常规随手帖仅 12% 转化，标准化发布模板提升至 38%。',
@@ -77,8 +81,9 @@ export const profile = {
     },
     {
       value: '3',
-      label: '独立项目',
-      desc: '从 0 到 1 落地',
+      label: '交付案卷',
+      desc: '从 0 到 1 闭环落地',
+      dimension: '端到端落地',
       caseTag: '作品 · 完整案卷库',
       previewTitle: '内容增长 / 社群提效 / 深度调研',
       previewSnippet: '涵盖二手社群重构、豆包校园调研、招聘平台走查，附带可查验原始物证。',
@@ -319,7 +324,7 @@ export const projects = [
     title: '招聘平台产品研究',
     summary:
       '双非 / 无经验大学生在实习僧、Boss 直聘求职时，普遍面临推荐不精准、无法判断岗位是否够格、缺少同类上岸参考等困境。以目标用户视角搭建「战略 / 体验 / 商业 / 能力」四层分析框架，对双平台做竞品走查并收集 18 张真实 App 截图作为证据，交叉验证后输出 P0 / P1 / P2 优化方案与关键页面原型线框。',
-    headline: '18 张真实截图 + 3 大痛点，输出可落地的招聘平台优化方案',
+    headline: '拆解双非求职困境 · 18 张 App 走查截图驱动原型',
     actions: [
       '搭建「战略 / 体验 / 商业 / 能力」四层分析框架，对实习僧、Boss 直聘做系统竞品走查，收集 18 张真实 App 截图作为证据',
       '结合智联招聘（21 万样本）、中青报等公开行业数据交叉验证，识别 3 大核心痛点：推荐错配、资格靠猜、缺少同类参考',
