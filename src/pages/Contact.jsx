@@ -66,6 +66,22 @@ export default function Contact() {
           {profile.email}
         </a>
 
+        {/* HR 30 秒路径 — 简历 + 意向 + 最快联系方式，一屏给齐 */}
+        <div className="mt-8 flex max-w-3xl flex-wrap items-center gap-4 border border-paper-line bg-paper-deep/30 p-5">
+          <a
+            href="resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-ink px-6 py-2.5 font-mono text-[12px] text-paper transition-colors duration-300 hover:bg-red inline-flex items-center gap-2"
+          >
+            <span>下载简历 PDF</span>
+            <span>↓</span>
+          </a>
+          <p className="font-mono text-[11px] leading-relaxed text-ink-mute">
+            单页 A4 · 产品运营实习 · 随时到岗 · 支持异地驻场或远程
+          </p>
+        </div>
+
         {/* 直达卡：抖音 / GitHub */}
         <div className="mt-14 grid max-w-3xl gap-5 sm:grid-cols-2">
           {douyin && (

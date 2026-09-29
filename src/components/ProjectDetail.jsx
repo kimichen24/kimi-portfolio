@@ -133,6 +133,20 @@ export default function ProjectDetail({ projectId }) {
           </ol>
         </section>
 
+        {/* 复盘反思 — 做完之后的回头看：面试官最爱问的部分 */}
+        {project.reflections && project.reflections.length > 0 && (
+          <section className="mt-12">
+            <h2 className="eyebrow-mono">复盘 / Retrospective</h2>
+            <ul className="mt-5 space-y-4 max-w-3xl">
+              {project.reflections.map((r, ri) => (
+                <li key={ri} className="flex gap-4 border-l-2 border-red/50 bg-paper-deep/20 pl-5 py-2">
+                  <p className="text-[14px] leading-[1.9] text-ink-soft md:text-[15px]">{r}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
         {/* 补充材料 */}
         {project.extras && project.extras.length > 0 && (
           <section className="mt-12">

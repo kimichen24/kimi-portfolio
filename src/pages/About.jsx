@@ -22,18 +22,31 @@ export default function About() {
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-red" />
             关于 · About
           </p>
-          <button
-            type="button"
-            onClick={() => {
-              playPaperTap(0.7)
-              window.print()
-            }}
-            className="font-mono text-[11px] text-ink-mute hover:text-red transition-colors flex items-center gap-1.5 border border-paper-line bg-white/60 px-3 py-1 cursor-pointer print:hidden"
-            title="调起浏览器打印，导出极简纸质求职档案"
-          >
-            <span>打印纸质档案</span>
-            <span className="text-[12px]">⎙</span>
-          </button>
+          <div className="flex items-center gap-2 print:hidden">
+            <a
+              href="resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => playPaperTap(0.7)}
+              className="font-mono text-[11px] text-paper bg-ink hover:bg-red transition-colors flex items-center gap-1.5 px-3 py-1"
+              title="下载单页简历 PDF（A4，可直接投递）"
+            >
+              <span>下载简历 PDF</span>
+              <span className="text-[12px]">↓</span>
+            </a>
+            <button
+              type="button"
+              onClick={() => {
+                playPaperTap(0.7)
+                window.print()
+              }}
+              className="font-mono text-[11px] text-ink-mute hover:text-red transition-colors flex items-center gap-1.5 border border-paper-line bg-white/60 px-3 py-1 cursor-pointer"
+              title="调起浏览器打印，导出极简纸质求职档案"
+            >
+              <span>打印纸质档案</span>
+              <span className="text-[12px]">⎙</span>
+            </button>
+          </div>
         </div>
 
         <h1
