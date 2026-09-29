@@ -13,24 +13,25 @@
   html { -webkit-font-smoothing: antialiased; }
   body {
     font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-    background: var(--paper); color: var(--ink); line-height: 1.65;
+    background: var(--paper); color: var(--ink); line-height: 1.6;
     font-size: 12.5px;
   }
-  .sheet { max-width: 760px; margin: 0 auto; padding: 40px 44px 48px; }
+  .sheet { max-width: 760px; margin: 0 auto; padding: 32px 44px 40px; }
   .serif { font-family: 'Noto Serif SC', 'Songti SC', 'SimSun', serif; }
   .mono { font-family: 'IBM Plex Mono', 'SF Mono', Consolas, monospace; }
 
-  header.head { border-bottom: 2px solid var(--ink); padding-bottom: 14px; }
-  .head h1 { font-size: 30px; font-weight: 900; letter-spacing: -0.02em; }
+  header.head { border-bottom: 2px solid var(--ink); padding-bottom: 10px; }
+  .head h1 { font-size: 24px; font-weight: 900; letter-spacing: -0.02em; }
   .head h1 span.en { font-size: 15px; color: var(--mute); font-weight: 600; margin-left: 10px; }
   .head .intent {
     margin-top: 6px; display: inline-block; color: var(--red);
     font-size: 12.5px; font-weight: 600;
   }
   .head .meta { margin-top: 8px; color: var(--soft); font-size: 11.5px; }
+  .head .meta span { white-space: nowrap; }
   .head .meta span + span::before { content: ' · '; color: var(--mute); }
 
-  section { margin-top: 20px; }
+  section { margin-top: 11px; }
   .sec-title {
     display: flex; align-items: baseline; gap: 10px;
     border-bottom: 1px solid var(--line); padding-bottom: 5px;
@@ -39,13 +40,13 @@
   .sec-title h2 { font-size: 14.5px; font-weight: 800; letter-spacing: 0.02em; }
   .sec-title .en { color: var(--mute); font-size: 9.5px; letter-spacing: 0.25em; text-transform: uppercase; margin-left: auto; }
 
-  .item { margin-top: 12px; }
+  .item { margin-top: 8px; }
   .item .row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
   .item h3 { font-size: 13px; font-weight: 800; }
   .item .period { color: var(--mute); font-size: 10.5px; white-space: nowrap; }
   .item .headline { color: var(--red); font-size: 11.5px; font-weight: 600; margin-top: 2px; }
-  .item ul { margin-top: 5px; list-style: none; }
-  .item li { position: relative; padding-left: 14px; margin-top: 3px; color: var(--soft); }
+  .item ul { margin-top: 4px; list-style: none; }
+  .item li { position: relative; padding-left: 14px; margin-top: 2px; color: var(--soft); }
   .item li::before {
     content: ''; position: absolute; left: 0; top: 8px;
     width: 8px; height: 2.5px; background: var(--red);
@@ -60,7 +61,7 @@
   .plain li::before { content: ''; position: absolute; left: 0; top: 8px; width: 8px; height: 2.5px; background: var(--red); }
 
   footer.foot {
-    margin-top: 24px; border-top: 1px solid var(--line); padding-top: 10px;
+    margin-top: 10px; border-top: 1px solid var(--line); padding-top: 7px;
     color: var(--mute); font-size: 10px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
   }
   footer.foot a { color: var(--red); text-decoration: none; }
@@ -68,7 +69,7 @@
   @page { size: A4; margin: 0; }
   @media print {
     body { background: #fff; }
-    .sheet { padding: 28px 34px; max-width: none; }
+    .sheet { padding: 18px 32px; max-width: none; }
     .noprint { display: none !important; }
   }
   .noprint.tip {
@@ -82,14 +83,14 @@
   <div class="sheet">
     <header class="head">
       <h1 class="serif">陈权峰<span class="en">Kimi Chen</span></h1>
-      <p class="intent mono">产品运营实习 · 求职中 · 随时到岗</p>
+      <p class="intent mono">内容 / AI 产品运营实习 · 求职中 · 随时到岗</p>
       <p class="meta mono">
         <span>湖南 · 长沙（支持异地驻场 / 远程）</span>
         <span>kimichen224@163.com</span>
         <span>微信 Butter2fly4blue</span>
         <span>github.com/kimichen24</span>
+        <span>作品集 kimichen24.github.io/kimi-portfolio</span>
       </p>
-      <p class="meta mono"><span>作品集：kimichen24.github.io/kimi-portfolio（每个数字都可查证）</span></p>
     </header>
 
     <section>
@@ -97,14 +98,26 @@
       <div class="item">
         <div class="row"><h3>南华大学船山学院 · 软件工程（本科在读）</h3><span class="period mono">湖南 · 衡阳</span></div>
         <ul>
-          <li>校级一等奖学金 · 英语四级（CET-4）</li>
-          <li>工科背景转译运营：懂数据逻辑与基本代码，能独立用 SQL / Excel 完成数据分析，能与研发无障碍对话</li>
+          <li>校级一等奖学金 · 英语四级（CET-4）· 工科背景转译运营：能独立用 SQL / Excel 完成数据分析，与研发无障碍对话</li>
         </ul>
       </div>
     </section>
 
     <section>
-      <div class="sec-title"><span class="no mono">02</span><h2 class="serif">项目实战</h2><span class="en mono">Projects</span></div>
+      <div class="sec-title"><span class="no mono">02</span><h2 class="serif">实习经历</h2><span class="en mono">Internship</span></div>
+      <div class="item">
+        <div class="row"><h3>海伦天空（北京）国际旅行社有限公司 · 内容运营实习生</h3><span class="period mono">2026-07 ~ 2026-09</span></div>
+        <p class="headline">澳大利亚 & 新西兰旅游业务方向 · 内容体系搭建与账号矩阵运营</p>
+        <ul>
+          <li>负责澳新方向小红书内容生产，参与官方号 / KOS 签证号 / KOS 家庭号的 3 账号矩阵运营</li>
+          <li>完成选题、脚本、剪辑、封面、文案与发布支持全流程；参与搭建目的地 / 亲子 / 签证 / 定制 4 类内容体系，按月度排期稳定供给</li>
+          <li>探索 AI 辅助内容生产流程（AI 视觉方案生成、Whisper 字幕生成），重复环节交给 AI、判断留给人</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <div class="sec-title"><span class="no mono">03</span><h2 class="serif">项目实战</h2><span class="en mono">Projects</span></div>
 
       <div class="item">
         <div class="row"><h3>校园二手交易社群运营效率优化</h3><span class="period mono">社群运营 · 效率优化</span></div>
@@ -137,7 +150,7 @@
     </section>
 
     <section>
-      <div class="sec-title"><span class="no mono">03</span><h2 class="serif">独立运营经历</h2><span class="en mono">Experience</span></div>
+      <div class="sec-title"><span class="no mono">04</span><h2 class="serif">独立运营经历</h2><span class="en mono">Experience</span></div>
       <div class="item">
         <div class="row"><h3>抖音音乐垂类账号 0-1 全链路运营（采样解析赛道）</h3><span class="period mono">2026-07 ~ 至今</span></div>
         <ul>
@@ -154,7 +167,7 @@
     </section>
 
     <section>
-      <div class="sec-title"><span class="no mono">04</span><h2 class="serif">技能与工具</h2><span class="en mono">Skills</span></div>
+      <div class="sec-title"><span class="no mono">05</span><h2 class="serif">技能与工具</h2><span class="en mono">Skills</span></div>
       <ul class="two-col plain">
         <li>用户调研：深度访谈 / 问卷 / 可用性测试 / 三级编码</li>
         <li>数据分析：Excel · SQL · 漏斗拆解 · A/B 实验</li>
@@ -164,7 +177,7 @@
     </section>
 
     <footer class="foot mono">
-      <span>陈权峰 · 产品运营实习求职 · 2026</span>
+      <span>陈权峰 · 内容 / AI 产品运营实习求职 · 2026</span>
       <span>完整案卷与原始物证：<a href="https://kimichen24.github.io/kimi-portfolio/">kimichen24.github.io/kimi-portfolio</a></span>
     </footer>
   </div>

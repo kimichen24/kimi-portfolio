@@ -25,7 +25,7 @@ export const profile = {
   name: '陈权峰',
   englishName: 'Kimi Chen',
   // 一句话定位 — 个人网站的自我介绍（分享体，非求职体）
-  role: '产品运营 · 求职中',
+  role: '内容 / AI 产品运营 · 求职中',
   valueProposition: '用用户研究驱动产品增长，用数据与流程沉淀确定性。',
   tagline: '这里是 Kimi 的个人网站——案卷、手记、采样笔记，和一些随手造的小东西。',
   // 首屏宣言：带画面感的个人句子（「听」是红笔圈注的落点）
@@ -97,6 +97,23 @@ export const profile = {
 // （首页底部引语缓流 + 点开后的「原声 Voices」网格）
 
 export const experiences = [
+  {
+    id: 'helensky-intern',
+    period: '2026-07 ~ 2026-09',
+    tag: '企业实习',
+    title: '海伦天空（北京）国际旅行社 · 内容运营实习生',
+    points: [
+      '负责澳大利亚 & 新西兰旅游业务方向的小红书内容生产，参与官方号 / KOS 签证号 / KOS 家庭号的账号矩阵运营',
+      '完成选题策划、视频脚本、剪辑、封面设计、文案与发布支持的内容全流程执行',
+      '参与搭建目的地、亲子出行、签证知识、定制案例四类内容体系，按月度排期维持账号稳定内容供给',
+      '探索 AI 辅助内容生产流程：AI 视觉方案生成、Whisper 字幕生成——重复环节交给 AI，判断留给人',
+    ],
+    metrics: [
+      { value: '3', label: '账号矩阵' },
+      { value: '4', label: '类内容体系' },
+    ],
+    highlight: '首次真实业务场景实战',
+  },
   {
     id: 'douyin-music',
     period: '2026-07 ~ 至今',

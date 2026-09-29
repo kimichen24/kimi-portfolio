@@ -141,7 +141,7 @@ export default function About() {
 
             <div className="border-t border-paper-line pt-5">
               <p className="eyebrow-mono">DISCIPLINE · 目标方向</p>
-              <p className="mt-2 font-serif text-[15px] font-bold text-ink">产品运营 / 增长与用户调研</p>
+              <p className="mt-2 font-serif text-[15px] font-bold text-ink">内容产品运营 / AI 产品运营</p>
               <p className="mt-1 font-mono text-[11px] text-ink-mute">工科背景转译 · 懂代码与数据逻辑</p>
             </div>
 

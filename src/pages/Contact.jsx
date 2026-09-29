@@ -78,7 +78,7 @@ export default function Contact() {
             <span>↓</span>
           </a>
           <p className="font-mono text-[11px] leading-relaxed text-ink-mute">
-            单页 A4 · 产品运营实习 · 随时到岗 · 支持异地驻场或远程
+            单页 A4 · 内容 / AI 产品运营实习 · 随时到岗 · 支持异地驻场或远程
           </p>
         </div>
 

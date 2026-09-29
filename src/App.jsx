@@ -72,7 +72,7 @@ export default function App() {
   useEffect(() => {
     const project = loc.route === 'project' ? projects.find((p) => p.id === loc.projectId) : null
     const titles = {
-      home: 'Kimi Chen · 陈权峰 — 产品运营作品集',
+      home: 'Kimi Chen · 陈权峰 — 内容 / AI 产品运营作品集',
       notes: '手记 · Kimi Chen',
       work: '作品 · Kimi Chen',
       about: '关于 · Kimi Chen',

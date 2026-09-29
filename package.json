@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "陈权峰 Kimi · 个人作品集官网 — 内容运营 / 用户调研 / 数据驱动 / AI 增效",
+  "description": "陈权峰 Kimi · 个人作品集官网 — 内容产品运营 / AI 产品运营",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

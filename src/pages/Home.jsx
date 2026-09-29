@@ -187,7 +187,7 @@ export default function Home() {
         <div className="container-codex flex flex-1 flex-col justify-center py-14 sm:py-[4.5rem]">
           <p className="eyebrow-mono flex items-center gap-2.5">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-red" />
-            产品运营实习 · 求职中 · {profile.location}
+            内容 / AI 产品运营 · 求职中 · {profile.location}
           </p>
 
           {/* 名字与自我身份 */}
@@ -218,7 +218,7 @@ export default function Home() {
           <p className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1.5 font-mono text-[12px] text-ink-soft">
             <span className="inline-flex items-center gap-1.5 border border-red/40 bg-red-soft/40 px-2.5 py-1 text-red font-medium">
               <span className="inline-block h-1.5 w-1.5 rounded-full bg-red animate-pulse" />
-              产品运营实习 · 随时到岗
+              内容 / AI 产品运营实习 · 随时到岗
             </span>
             <span className="text-ink-mute">3 份可查证案卷</span>
             <span className="text-ink-faint">·</span>
@@ -426,7 +426,7 @@ export default function Home() {
             想聊聊产品增长、用户研究，<br className="hidden sm:inline" />或者只是一首老歌的采样？
           </h2>
           <p className="mt-4 mx-auto max-w-xl text-[14px] leading-relaxed text-ink-soft">
-            正在寻找产品运营 / 增长方向的实习机会。保证充沛实习周期与稳定投入，随时可以到岗。
+            正在寻找内容产品运营 / AI 产品运营方向的实习机会。保证充沛实习周期与稳定投入，随时可以到岗。
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
             <a
