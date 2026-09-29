@@ -261,9 +261,11 @@ function AffinityEvidence({ data }) {
   )
 }
 
-/** 3. 真实走查截图画廊（招聘平台产品研究） */
+/** 3. 真实走查截图画廊（招聘平台产品研究 / 桌面端分析站点） */
 function GalleryEvidence({ data }) {
   const [lightboxIndex, setLightboxIndex] = useState(null)
+  // 图槽比例可按证据设置：手机截图默认 9/16，桌面端站点传 '16 / 10' 等
+  const ratio = data.aspectRatio || '9 / 16'
 
   const openLightbox = (idx) => {
     setLightboxIndex(idx)
@@ -287,14 +289,14 @@ function GalleryEvidence({ data }) {
 
   return (
     <div>
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <div className={`grid gap-5 ${data.aspectRatio ? 'sm:grid-cols-2' : 'sm:grid-cols-2 lg:grid-cols-4'}`}>
         {data.images.map((img, idx) => (
           <figure
             key={idx}
             className="case-file group cursor-pointer overflow-hidden p-3 transition-transform hover:-translate-y-1"
             onClick={() => openLightbox(idx)}
           >
-            <div className="relative aspect-[9/16] w-full overflow-hidden bg-paper-deep border border-paper-line">
+            <div className="relative w-full overflow-hidden bg-paper-deep border border-paper-line" style={{ aspectRatio: ratio }}>
               <img
                 src={img.url}
                 alt={img.title}
@@ -323,7 +325,7 @@ function GalleryEvidence({ data }) {
         {data.pending &&
           data.pending.map((p) => (
             <figure key={p.code} className="case-file overflow-hidden p-3">
-              <div className="relative aspect-[9/16] w-full border border-dashed border-ink-faint bg-paper-deep/40 flex flex-col items-center justify-center gap-2.5">
+              <div className="relative w-full border border-dashed border-ink-faint bg-paper-deep/40 flex flex-col items-center justify-center gap-2.5" style={{ aspectRatio: ratio }}>
                 <span className="font-mono text-[10px] font-semibold text-red bg-red-soft/50 px-1.5 py-0.5">
                   {p.code}
                 </span>
