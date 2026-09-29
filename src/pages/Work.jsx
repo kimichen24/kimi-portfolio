@@ -20,7 +20,7 @@ export default function Work() {
           data-ink-wipe
           className="ink-wipe mt-4 font-serif text-[clamp(2rem,5vw,3.4rem)] font-black tracking-tightest text-ink"
         >
-          三组案卷
+          四组案卷
         </h1>
         <p className="mt-5 max-w-xl text-[14px] leading-[1.9] text-ink-soft sm:text-[15px]">
           每份案卷都是一段完整的「输入 → 编码 → 输出」：原始素材、分析方法、可验证的结果。

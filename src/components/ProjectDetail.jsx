@@ -9,6 +9,7 @@ import { projects } from '../data'
 import HandBars from './HandChart'
 import EvidenceViewer from './EvidenceViewer'
 import DossierReader from './DossierReader'
+import { FlowSteps, AnalysisGrid } from './CaseBlocks'
 import { playPaperSlide, playPaperTap } from '../lib/audio'
 
 export default function ProjectDetail({ projectId }) {
@@ -133,6 +134,22 @@ export default function ProjectDetail({ projectId }) {
           </ol>
         </section>
 
+        {/* 研究框架 — 从原始信息到决策支持的链路（可选字段） */}
+        {project.researchFlow && (
+          <section className="mt-12">
+            <h2 className="eyebrow-mono">研究框架 / Research Framework</h2>
+            <FlowSteps steps={project.researchFlow} />
+          </section>
+        )}
+
+        {/* 分析框架 — 竞品研究的切入角度（可选字段） */}
+        {project.analysisFramework && (
+          <section className="mt-12">
+            <h2 className="eyebrow-mono">分析框架 / Analysis Framework</h2>
+            <AnalysisGrid items={project.analysisFramework} />
+          </section>
+        )}
+
         {/* 复盘反思 — 做完之后的回头看：面试官最爱问的部分 */}
         {project.reflections && project.reflections.length > 0 && (
           <section className="mt-12">
@@ -246,6 +263,28 @@ export default function ProjectDetail({ projectId }) {
 
         {/* 现场物证展台 */}
         {project.evidence && <EvidenceViewer evidence={project.evidence} />}
+
+        {/* 在线演示 — 可交互的分析系统 / 作品直达（可选字段） */}
+        {project.demoUrl && (
+          <section className="mt-14 border-t border-paper-line pt-10">
+            <h2 className="eyebrow-mono">在线演示 / Live Demo</h2>
+            <div className="mt-5">
+              <a
+                href={project.demoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => playPaperTap(0.8)}
+                className="group inline-flex items-center gap-3 bg-ink px-8 py-4 font-mono text-[13px] text-paper transition-colors duration-300 hover:bg-red"
+              >
+                <span className="font-semibold tracking-wide">Open Live Demo</span>
+                <span className="transition-transform group-hover:translate-x-0.5">↗</span>
+              </a>
+              <p className="mt-3 max-w-2xl font-mono text-[11px] leading-relaxed text-ink-mute">
+                静态分析站点 · 可交互查看产品列表、指标矩阵与竞品对比
+              </p>
+            </div>
+          </section>
+        )}
 
         {/* 完整报告 */}
         {project.reportUrl && (

@@ -318,6 +318,24 @@ function GalleryEvidence({ data }) {
             </figcaption>
           </figure>
         ))}
+
+        {/* 预留图槽 — 物证素材整理中：虚线占位卡，素材就位后移入 images */}
+        {data.pending &&
+          data.pending.map((p) => (
+            <figure key={p.code} className="case-file overflow-hidden p-3">
+              <div className="relative aspect-[9/16] w-full border border-dashed border-ink-faint bg-paper-deep/40 flex flex-col items-center justify-center gap-2.5">
+                <span className="font-mono text-[10px] font-semibold text-red bg-red-soft/50 px-1.5 py-0.5">
+                  {p.code}
+                </span>
+                <span className="font-mono text-[10px] tracking-wider text-ink-faint">
+                  素材整理中
+                </span>
+              </div>
+              <figcaption className="mt-3">
+                <p className="font-serif text-[13.5px] font-bold text-ink-mute">{p.title}</p>
+              </figcaption>
+            </figure>
+          ))}
       </div>
 
       {/* 灯箱放大部分 */}

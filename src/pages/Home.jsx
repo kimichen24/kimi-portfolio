@@ -279,7 +279,7 @@ export default function Home() {
                 精选案卷 · Selected Dossiers
               </p>
               <h2 className="mt-3 font-serif text-[clamp(1.7rem,4vw,2.6rem)] font-black tracking-tightest text-ink">
-                三份代表作
+                四份代表作
               </h2>
               <p className="mt-2 text-[13.5px] text-ink-soft">
                 以结果先行的编辑式案卷呈现：先看核心业务产出，再看过程验证与原始物证。
@@ -295,7 +295,7 @@ export default function Home() {
           </div>
 
           {/* 成果优先（Result-First）案卷卡片网格 */}
-          <div className="mt-10 grid gap-6 md:grid-cols-3">
+          <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
             {projects.map((p, i) => (
               <a
                 key={p.id}

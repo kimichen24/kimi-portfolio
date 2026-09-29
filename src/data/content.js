@@ -62,7 +62,7 @@ export const profile = {
       label: '效率优化',
       desc: '二手群成交耗时 23h→4.2h',
       dimension: '流程与提效',
-      caseTag: '案卷 01 · 校园二手群',
+      caseTag: '案卷 02 · 校园二手群',
       previewTitle: '成交周期 23.0h 压缩至 4.2h',
       previewSnippet: '采集 3 天 2,471 条群聊基线，设计结构化发布模版与确认帖防鸽机制。',
       targetUrl: '#/project/campus-trade',
@@ -73,20 +73,20 @@ export const profile = {
       label: '转化跃升',
       desc: '咨询到成交 12%→38%',
       dimension: '转化与验证',
-      caseTag: '案卷 01 · 校园二手群',
+      caseTag: '案卷 02 · 校园二手群',
       previewTitle: '咨询到成交转化率提升 216%',
       previewSnippet: '同物品 A/B 实测：常规随手帖仅 12% 转化，标准化发布模板提升至 38%。',
       targetUrl: '#/project/campus-trade',
       targetLabel: '查看对比实录 →',
     },
     {
-      value: '3',
+      value: '4',
       label: '交付案卷',
       desc: '从 0 到 1 闭环落地',
       dimension: '端到端落地',
       caseTag: '作品 · 完整案卷库',
-      previewTitle: '内容增长 / 社群提效 / 深度调研',
-      previewSnippet: '涵盖二手社群重构、豆包校园调研、招聘平台走查，附带可查验原始物证。',
+      previewTitle: '竞品分析 / 社群提效 / 深度调研',
+      previewSnippet: '涵盖澳新私家团竞品分析、二手社群重构、豆包校园调研、招聘平台走查，附带可查验原始物证。',
       targetUrl: '#/work',
       targetLabel: '查阅三份案卷 →',
     },
@@ -149,6 +149,55 @@ export const experiences = [
 ]
 
 export const projects = [
+  {
+    id: 'anz-product-intel',
+    tag: '产品研究 · 数据分析',
+    title: '澳新私家团竞品分析系统',
+    summary:
+      '海伦天空（北京）国际旅行社澳新旅游业务实习期间，针对产品选品过程中信息分散、缺少统一比较标准的问题，完成澳新私家团竞品分析研究：从携程公开页面采集 29 个真实产品并结构化整理，建立筛选标准锁定 7 个核心竞品，设计 6 项分析指标，最终搭建可视化分析网站——把分散的竞品信息收敛为同一套分析语言，为产品选品讨论提供数据支持。',
+    headline: '29 个真实产品 → 7 个核心竞品：为旅游选品建立统一分析语言',
+    actions: [
+      '从携程公开页面采集澳新旅游产品数据，整理为结构化字段（价格 / 路线 / 包含项 / 用户评价）',
+      '建立竞品筛选标准，从 29 个产品中锁定 7 个核心竞品',
+      '设计价格、路线结构、用户反馈等 6 项分析指标，形成可复用的竞品分析体系',
+      '搭建可视化分析网站，支持产品比较与研究结论的直观呈现',
+    ],
+    metrics: [
+      { value: '29', label: '产品样本' },
+      { value: '7', label: '核心竞品' },
+      { value: '6', label: '分析指标' },
+    ],
+    // 研究框架 — 从原始信息到决策支持的完整链路
+    researchFlow: ['数据采集', '字段整理', '竞品筛选', '指标分析', '可视化展示'],
+    // 分析框架 — 竞品研究的四个切入角度
+    analysisFramework: [
+      { title: '产品结构分析', desc: '路线结构、行程节奏、包含项与自费项的拆解对比' },
+      { title: '价格分析', desc: '价格带分布与日均价格，识别不同产品的定价策略' },
+      { title: '用户反馈分析', desc: '评价关键词与差评归因，还原真实体验的长短板' },
+      { title: '竞争矩阵分析', desc: '多指标交叉定位，找出差异化空位与正面竞争区' },
+    ],
+    demoUrl: 'https://kimichen24.github.io/au-nz-tour-selection/index.html',
+    reflections: [
+      '数据研究的价值是建立统一分析语言，而非替代业务判断。',
+      '产品竞争力需要结合价格、结构和用户需求综合判断。',
+      '数据工具能够降低信息整理成本。',
+    ],
+    evidence: {
+      type: 'gallery',
+      badge: '现场物证 · 分析系统截图',
+      title: '可视化分析网站 · 核心视图',
+      desc: '分析系统的关键界面物证：产品列表、产品对比、竞争矩阵、价格分析与用户反馈视图。截图素材整理中，陆续补充。',
+      images: [],
+      // 预留图槽 — 素材就位后把每张改为 { url, code, title, desc } 放入 images 即可
+      pending: [
+        { code: 'E1', title: '产品列表截图' },
+        { code: 'E2', title: '产品对比截图' },
+        { code: 'E3', title: '竞争矩阵截图' },
+        { code: 'E4', title: '价格分析截图' },
+        { code: 'E5', title: '用户反馈截图' },
+      ],
+    },
+  },
   {
     id: 'campus-trade',
     tag: '社群运营 · 效率优化',
