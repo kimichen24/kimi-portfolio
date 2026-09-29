@@ -184,10 +184,10 @@ export default function Home() {
     <main className="w-full">
       {/* ── Node 01: Hero 首屏与价值主张 ── */}
       <section className="relative flex min-h-[calc(100svh-3.5rem)] w-full flex-col justify-between">
-        <div className="container-codex flex flex-1 flex-col justify-center py-14 sm:py-18">
+        <div className="container-codex flex flex-1 flex-col justify-center py-14 sm:py-[4.5rem]">
           <p className="eyebrow-mono flex items-center gap-2.5">
             <span className="inline-block h-1.5 w-1.5 rounded-full bg-red" />
-            Personal Portfolio · Est. 2026 · {profile.location}
+            产品运营实习 · 求职中 · {profile.location}
           </p>
 
           {/* 名字与自我身份 */}
@@ -212,6 +212,19 @@ export default function Home() {
               听用户说话
             </RedCircle>
             。
+          </p>
+
+          {/* 求职身份条 — 30 秒法则：HR 扫首屏先看到岗位与最强证据 */}
+          <p className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1.5 font-mono text-[12px] text-ink-soft">
+            <span className="inline-flex items-center gap-1.5 border border-red/40 bg-red-soft/40 px-2.5 py-1 text-red font-medium">
+              <span className="inline-block h-1.5 w-1.5 rounded-full bg-red animate-pulse" />
+              产品运营实习 · 随时到岗
+            </span>
+            <span className="text-ink-mute">3 份可查证案卷</span>
+            <span className="text-ink-faint">·</span>
+            <span className="text-ink-mute">咨询→成交转化 12%→38%</span>
+            <span className="text-ink-faint">·</span>
+            <span className="text-ink-mute">15 人深度访谈调研</span>
           </p>
 
           {/* 行动入口（CTA） */}
@@ -240,7 +253,7 @@ export default function Home() {
           </div>
 
           {/* ── Node 02: 数据墙与能力证明（微故事钩子） ── */}
-          <div className="mt-14 border-t border-paper-line pt-7 sm:mt-18">
+          <div className="mt-14 border-t border-paper-line pt-7 sm:mt-[4.5rem]">
             <div className="flex flex-wrap items-baseline gap-x-10 gap-y-5">
               {profile.stats.map((s, i) => (
                 <Stat key={s.label} stat={s} delay={i * 150} index={i} />
@@ -288,7 +301,7 @@ export default function Home() {
                 key={p.id}
                 href={`#/project/${p.id}`}
                 onClick={() => playPaperTap(0.7)}
-                className="case-file group flex flex-col justify-between p-6 sm:p-7 border border-paper-line bg-paper hover:border-red/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-card"
+                className="case-file group flex flex-col justify-between p-6 sm:p-7 border border-paper-line bg-paper hover:border-red/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-sheet"
               >
                 <div>
                   {/* 顶栏：序号 + 标签 */}

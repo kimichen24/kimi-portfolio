@@ -22,16 +22,18 @@ export default function ProjectDetail({ projectId }) {
   }, [projectId, project])
 
   // 计算案卷阅读进度百分比（红墨水浸润标尺）
+  // 性能：只有整数百分比变化时才 setState——避免 Lenis 平滑滚动下
+  // 每帧触发整个案卷页（含物证展台）的重渲染。1% 步进 + CSS 75ms
+  // 过渡，视觉上与逐帧更新无差别。
   useEffect(() => {
     const handleScroll = () => {
       const el = document.documentElement
       const total = el.scrollHeight - window.innerHeight
-      if (total > 0) {
-        const p = Math.min(100, Math.max(0, (window.scrollY / total) * 100))
-        setScrollProgress(p)
-      } else {
-        setScrollProgress(0)
-      }
+      const p = total > 0 ? Math.min(100, Math.max(0, (window.scrollY / total) * 100)) : 0
+      setScrollProgress((prev) => {
+        const next = Math.round(p)
+        return prev === next ? prev : next
+      })
     }
     window.addEventListener('scroll', handleScroll, { passive: true })
     handleScroll()

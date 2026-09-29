@@ -11,6 +11,7 @@ import About from './pages/About'
 import Contact from './pages/Contact'
 import { initSmoothScroll, destroySmoothScroll, scrollToTop, getLenis } from './lib/smoothScroll'
 import { playPaperSlide } from './lib/audio'
+import { projects } from './data'
 
 /**
  * App — 稿纸作品集（个人网站结构）
@@ -65,6 +66,21 @@ export default function App() {
     }
     scrollToTop(true)
   }, [loc.route, loc.projectId, loc.noteId])
+
+  // 路由切换同步标签页标题（hash 路由下所有页共享一份 HTML，
+  // 至少让 title 能区分——多标签辨识 / 收藏 / 分享快照都靠它）
+  useEffect(() => {
+    const project = loc.route === 'project' ? projects.find((p) => p.id === loc.projectId) : null
+    const titles = {
+      home: 'Kimi Chen · 陈权峰 — 产品运营作品集',
+      notes: '手记 · Kimi Chen',
+      work: '作品 · Kimi Chen',
+      about: '关于 · Kimi Chen',
+      contact: '联系 · Kimi Chen',
+      'not-found': '404 · Kimi Chen',
+    }
+    document.title = project ? `${project.title} · Kimi Chen 案卷` : titles[loc.route] || titles.home
+  }, [loc.route, loc.projectId])
 
   const pageKey =
     loc.route === 'project'
