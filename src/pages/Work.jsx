@@ -20,7 +20,7 @@ export default function Work() {
           data-ink-wipe
           className="ink-wipe mt-4 font-serif text-[clamp(2rem,5vw,3.4rem)] font-black tracking-tightest text-ink"
         >
-          五组案卷
+          {projects.length} 组案卷
         </h1>
         <p className="mt-5 max-w-xl text-[14px] leading-[1.9] text-ink-soft sm:text-[15px]">
           每份案卷都是一段完整的「输入 → 编码 → 输出」：原始素材、分析方法、可验证的结果。
@@ -48,6 +48,9 @@ export default function Work() {
             <p className="mt-3 max-w-3xl text-[13.5px] leading-[1.85] text-ink-soft md:text-[14px]">
               {p.summary}
             </p>
+            {p.metricsNote && (
+              <p className="mt-3 font-mono text-[11px] leading-relaxed text-ink-mute">{p.metricsNote}</p>
+            )}
             <div className="mt-6 flex flex-wrap items-center gap-x-7 gap-y-2 border-t border-paper-line pt-5">
               {p.metrics.map((m) => (
                 <span key={m.label} className="font-mono text-[12px] text-ink">

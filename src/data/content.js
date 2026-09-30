@@ -80,7 +80,7 @@ export const profile = {
       targetLabel: '查看对比实录 →',
     },
     {
-      value: '5',
+      value: '6',
       label: '交付案卷',
       desc: '从 0 到 1 闭环落地',
       dimension: '端到端落地',
@@ -149,6 +149,68 @@ export const experiences = [
 ]
 
 export const projects = [
+  {
+    id: 'signal',
+    featured: true,
+    tag: 'AI Product Operations / AI Product Management Case Study',
+    title: 'Signal｜AI 产品反馈智能分析系统',
+    summary: '将 2,254 条公开用户反馈转化为结构化产品信号、调查机会和行动建议。以 OpenAI Codex 的公开 GitHub Issues 为案例，把分散的反馈组织为产品团队可解释、可追溯的调查依据。',
+    headline: '从 2,254 条公开反馈到 44 个产品机会：让证据支持下一步产品判断',
+    goal: '面对大量公开反馈，如何识别真正值得产品团队调查的问题。',
+    metrics: [
+      { value: '2,254', label: '真实反馈' },
+      { value: '2,096', label: '有效反馈' },
+      { value: '197', label: '问题簇' },
+      { value: '44', label: '产品机会' },
+    ],
+    metricsNote: 'codex-14d-2026-09-06 冻结数据快照 · 非实时统计',
+    actions: [
+      '产品问题定义：把大量公开反馈的分析目标收敛为发现变化、解释影响、确定调查优先级和形成下一步行动，而不是堆积反馈与图表。',
+      '分析框架设计：设计 Detect → Explain → Prioritize → Act 链路，让原始 Issue、问题簇、产品机会和行动简报保持证据关联。',
+      '信号分类规则设计：定义反馈类别、产品范围、使用场景与信号边界；宽问题族保留需进一步细化状态，AI 估算严重度明确区别于官方严重度。',
+      '优先级体系设计：以反馈频次、严重度、信号强度和公开互动度支持 Investigation Priority，统计、趋势和排序由确定性规则计算，评分依据可复核。',
+      'Action Brief 信息架构：围绕发生了什么、为什么值得调查、有哪些原始证据以及下一步如何验证组织建议，让行动方向有据可查。',
+      'Demo 交付：串联真实反馈、洞察、产品机会与行动简报，交付可访问的在线演示，并公开冻结快照、明细覆盖范围与失败记录。',
+    ],
+    researchFlow: ['Detect', 'Explain', 'Prioritize', 'Act'],
+    analysisFramework: [
+      { title: 'Detect · 识别变化', desc: '从真实 GitHub Issues 采集与清洗反馈，AI 辅助结构化抽取；保留原始内容并过滤 PR，用确定性计数与趋势检测识别新兴信号。' },
+      { title: 'Explain · 解释问题', desc: 'AI 用于语义理解、分类、摘要与辅助分析，组织重复出现的问题模式；洞察关联真实 Issue，低置信度与宽问题族保留复核空间。' },
+      { title: 'Prioritize · 确定调查顺序', desc: '统计、趋势、评分和排序使用确定性规则，公开 Investigation Priority 的依据；调查优先级不等于 OpenAI 官方 P0/P1。' },
+      { title: 'Act · 形成行动建议', desc: '把信号转为调查机会，再以统计和原始证据组织 Action Brief，明确下一步需要调查或验证什么。' },
+    ],
+    results: [
+      { value: '25', label: '新兴信号' },
+      { value: '15', label: '需进一步细化' },
+      { value: '44', label: '产品机会' },
+      { value: '43', label: '行动简报' },
+    ],
+    limitations: [
+      '冻结数据快照：codex-14d-2026-09-06 覆盖 2026-08-23 至 2026-09-06（不含结束日）的 14 天公开 GitHub Issues，仅来自 openai/codex，不代表全部用户或全部反馈渠道。',
+      '非实时数据：Demo 展示已冻结的分析结果，页面访问与刷新不会更新反馈或重新运行分析。',
+      'Feedback / Insight 明细范围限制：静态 Demo 的 Feedback 仅含 20 条反馈明细，Insights 仅含 50 个簇明细，不覆盖全部 2,254 条反馈和 197 个问题簇；全量汇总来自冻结快照的聚合字段，不能用有限明细重算全量指标。',
+      '相关性不代表因果关系：Release Impact 只描述版本发布前后的相关性变化；历史不足时不输出确定结论，不能声称某次发布导致了某个问题。',
+      '197 个问题簇不是 197 个已验证根因；AI 估算严重度不是官方严重度，调查机会也不代表已被产品团队采用或产生业务收益。',
+      '44 个产品机会中有 43 份非空 Action Brief，1 份生成失败并保留为空，不补造行动建议。',
+    ],
+    evidence: {
+      type: 'gallery',
+      badge: '现场物证 · Signal 产品截图',
+      label: '真实 Demo 截图 · 冻结数据快照',
+      title: '从公开反馈到产品行动的证据链',
+      desc: '四张截图来自在线 Signal Demo，展示同一冻结快照下的总览、洞察、调查机会和行动简报。点击截图查看原图。',
+      aspectRatio: '16 / 10',
+      images: [
+        { url: 'images/evidence/signal-overview.jpg', code: 'S1 总览', title: '总览：反馈如何被转化为产品信号', desc: '呈现真实反馈规模与关注入口，把公开用户反馈转化为可调查的产品信号。' },
+        { url: 'images/evidence/signal-insights.jpg', code: 'S2 洞察', title: '洞察：发现重复出现的问题模式', desc: '通过问题簇、趋势和原始 Issue 证据，解释重复出现的用户问题。' },
+        { url: 'images/evidence/signal-opportunities.jpg', code: 'S3 机会', title: '机会：调查优先级排序', desc: '展示 Investigation Priority 与评分依据，帮助产品团队确定调查顺序。' },
+        { url: 'images/evidence/signal-action-briefs.jpg', code: 'S4 行动', title: '行动简报：从证据到行动建议', desc: '基于已有统计与真实证据，说明问题影响和下一步验证方向。' },
+      ],
+    },
+    demoUrl: 'https://kimichen24.github.io/signal/',
+    demoLabel: '查看在线 Demo',
+    demoDescription: '冻结分析快照 · 非实时数据 · 可回溯原始 GitHub Issue 证据',
+  },
   {
     id: 'anz-product-intel',
     tag: '产品研究 · 数据分析',

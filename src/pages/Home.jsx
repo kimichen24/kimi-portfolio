@@ -220,7 +220,7 @@ export default function Home() {
               <span className="inline-block h-1.5 w-1.5 rounded-full bg-red animate-pulse" />
               内容 / AI 产品运营实习 · 随时到岗
             </span>
-            <span className="text-ink-mute">3 份可查证案卷</span>
+            <span className="text-ink-mute">{projects.length} 份可查证案卷</span>
             <span className="text-ink-faint">·</span>
             <span className="text-ink-mute">咨询→成交转化 12%→38%</span>
             <span className="text-ink-faint">·</span>
@@ -279,7 +279,7 @@ export default function Home() {
                 精选案卷 · Selected Dossiers
               </p>
               <h2 className="mt-3 font-serif text-[clamp(1.7rem,4vw,2.6rem)] font-black tracking-tightest text-ink">
-                五份代表作
+                {projects.length} 份代表作
               </h2>
               <p className="mt-2 text-[13.5px] text-ink-soft">
                 以结果先行的编辑式案卷呈现：先看核心业务产出，再看过程验证与原始物证。
@@ -301,16 +301,16 @@ export default function Home() {
                 key={p.id}
                 href={`#/project/${p.id}`}
                 onClick={() => playPaperTap(0.7)}
-                className="case-file group flex flex-col justify-between p-6 sm:p-7 border border-paper-line bg-paper hover:border-red/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-sheet"
+                className={`case-file group flex flex-col justify-between p-6 sm:p-7 border border-paper-line bg-paper hover:border-red/40 transition-all duration-300 hover:-translate-y-1 hover:shadow-sheet ${p.featured ? 'md:col-span-2 xl:col-span-3' : ''}`}
               >
                 <div>
                   {/* 顶栏：序号 + 标签 */}
-                  <div className="flex items-center justify-between border-b border-paper-line/70 pb-3">
+                  <div className="flex flex-wrap items-center justify-between gap-3 border-b border-paper-line/70 pb-3">
                     <span className="font-mono text-[11px] font-bold text-red tracking-wider">
                       § 0{i + 1}
                     </span>
                     <span className="font-mono text-[10.5px] text-ink-mute tracking-wide">
-                      {p.tag}
+                      {p.featured ? 'Featured Project' : p.tag}
                     </span>
                   </div>
 
@@ -322,7 +322,7 @@ export default function Home() {
                   </div>
 
                   {/* 项目标题 */}
-                  <h3 className="mt-2 font-serif text-[18px] sm:text-[19px] font-black leading-snug tracking-tight text-ink group-hover:text-red transition-colors">
+                  <h3 className={`mt-2 font-serif font-black leading-snug tracking-tight text-ink group-hover:text-red transition-colors ${p.featured ? 'text-[24px] sm:text-[32px]' : 'text-[18px] sm:text-[19px]'}`}>
                     {p.title}
                   </h3>
 
@@ -330,12 +330,18 @@ export default function Home() {
                   <p className="mt-3 line-clamp-3 text-[13px] leading-[1.8] text-ink-soft">
                     {p.summary}
                   </p>
+                  {p.featured && (
+                    <>
+                      <p className="mt-5 font-mono text-[12px] leading-relaxed text-red">{p.researchFlow.join(' → ')}</p>
+                      <p className="mt-3 font-mono text-[11px] leading-relaxed text-ink-mute">{p.metricsNote}</p>
+                    </>
+                  )}
                 </div>
 
                 {/* 卡片底栏：关键指标 + 显性 CTA */}
-                <div className="mt-7 pt-4 border-t border-dashed border-paper-line flex items-center justify-between">
+                <div className="mt-7 pt-4 border-t border-dashed border-paper-line flex flex-wrap gap-4 items-center justify-between">
                   <div className="flex flex-wrap gap-x-3 gap-y-1">
-                    {p.metrics.slice(0, 2).map((m) => (
+                    {p.metrics.slice(0, p.featured ? 4 : 2).map((m) => (
                       <span key={m.label} className="font-mono text-[11px] text-ink">
                         <b className="font-semibold text-ink">{m.value}</b>
                         <span className="ml-1 text-[10px] text-ink-mute">{m.label}</span>

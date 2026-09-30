@@ -29,7 +29,7 @@ export default function EvidenceViewer({ evidence }) {
         <span className="font-mono text-[11px] text-ink-mute">
           {evidence.type === 'comparison' && '脱敏整理复现'}
           {evidence.type === 'affinity' && '访谈摘录 · 主题编码'}
-          {evidence.type === 'gallery' && '真实 App 走查截图'}
+          {evidence.type === 'gallery' && (evidence.label || '真实 App 走查截图')}
         </span>
       </div>
       <p className="mt-2.5 max-w-3xl text-[13.5px] leading-relaxed text-ink-soft">

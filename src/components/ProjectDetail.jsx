@@ -87,7 +87,7 @@ export default function ProjectDetail({ projectId }) {
 
         {/* 卷首 */}
         <header className="mt-12 border-b border-paper-line pb-10 md:mt-16">
-          <div className="flex items-baseline justify-between gap-4">
+          <div className="flex flex-wrap items-baseline justify-between gap-4">
             <span className="red-note text-[13px] font-semibold">
               案卷 {String(i + 1).padStart(2, '0')}
             </span>
@@ -102,13 +102,28 @@ export default function ProjectDetail({ projectId }) {
           <p className="mt-5 max-w-3xl text-[14px] leading-[1.9] text-ink-soft md:text-[15px]">
             {project.summary}
           </p>
+          {project.metricsNote && (
+            <div className="mt-6 border-t border-paper-line pt-5">
+              <p className="flex flex-wrap gap-x-6 gap-y-2 font-mono text-[12px] text-ink">
+                {project.metrics.map((m) => <span key={m.label}><b>{m.value}</b> {m.label}</span>)}
+              </p>
+              <p className="mt-3 font-mono text-[11px] leading-relaxed text-ink-mute">{project.metricsNote}</p>
+            </div>
+          )}
         </header>
+
+        {project.goal && (
+          <section className="mt-12">
+            <h2 className="eyebrow-mono">目标 / Goal</h2>
+            <p className="mt-5 max-w-3xl text-[14px] leading-[1.9] text-ink-soft md:text-[15px]">{project.goal}</p>
+          </section>
+        )}
 
         {/* 量化成果 */}
         <section className="mt-12">
           <h2 className="eyebrow-mono">关键结果 / Results</h2>
-          <div className="mt-5 grid grid-cols-1 gap-px border border-paper-line bg-paper-line sm:grid-cols-3">
-            {project.metrics.map((m) => (
+          <div className={`mt-5 grid grid-cols-1 gap-px border border-paper-line bg-paper-line ${project.results ? 'sm:grid-cols-4' : 'sm:grid-cols-3'}`}>
+            {(project.results || project.metrics).map((m) => (
               <div key={m.label} className="bg-white/70 p-6">
                 <p className="font-mono text-[clamp(1.4rem,3vw,2rem)] font-semibold leading-none text-ink">
                   {m.value}
@@ -123,7 +138,7 @@ export default function ProjectDetail({ projectId }) {
 
         {/* 核心工作 */}
         <section className="mt-12">
-          <h2 className="eyebrow-mono">核心工作 / Approach</h2>
+          <h2 className="eyebrow-mono">{project.goal ? '我的工作 / My Work' : '核心工作 / Approach'}</h2>
           <ol className="mt-5 space-y-4">
             {project.actions.map((a, ai) => (
               <li key={ai} className="flex gap-4 border-l border-paper-line pl-5">
@@ -137,7 +152,7 @@ export default function ProjectDetail({ projectId }) {
         {/* 研究框架 — 从原始信息到决策支持的链路（可选字段） */}
         {project.researchFlow && (
           <section className="mt-12">
-            <h2 className="eyebrow-mono">研究框架 / Research Framework</h2>
+            <h2 className="eyebrow-mono">{project.goal ? '方法 / Method' : '研究框架 / Research Framework'}</h2>
             <FlowSteps steps={project.researchFlow} />
           </section>
         )}
@@ -264,6 +279,17 @@ export default function ProjectDetail({ projectId }) {
         {/* 现场物证展台 */}
         {project.evidence && <EvidenceViewer evidence={project.evidence} />}
 
+        {project.limitations && (
+          <section className="mt-14 border-t border-paper-line pt-10">
+            <h2 className="eyebrow-mono">限制 / Limitations</h2>
+            <ul className="mt-5 max-w-3xl space-y-4">
+              {project.limitations.map((limitation) => (
+                <li key={limitation} className="border-l-2 border-red/50 bg-paper-deep/20 py-2 pl-5 text-[14px] leading-[1.9] text-ink-soft md:text-[15px]">{limitation}</li>
+              ))}
+            </ul>
+          </section>
+        )}
+
         {/* 在线演示 — 可交互的分析系统 / 作品直达（可选字段） */}
         {project.demoUrl && (
           <section className="mt-14 border-t border-paper-line pt-10">
@@ -276,11 +302,11 @@ export default function ProjectDetail({ projectId }) {
                 onClick={() => playPaperTap(0.8)}
                 className="group inline-flex items-center gap-3 bg-ink px-8 py-4 font-mono text-[13px] text-paper transition-colors duration-300 hover:bg-red"
               >
-                <span className="font-semibold tracking-wide">Open Live Demo</span>
+                <span className="font-semibold tracking-wide">{project.demoLabel || 'Open Live Demo'}</span>
                 <span className="transition-transform group-hover:translate-x-0.5">↗</span>
               </a>
               <p className="mt-3 max-w-2xl font-mono text-[11px] leading-relaxed text-ink-mute">
-                静态分析站点 · 可交互查看产品列表、指标矩阵与竞品对比
+                {project.demoDescription || '静态分析站点 · 可交互查看产品列表、指标矩阵与竞品对比'}
               </p>
             </div>
           </section>
