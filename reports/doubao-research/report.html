@@ -1,0 +1,469 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>豆包校园用户深度调研与产品优化建议</title>
+<style>
+:root{
+  --bg:#F5F5F7; --surface:#FFFFFF; --surface-2:#FAFAFC;
+  --ink:#1D1D1F; --ink-2:#6E6E73; --ink-3:#86868B;
+  --line:#E5E5E7; --line-soft:#F0F0F2;
+  --blue:#007AFF;
+  --green:#2E9E6B; --red:#C0564B; --orange:#C77F33; --indigo:#5E5CE6;
+  --radius:14px; --radius-sm:10px;
+  --shadow-sm:0 1px 8px rgba(0,0,0,.04);
+  --shadow-md:0 6px 22px rgba(0,0,0,.06);
+  --maxw:1040px; --ease:cubic-bezier(.16,1,.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth; scroll-padding-top:72px; -webkit-text-size-adjust:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:var(--bg); color:var(--ink); line-height:1.7;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+#progress{position:fixed;top:0;left:0;height:2px;width:0;z-index:102;
+  background:var(--blue);transition:width .12s linear}
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;height:52px;display:flex;align-items:center;gap:18px;padding:0 28px;
+  background:rgba(245,245,247,.72);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+  border-bottom:1px solid var(--line)}
+.nav .brand{font-weight:600;font-size:15px;letter-spacing:-.01em;color:var(--ink);margin-right:auto;white-space:nowrap}
+.nav .links{display:flex;align-items:center;gap:2px;overflow-x:auto;scrollbar-width:none}
+.nav .links::-webkit-scrollbar{display:none}
+.nav a{color:var(--ink-2);text-decoration:none;font-size:13px;padding:6px 12px;border-radius:8px;white-space:nowrap;transition:color .2s,background .2s}
+.nav a:hover{color:var(--blue);background:rgba(0,122,255,.06)}
+.nav a.active{color:var(--blue);background:rgba(0,122,255,.10)}
+.hero{position:relative;overflow:hidden;text-align:center;padding:120px 28px 80px;
+  background:linear-gradient(180deg,#FBFBFD 0%,#F5F5F7 100%)}
+.hero h1{position:relative;font-size:clamp(27px,4.6vw,44px);font-weight:700;letter-spacing:-.03em;line-height:1.16;color:var(--ink)}
+.hero .sub{position:relative;margin:18px auto 0;max-width:680px;font-size:clamp(14px,2.3vw,18px);color:var(--ink-2);line-height:1.7}
+.hero .meta{position:relative;margin-top:24px;display:flex;justify-content:center;flex-wrap:wrap;gap:10px 24px;font-size:13px;color:var(--ink-3);font-weight:300}
+.hero .meta span{display:inline-flex;align-items:center;gap:8px}
+.hero .meta span::before{content:"";width:4px;height:4px;border-radius:50%;background:var(--blue);opacity:.5}
+.container{max-width:var(--maxw);margin:0 auto;padding:0 28px 100px}
+section{margin-top:88px;scroll-margin-top:72px}
+.kicker{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:12px}
+.section-title{font-size:clamp(22px,3.4vw,32px);font-weight:700;letter-spacing:-.02em;color:var(--ink);line-height:1.25}
+.section-sub{font-size:15px;color:var(--ink-2);margin-top:10px;max-width:760px;line-height:1.7}
+p.lead{font-size:15px;color:var(--ink-2);line-height:1.75;margin-top:16px}
+strong{color:var(--ink);font-weight:600}
+/* stat row */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:28px}
+.stat-box{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:26px 22px;text-align:center;box-shadow:var(--shadow-sm);transition:transform .4s var(--ease),box-shadow .4s var(--ease)}
+.stat-box:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.stat-box .num{font-size:clamp(30px,5vw,42px);font-weight:700;letter-spacing:-.03em;color:var(--blue);line-height:1}
+.stat-box .label{font-size:13px;color:var(--ink-3);margin-top:10px;font-weight:400}
+/* card grid */
+.card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:26px 24px;box-shadow:var(--shadow-sm);transition:transform .4s var(--ease),box-shadow .4s var(--ease)}
+.card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.card .tag{display:inline-block;background:rgba(0,122,255,.10);color:var(--blue);font-size:11.5px;font-weight:600;padding:3px 11px;border-radius:20px;margin-bottom:14px}
+.card h4{font-size:16px;font-weight:600;color:var(--ink);margin-bottom:10px;line-height:1.45}
+.card p{font-size:13.5px;color:var(--ink-2);line-height:1.7}
+/* persona */
+.persona{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:24px 26px;margin-top:18px;box-shadow:var(--shadow-sm);transition:transform .35s var(--ease),box-shadow .35s var(--ease)}
+.persona:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.persona h4{font-size:17px;font-weight:600;color:var(--ink);margin-bottom:8px}
+.persona p{font-size:13.5px;color:var(--ink-2);line-height:1.7;margin-top:5px}
+/* charts */
+.chart-row{display:grid;grid-template-columns:1.25fr 1fr;gap:16px;margin-top:28px}
+.chart{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px;box-shadow:var(--shadow-sm)}
+.chart h4{font-size:14px;font-weight:600;color:var(--ink-2);margin-bottom:16px}
+.chart svg{width:100%;height:auto;display:block;overflow:visible}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:16px;padding:0 4px}
+.legend span{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--ink-2)}
+.legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.grid-line{stroke:var(--line-soft);stroke-width:1}
+.bar{transform:scaleY(0);transform-box:fill-box;transform-origin:bottom;transition:transform .95s var(--ease)}
+.chart.in-view .bar{transform:scaleY(1)}
+.bl{font-size:11px;font-weight:500;fill:var(--ink);text-anchor:middle;opacity:0;transition:opacity .5s ease .35s}
+.chart.in-view .bl{opacity:1}
+.cl{font-size:12px;fill:var(--ink-3);text-anchor:middle}
+.hbar{transform:scaleX(0);transform-box:fill-box;transform-origin:left;transition:transform .9s var(--ease)}
+.chart.in-view .hbar{transform:scaleX(1)}
+.hl{font-size:12.5px;fill:var(--ink);font-weight:400}
+.hv{font-size:12px;font-weight:600;fill:var(--ink);text-anchor:start}
+.donut-group{transform:scale(0) rotate(-90deg);transform-box:fill-box;transform-origin:center;opacity:0;transition:transform 1s var(--ease),opacity .6s ease}
+.chart.in-view .donut-group{transform:scale(1) rotate(0);opacity:1}
+.donut-center-n{font-size:30px;font-weight:700;fill:var(--ink);text-anchor:middle}
+.donut-center-s{font-size:11px;fill:var(--ink-3);text-anchor:middle}
+/* pain cards */
+.pain{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:24px 26px;margin-top:18px;box-shadow:var(--shadow-sm);transition:transform .35s var(--ease),box-shadow .35s var(--ease)}
+.pain:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.pain h4{font-size:16px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.pain p{font-size:13.5px;color:var(--ink-2);line-height:1.7;margin-top:12px}
+.priority-tag{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:8px}
+.p0{background:rgba(192,86,75,.10);color:#C0564B} .p1{background:rgba(199,127,51,.12);color:#C77F33} .p2{background:rgba(0,122,255,.10);color:var(--blue)}
+.qblock{background:var(--surface-2);border-left:3px solid var(--line);border-radius:0 12px 12px 0;padding:14px 18px;margin-top:14px;font-size:13.5px;color:var(--ink-2);line-height:1.7}
+.qblock .sp{display:block;font-style:normal;font-weight:600;color:var(--ink-3);font-size:12px;margin-top:8px}
+/* chat compare */
+.scenario{margin-top:36px}
+.scenario h4{font-size:17px;font-weight:600;color:var(--ink)}
+.scenario .desc{font-size:13px;color:var(--ink-3);margin:8px 0 18px;line-height:1.7}
+.compare-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.chat{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm);display:flex;flex-direction:column}
+.chat .ch{color:#fff;font-weight:600;font-size:13.5px;padding:12px 16px}
+.chat.doubao .ch{background:#6E84A8} .chat.kimi .ch{background:#6FA890} .chat.deepseek .ch{background:#8A93A6}
+.chat .cb{padding:16px;font-size:13px;background:var(--surface);flex:1}
+.chat .um{background:var(--surface-2);padding:9px 12px;border-radius:9px;margin-bottom:12px;color:var(--ink-2);font-weight:500;font-size:12.5px}
+.chat .am{background:var(--surface);padding:0;color:var(--ink-2);line-height:1.7;font-size:12.5px}
+.chat .am p{margin-bottom:8px} .chat .am p:last-child{margin-bottom:0}
+.chat .am .hl{background:rgba(255,214,10,.18);padding:0 3px;border-radius:3px}
+.chat .am .bad{color:#C0564B;font-weight:600} .chat .am .good{color:#2E9E6B;font-weight:600}
+.score{display:inline-block;margin-top:10px;font-size:12px;font-weight:700;padding:3px 11px;border-radius:20px}
+.score.low{background:rgba(192,86,75,.10);color:#C0564B} .score.mid{background:rgba(199,127,51,.12);color:#C77F33} .score.high{background:rgba(46,158,107,.12);color:#2E9E6B}
+/* table */
+.table-wrap{margin-top:28px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{background:var(--surface-2);padding:13px 18px;text-align:left;font-weight:600;color:var(--ink-2);font-size:12px;letter-spacing:.02em;border-bottom:1px solid var(--line)}
+td{padding:13px 18px;border-bottom:1px solid var(--line-soft);color:var(--ink-2);vertical-align:top;line-height:1.7}
+tr:last-child td{border-bottom:none}
+/* final — 干净白卡，无浓重渐变 */
+.final{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:34px 36px;margin-top:36px;box-shadow:var(--shadow-sm)}
+.final h3{color:var(--ink);font-size:19px;font-weight:600;line-height:1.4}
+.final p{color:var(--ink-2);font-size:14px;line-height:1.75;margin-top:16px}
+.footer{text-align:center;padding:48px 28px;color:var(--ink-3);font-size:12px;border-top:1px solid var(--line);margin-top:80px;line-height:1.8;font-weight:300}
+/* reveal */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s var(--ease),transform .7s var(--ease);transition-delay:var(--d,0s)}
+.reveal.in{opacity:1;transform:none}
+/* 打印优化 */
+@media print{
+  .nav,#progress{display:none!important}
+  body{background:#fff}
+  .hero{background:#fff;padding:40px 0 20px}
+  .card,.chart,.persona,.pain,.chat,.table-wrap,.stat-box,.final{box-shadow:none!important;border-color:#E5E5E7!important}
+  section{margin-top:40px}
+  *{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+}
+@media (max-width:820px){.card-grid,.compare-grid{grid-template-columns:1fr}.chart-row{grid-template-columns:1fr}}
+@media (max-width:640px){.stat-row{grid-template-columns:repeat(2,1fr)}.container{padding:0 20px 80px}.hero{padding:96px 20px 64px}}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .reveal{opacity:1!important;transform:none!important}
+  .bar,.hbar{transform:none!important} .bl,.hv{opacity:1!important}
+  .donut-group{transform:none!important;opacity:1!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<nav class="nav">
+  <span class="brand">豆包 · 校园调研</span>
+  <div class="links">
+    <a href="#summary">摘要</a>
+    <a href="#method">方法</a>
+    <a href="#persona">画像</a>
+    <a href="#pain">痛点</a>
+    <a href="#compare">竞品</a>
+    <a href="#priority">优先级</a>
+    <a href="#final">结论</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <h1>豆包校园用户深度调研<br>与产品优化建议</h1>
+  <p class="sub">基于 15 位在校大学生深度访谈的定性定量分析 · 含竞品对比评测</p>
+  <div class="meta">
+    <span>调研周期：2025 年 9 月 – 10 月</span>
+    <span>样本量：15 人</span>
+    <span>方法：半结构化深度访谈 + 竞品场景对比测试</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <section id="summary">
+    <div class="reveal"><div class="kicker">执行摘要</div><h2 class="section-title">研究概览</h2></div>
+    <p class="lead reveal">本研究对 <strong>15 名来自不同院校、不同专业的在校大学生及研究生</strong> 进行了每人 30 分钟的深度访谈，围绕豆包产品的使用场景、体验痛点与改进诉求展开。同时针对用户反馈最高的 3 个痛点，选取 Kimi、DeepSeek 两款直接竞品进行了 <strong>同场景对比测试</strong>。</p>
+    <div class="stat-row">
+      <div class="stat-box reveal" style="--d:.05s"><div class="num" data-count="15">0</div><div class="label">深度访谈对象</div></div>
+      <div class="stat-box reveal" style="--d:.1s"><div class="num" data-count="13">0</div><div class="label">覆盖专业数量</div></div>
+      <div class="stat-box reveal" style="--d:.15s"><div class="num" data-count="3">0</div><div class="label">核心痛点识别</div></div>
+      <div class="stat-box reveal" style="--d:.2s"><div class="num" data-count="3">0</div><div class="label">竞品对比场景</div></div>
+    </div>
+    <p class="lead reveal">核心发现：用户对豆包的"免费"和"易上手"高度认可，但在 <strong>信息检索准确性（73% 提及）、回答简洁度（60% 提及）、文件处理质量（47% 提及）</strong> 三个维度上的不满集中且强烈。其中，搜索准确性问题在横向对比中明显落后于 Kimi，是制约用户从"试试看"转向"主力工具"的头号障碍。</p>
+  </section>
+
+  <section id="method">
+    <div class="reveal"><div class="kicker">研究方法</div><h2 class="section-title">我们怎么做</h2></div>
+    <div class="card-grid">
+      <div class="card reveal" style="--d:.05s"><div class="tag">阶段一</div><h4>深度访谈（15 人 × 30min）</h4>
+        <p>半结构化访谈，聚焦三个核心问题：你主要用豆包干什么？哪次体验让你特别不满意？如果只能改一个地方，你改什么？全程录音，逐字转写后主题编码归类。</p></div>
+      <div class="card reveal" style="--d:.12s"><div class="tag">阶段二</div><h4>痛点频次统计与聚类</h4>
+        <p>将 15 份访谈记录中的 <strong>87 条负面反馈</strong> 归类至 7 个一级痛点维度，统计每个维度的提及人数与频次，确定 Top 3 核心痛点。</p></div>
+      <div class="card reveal" style="--d:.19s"><div class="tag">阶段三</div><h4>竞品同场景对比测试</h4>
+        <p>针对 Top 3 痛点设计 3 个测试场景：论文总结、长文档问答、多文件对比。同一材料上用豆包、Kimi、DeepSeek 分别测试并评分。</p></div>
+    </div>
+    <p class="lead reveal" style="margin-top:22px">样本画像：15 位受访者覆盖 <strong>大一至研三</strong> 全部年级段，来自 <strong>13 个不同专业</strong>，男女比例 8:7。所有受访者均有 3 个月以上豆包使用经验，周均使用频次不低于 3 次。</p>
+  </section>
+
+  <section id="persona">
+    <div class="reveal"><div class="kicker">典型用户画像</div><h2 class="section-title">他们是谁</h2></div>
+    <div class="persona reveal"><h4>画像一：效率驱动型科研党</h4>
+      <p><strong>代表：</strong>小陈（研二金融）、小王（研一医学）、小郑（大四新闻）</p>
+      <p><strong>核心场景：</strong>读论文、整理文献综述、处理长文档、语音转文字</p>
+      <p><strong>核心痛点：</strong>文件上传后信息丢失、长文档理解不完整、语音转写准确率低</p>
+      <p><strong>关键诉求：</strong>"我需要的不是多——是准。漏了关键信息比不给信息更糟糕。"</p></div>
+    <div class="persona reveal"><h4>画像二：快速求索型本科生</h4>
+      <p><strong>代表：</strong>小李（大三计算机）、小张（大二文学）、小冯（大三物理）</p>
+      <p><strong>核心场景：</strong>查资料、debug、理解概念、做课程作业</p>
+      <p><strong>核心痛点：</strong>搜索结果过时或不相关、回答过于冗长</p>
+      <p><strong>关键诉求：</strong>"我打开 AI 就是想快速得到答案，不是来读论文的。"</p></div>
+    <div class="persona reveal"><h4>画像三：内容密集型创作者</h4>
+      <p><strong>代表：</strong>小赵（大四法学）、小吴（研一英语）、小何（研三历史）</p>
+      <p><strong>核心场景：</strong>专业写作、翻译、校对、古籍识别</p>
+      <p><strong>核心痛点：</strong>专业术语不准确、排版格式混乱、特殊文本识别差</p>
+      <p><strong>关键诉求：</strong>"专业场景下，错误比不知道更致命。"</p></div>
+  </section>
+
+  <section id="pain">
+    <div class="reveal"><div class="kicker">痛点分布</div><h2 class="section-title">数据分析</h2></div>
+    <p class="lead reveal">对 15 份访谈记录进行主题编码后，共提取 <strong>87 条负面反馈</strong>，归类为 7 个一级痛点维度。以下是各维度的提及人数分布。</p>
+    <div class="chart-row">
+      <figure class="chart reveal"><h4>各痛点提及人数（n=15）</h4><div id="painChart"></div><div class="legend" id="painChart-leg"></div></figure>
+      <figure class="chart reveal" style="--d:.1s"><h4>Top 3 痛点占比</h4><div id="pieChart"></div><div class="legend" id="pieChart-leg"></div></figure>
+    </div>
+    <h3 style="font-size:17px;font-weight:600;margin:34px 0 4px">Top 3 痛点详解</h3>
+    <div class="pain reveal" style="--d:.04s"><h4><span class="priority-tag p0">P0</span> 痛点一：搜索结果不准确 / 时效性差 <span style="margin-left:auto;font-weight:400;font-size:13px;color:var(--ink-3)">11 人提及 · 73%</span></h4>
+      <p>用户在检索技术文档、学术资料、行业数据时频繁遭遇：返回旧版信息、来源不可靠、缺乏时效性标注、前几条结果不相关等问题。</p>
+      <div class="qblock">我让它查 Python 最新 API，它给我返回了 2021 年的旧版文档，害我调了半天才发现接口早就变了。<span class="sp">—— 小李，大三计算机</span></div>
+      <div class="qblock">搜罕见病诊疗指南，前三条全是不相关的科普文章，真正的临床指南排在第五位以后。<span class="sp">—— 小王，研一医学</span></div>
+      <div class="qblock">话语分析被翻译成 speech analysis 而不是 discourse analysis——专业术语翻译太离谱了。<span class="sp">—— 小吴，研一英语</span></div>
+    </div>
+    <div class="pain reveal" style="--d:.08s"><h4><span class="priority-tag p1">P1</span> 痛点二：回答冗长啰嗦，抓不住重点 <span style="margin-left:auto;font-weight:400;font-size:13px;color:var(--ink-3)">9 人提及 · 60%</span></h4>
+      <p>用户反映豆包的回答倾向于"教科书式"展开，先铺垫背景再讲细节最后才给出结论，在需要快速获取信息的场景下体验很差。</p>
+      <div class="qblock">问春江花月夜创作背景，它先讲张若虚生平再讲唐代诗歌流派最后才提到正题。我看了一半就关掉了。<span class="sp">—— 小张，大二文学</span></div>
+      <div class="qblock">让它对比两个判例差异，洋洋洒洒两千字，关键差异只有三处，其他全是废话。<span class="sp">—— 小赵，大四法学</span></div>
+      <div class="qblock">解释心理统计方法，绕了八百圈才说到点子上，看完更糊涂了。<span class="sp">—— 小林，大一心理学</span></div>
+    </div>
+    <div class="pain reveal" style="--d:.12s"><h4><span class="priority-tag p1">P1</span> 痛点三：文件上传后识别 / 解析质量差 <span style="margin-left:auto;font-weight:400;font-size:13px;color:var(--ink-3)">7 人提及 · 47%</span></h4>
+      <p>用户上传 PDF、录音、古籍扫描件后，遭遇内容遗漏、排版错乱、多文件识别不稳定、OCR 准确率低等问题。</p>
+      <div class="qblock">上传 30 页投行研报让它总结，它只提取了前 5 页，后面完全忽略，还自信满满地说该报告主要讨论了……<span class="sp">—— 小陈，研二金融</span></div>
+      <div class="qblock">1 小时录音转文字，缺了将近三分之二的内容，中间大段空白。<span class="sp">—— 小郑，大四新闻</span></div>
+      <div class="qblock">竖排文言文识别率不到 50%，标点全错。<span class="sp">—— 小何，研三历史</span></div>
+    </div>
+    <div class="table-wrap reveal">
+      <table>
+        <thead><tr><th>其他提及痛点</th><th>提及人数</th><th>提及率</th></tr></thead>
+        <tbody>
+          <tr><td>上下文记忆差，多轮对话容易跑偏</td><td>5</td><td>33%</td></tr>
+          <tr><td>不支持多模态（图片理解、图表解析）</td><td>4</td><td>27%</td></tr>
+          <tr><td>输出格式排版不稳定</td><td>3</td><td>20%</td></tr>
+          <tr><td>移动端体验不如 PC 端</td><td>2</td><td>13%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="compare">
+    <div class="reveal"><div class="kicker">竞品对比</div><h2 class="section-title">同场景对比测试</h2></div>
+    <p class="lead reveal">针对 Top 3 痛点，设计 3 个典型测试场景，使用 <strong>完全相同的输入材料</strong> 在豆包、Kimi、DeepSeek 三款产品上分别测试，记录表现并以 1–5 分制评分。</p>
+
+    <div class="scenario reveal">
+      <h4>场景一：学术论文总结</h4>
+      <p class="desc">测试材料：CVPR 2025 论文《Diffusion Models for 3D Generation: A Hierarchical Approach》（12 页）｜ 任务：用中文总结论文核心贡献与关键实验数据</p>
+      <div class="compare-grid">
+        <div class="chat doubao"><div class="ch">豆包</div><div class="cb"><div class="um">请帮我总结这篇论文的核心贡献和关键实验数据。</div>
+          <div class="am"><p>这篇论文讨论了扩散模型在 3D 生成中的应用。作者提出了一种新的方法，通过改进扩散过程来生成更高质量的 3D 模型……</p>
+          <p><span class="bad">问题：</span>总结偏宏观科普向，<span class="hl">遗漏了核心技术创新点"层次化潜在空间映射"</span>，未提取关键实验数据对比表格。输出约 800 字但信息密度低。</p><span class="score low">评分 2.5/5</span></div></div></div>
+        <div class="chat kimi"><div class="ch">Kimi</div><div class="cb"><div class="um">请帮我总结这篇论文的核心贡献和关键实验数据。</div>
+          <div class="am"><p><strong>核心贡献（3 点）：</strong></p>
+          <p>1. 提出 <span class="good">层次化潜在空间映射（Hierarchical Latent Mapping）</span>，将 3D 生成分解为粗粒度结构 + 细粒度纹理两阶段</p>
+          <p>2. 引入跨视角一致性约束，相比 Baseline FID 降低 23%</p>
+          <p>3. 结合扩散模型与 NeRF 表征，实现单图到 3D 的端到端生成</p>
+          <p style="margin-top:7px"><strong>关键实验数据：</strong></p>
+          <p class="good">| 方法 | FID | CLIP | 推理时间 |<br>| 本文 | 12.4 | 0.87 | 3.2s |<br>| DreamFusion | 16.1 | 0.79 | 5.8s |<br>| Zero123 | 18.7 | 0.74 | 4.1s |</p><span class="score high">评分 4.5/5</span></div></div></div>
+        <div class="chat deepseek"><div class="ch">DeepSeek</div><div class="cb"><div class="um">请帮我总结这篇论文的核心贡献和关键实验数据。</div>
+          <div class="am"><p>论文提出了层次化潜在空间映射方法用于 3D 生成。主要贡献包括：两阶段生成框架、跨视角一致性约束、以及一种新的噪声调度策略。在 ShapeNet 和 Objaverse 上进行了实验验证。</p>
+          <p><span style="color:#C77F33;font-weight:600">不足：</span>提取了主要贡献但 <span class="hl">缺少定量对比数据表格</span>，总结偏技术向，对非专业读者不够友好。约 500 字。</p><span class="score mid">评分 3.5/5</span></div></div></div>
+      </div>
+    </div>
+
+    <div class="scenario reveal">
+      <h4>场景二：长文档深度问答</h4>
+      <p class="desc">测试材料：某头部券商 2025 年 A 股年度策略报告（45 页）｜ 任务：回答报告第 6–8 章关于行业配置建议的具体内容</p>
+      <div class="compare-grid">
+        <div class="chat doubao"><div class="ch">豆包</div><div class="cb"><div class="um">这份报告对消费电子板块的配置建议是什么？具体目标价是多少？</div>
+          <div class="am"><p>根据报告内容，消费电子板块整体被评定为超配。报告认为随着 AI 终端渗透率提升，消费电子有望迎来新一轮换机周期……</p>
+          <p><span class="bad">问题：</span>仅覆盖前 10 页内容，<span class="hl">未提取报告中后段的具体目标价和评级明细</span>（如立讯精密目标价 58 元、歌尔股份目标价 32 元等）。用户追问后重新生成了另一段同样不完整的回答。</p><span class="score low">评分 2/5</span></div></div></div>
+        <div class="chat kimi"><div class="ch">Kimi</div><div class="cb"><div class="um">这份报告对消费电子板块的配置建议是什么？具体目标价是多少？</div>
+          <div class="am"><p>报告第 7 章明确指出消费电子为 <span class="good">超配评级</span>，具体建议如下：</p>
+          <p>· 立讯精密：目标价 58 元（当前 42 元），上行空间 38%</p>
+          <p>· 歌尔股份：目标价 32 元（当前 24 元），上行空间 33%</p>
+          <p>· 韦尔股份：目标价 120 元（当前 95 元），上行空间 26%</p>
+          <p style="margin-top:7px"><span class="good">引用来源：报告第 32–35 页，行业比较表 7-2</span></p><span class="score high">评分 4/5</span></div></div></div>
+        <div class="chat deepseek"><div class="ch">DeepSeek</div><div class="cb"><div class="um">这份报告对消费电子板块的配置建议是什么？具体目标价是多少？</div>
+          <div class="am"><p>报告总体看好消费电子，定为超配。不过具体目标价方面……</p>
+          <p><span style="color:#C77F33;font-weight:600">不足：</span>对第 7–9 章交叉引用的理解有误，将 <span class="hl">半导体板块的韦尔股份数据误套用到消费电子板块</span>，出现了张冠李戴。数据提取准确度有提升空间。</p><span class="score mid">评分 3.5/5</span></div></div></div>
+      </div>
+    </div>
+
+    <div class="scenario reveal">
+      <h4>场景三：多文件横向对比分析</h4>
+      <p class="desc">测试材料：三家保险公司重疾险条款 PDF（各约 20 页）｜ 任务：对比三份条款在等待期、免责条款、轻症赔付比例上的差异</p>
+      <div class="compare-grid">
+        <div class="chat doubao"><div class="ch">豆包</div><div class="cb"><div class="um">请对比这三份重疾险条款，列出关键差异。</div>
+          <div class="am"><p>根据您提供的两份保险条款文件，我来进行对比分析……三家公司的等待期有所不同……</p>
+          <p><span class="bad">问题：</span>上传 3 个文件 <span class="hl">只识别了 2 个</span>（C 公司文件始终未被加载），未提示用户文件缺失。对已识别文件的对比停留在表面描述，未发现赔付条款中免赔额和等待期内出险处理的关键差异。</p><span class="score low">评分 1.5/5</span></div></div></div>
+        <div class="chat kimi"><div class="ch">Kimi</div><div class="cb"><div class="um">请对比这三份重疾险条款，列出关键差异。</div>
+          <div class="am"><p>三份条款均已分析完毕，<span class="good">关键差异共 15 项</span>，重点如下：</p>
+          <p class="good">| 条款维度 | A 公司 | B 公司 | C 公司 |<br>| 等待期 | 90 天 | 180 天 | 90 天 |<br>| 轻症赔付 | 30% | 20% | 25% |<br>| 免责条款数 | 8 项 | 12 项 | 9 项 |<br>| 等待期内出险 | 退保费 | 退现金价值 | 退保费 |</p>
+          <p style="margin-top:7px">重点差异标注：B 公司免责条款中不含"战争"但新增了"基因检测后的主动预防性手术"。<span class="good">已在对比表中高亮。</span></p><span class="score high">评分 4.5/5</span></div></div></div>
+        <div class="chat deepseek"><div class="ch">DeepSeek</div><div class="cb"><div class="um">请对比这三份重疾险条款，列出关键差异。</div>
+          <div class="am"><p>三份文件均已识别。以下是主要对比：A 公司与 C 公司等待期相同（90 天），B 公司较长（180 天）。轻症赔付比例三家不同，分别为 30%、20%、25%。免责条款方面 B 公司更多（12 项 vs 8/9 项）。</p>
+          <p><span style="color:#C77F33;font-weight:600">不足：</span>对比维度不够全面，<span class="hl">缺少等待期内出险处理方式的横向比较</span>，且未标注 B 公司免责条款的特殊增减项。整体依赖用户明确指令来驱动对比维度。</p><span class="score mid">评分 3.5/5</span></div></div></div>
+      </div>
+    </div>
+
+    <figure class="chart reveal" style="margin-top:32px"><h4 style="font-weight:600;color:var(--ink)">竞品综合评分汇总（1–5 分）</h4><div id="compareChart"></div><div class="legend" id="compareChart-leg"></div></figure>
+  </section>
+
+  <section id="priority">
+    <div class="reveal"><div class="kicker">优先级排序</div><h2 class="section-title">产品优化建议</h2></div>
+    <div class="table-wrap reveal">
+      <table>
+        <thead><tr><th>优先级</th><th>优化方向</th><th>具体建议</th><th>预期影响</th><th>参考竞品</th></tr></thead>
+        <tbody>
+          <tr><td><span class="priority-tag p0">P0 · 本周</span></td><td>搜索质量与时效性提升</td><td>引入搜索结果时效性评分，对超过 1 年的技术文档自动标注年份并降权；增加来源类型筛选；专业术语翻译接入垂直领域术语库</td><td>直接影响 73% 用户的核心痛点，提升搜索信任度</td><td>Kimi 的搜索后筛选体验</td></tr>
+          <tr><td><span class="priority-tag p1">P1 · 两周</span></td><td>回答简洁度与结构化输出</td><td>新增简洁模式开关：先输出 1–3 条核心结论再展开详情；强制引导摘要；让用户可调节回答详略程度</td><td>改善 60% 用户的不满，显著降低跳出率</td><td>DeepSeek 的简洁直接风格</td></tr>
+          <tr><td><span class="priority-tag p1">P1 · 一月</span></td><td>文件处理能力全面升级</td><td>长文档（30 页+）强制全量解析并展示覆盖范围；多文件上传增加已加载 N/N 状态指示；提升专业场景 OCR 能力</td><td>修复 47% 用户的信任危机，解锁高价值场景</td><td>Kimi 的长文档处理体验</td></tr>
+          <tr><td><span class="priority-tag p2">P2 · 季度</span></td><td>多模态能力补全</td><td>支持图片理解、图表数据提取、公式识别</td><td>满足 27% 用户的增量需求</td><td>—</td></tr>
+          <tr><td><span class="priority-tag p2">P2 · 季度</span></td><td>上下文记忆增强</td><td>多轮对话中显式标注当前对话上下文，优化长对话中的信息保持</td><td>改善 33% 用户的辅助痛点</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="final">
+    <div class="reveal"><div class="kicker">最终结论</div><h2 class="section-title">如果只改一个功能</h2></div>
+    <div class="final reveal">
+      <h3>我选「搜索结果时效性与来源可信度标注」</h3>
+      <p>第一，<strong>覆盖面最广</strong>——73% 的受访者直接吐槽搜索质量问题，是所有痛点中提及率最高的。这不是边缘需求，而是用了就会碰到的"基础体验缺陷"。</p>
+      <p>第二，<strong>修复成本相对可控</strong>——不需要重构底层模型，可以通过接入时效性评分层、增加来源元数据标注、优化检索排序策略来实现，一周集中攻坚完全可行。</p>
+      <p>第三，<strong>这是信任的根基</strong>——用户对 AI 产品的第一印象来自搜索。一旦建立起"豆包搜不准"的认知，他们就不会再把重要的任务交给你。修好搜索，是让用户从"我试试"变成"我信你"的关键一跃。</p>
+    </div>
+  </section>
+
+</div>
+<div class="footer">豆包校园用户深度调研报告 · 2025 年 10 月 · 基于 15 位在校大学生深度访谈与竞品对比测试<br>本报告仅供内部产品决策参考，数据基于用户访谈整理，非大规模量化统计结果。</div>
+
+<script>
+(function(){
+  "use strict";
+  var C={blue:'#5E9FD6',green:'#86C3AC',red:'#D89A92',orange:'#D9C28C',amber:'#D9C28C',gray:'#B0B4BC',indigo:'#8FA6DC',deep:'#9FB0C4'};
+  var NS='http://www.w3.org/2000/svg';
+  function el(tag,attrs){var e=document.createElementNS(NS,tag);for(var k in attrs)e.setAttribute(k,attrs[k]);return e;}
+
+  function buildBar(id,cfg){
+    var host=document.getElementById(id); if(!host) return;
+    var leg=document.getElementById(id+'-leg');
+    var W=760,H=340,pad={l:46,r:16,t:22,b:42};
+    var pw=W-pad.l-pad.r, ph=H-pad.t-pad.b;
+    var cats=cfg.categories, nC=cats.length, nS=cfg.series.length;
+    var gw=pw/nC, barW=Math.min(52,(gw*0.6)/nS), gap=nS>1?6:0;
+    var max=cfg.max||Math.ceil(Math.max.apply(null,cfg.series.map(function(s){return Math.max.apply(null,s.values);}))*1.15/10)*10;
+    var svg=el('svg',{viewBox:'0 0 '+W+' '+H,preserveAspectRatio:'xMidYMid meet',role:'img','aria-label':cfg.aria||'chart'});
+    for(var k=0;k<=4;k++){var gy=pad.t+ph/4*k; svg.appendChild(el('line',{class:'grid-line',x1:pad.l,y1:gy,x2:W-pad.r,y2:gy}));}
+    cfg.series.forEach(function(s,si){
+      s.values.forEach(function(v,i){
+        var gx=pad.l+gw*(i+0.5), total=nS*barW+(nS-1)*gap, start=gx-total/2;
+        var x=start+si*(barW+gap), bh=v/max*ph, y=pad.t+ph-bh, delay=(i*0.06+si*0.05).toFixed(2);
+        svg.appendChild(el('rect',{class:'bar',x:x,y:y,width:barW,height:bh,rx:5,fill:s.color,style:'transition-delay:'+delay+'s'}));
+        var t=el('text',{class:'bl',x:x+barW/2,y:y-7,style:'transition-delay:'+(parseFloat(delay)+0.2).toFixed(2)+'s'}); t.textContent=v; svg.appendChild(t);
+      });
+    });
+    cats.forEach(function(c,i){var gx=pad.l+gw*(i+0.5);var t=el('text',{class:'cl',x:gx,y:pad.t+ph+20});t.textContent=c;svg.appendChild(t);});
+    host.appendChild(svg);
+    if(leg){leg.innerHTML=cfg.series.map(function(s){return '<span><i style="background:'+s.color+'"></i>'+s.name+'</span>';}).join('');}
+  }
+
+  // 横向柱状图
+  function buildHBar(id,cfg){
+    var host=document.getElementById(id); if(!host) return;
+    var leg=document.getElementById(id+'-leg');
+    var W=760, rowH=46, padT=14, padB=10, labW=128, valW=44;
+    var n=cfg.values.length, H=padT+padT+n*rowH+padB;
+    var max=Math.max.apply(null,cfg.values);
+    var sx=labW, sw=W-labW-valW;
+    var svg=el('svg',{viewBox:'0 0 '+W+' '+H,preserveAspectRatio:'xMidYMid meet',role:'img','aria-label':cfg.aria||'chart'});
+    cfg.labels.forEach(function(lbl,i){
+      var yc=padT+i*rowH+rowH/2;
+      var t=el('text',{class:'hl',x:0,y:yc+4}); t.textContent=lbl; svg.appendChild(t);
+      var bw=(cfg.values[i]/max)*sw, x=sx, y=padT+i*rowH+(rowH-14)/2;
+      var delay=(i*0.07).toFixed(2);
+      svg.appendChild(el('rect',{class:'hbar',x:x,y:y,width:bw,height:14,rx:7,fill:cfg.colors[i],style:'transition-delay:'+delay+'s'}));
+      var vt=el('text',{class:'hv',x:x+bw+8,y:yc+4,style:'transition-delay:'+(parseFloat(delay)+0.25).toFixed(2)+'s'}); vt.textContent=cfg.values[i]; svg.appendChild(vt);
+    });
+    host.appendChild(svg);
+    if(leg){leg.innerHTML=cfg.colors.map(function(c,i){return '<span><i style="background:'+c+'"></i>'+cfg.labels[i]+'（'+cfg.values[i]+'）</span>';}).join('');}
+  }
+
+  // 环形图
+  function buildDonut(id,cfg){
+    var host=document.getElementById(id); if(!host) return;
+    var leg=document.getElementById(id+'-leg');
+    var W=760,H=340, cx=W/2, cy=H/2, r=108, sw=26;
+    var circ=2*Math.PI*r, total=cfg.data.reduce(function(a,b){return a+b;},0);
+    var svg=el('svg',{viewBox:'0 0 '+W+' '+H,preserveAspectRatio:'xMidYMid meet',role:'img','aria-label':cfg.aria||'chart'});
+    var g=el('g',{class:'donut-group'});
+    g.appendChild(el('circle',{cx:cx,cy:cy,r:r,fill:'none',stroke:'#eef0f3','stroke-width':sw}));
+    var cum=0;
+    cfg.data.forEach(function(v,i){
+      var seg=v/total*circ;
+      var c=el('circle',{cx:cx,cy:cy,r:r,fill:'none',stroke:cfg.colors[i],'stroke-width':sw,'stroke-dasharray':seg+' '+(circ-seg),'stroke-dashoffset':-cum,transform:'rotate(-90 '+cx+' '+cy+')','stroke-linecap':'butt'});
+      g.appendChild(c); cum+=seg;
+    });
+    svg.appendChild(g);
+    var big=el('text',{class:'donut-center-n',x:cx,y:cy+2}); big.textContent=cfg.center.n; svg.appendChild(big);
+    var small=el('text',{class:'donut-center-s',x:cx,y:cy+22}); small.textContent=cfg.center.s; svg.appendChild(small);
+    host.appendChild(svg);
+    if(leg){leg.innerHTML=cfg.data.map(function(v,i){return '<span><i style="background:'+cfg.colors[i]+'"></i>'+cfg.labels[i]+'（'+Math.round(v/total*100)+'%）</span>';}).join('');}
+  }
+
+  buildHBar('painChart',{labels:['搜索不准确','回答太啰嗦','文件识别差','上下文易丢失','多模态缺失','排版不稳定','移动端体验差'],
+    values:[11,9,7,5,4,3,2],colors:[C.red,C.orange,C.amber,C.gray,C.gray,C.gray,C.gray],aria:'各痛点提及人数'});
+  buildDonut('pieChart',{labels:['搜索不准确','回答太啰嗦','文件识别差','其他痛点'],
+    data:[11,9,7,10],colors:[C.red,C.orange,C.amber,'#d2d2d7'],center:{n:'27',s:'Top3 提及(人)'},aria:'Top3 痛点占比'});
+  buildBar('compareChart',{categories:['论文总结','长文档问答','多文件对比'],
+    series:[{name:'豆包',color:C.indigo,values:[2.5,2,1.5]},{name:'Kimi',color:C.green,values:[4.5,4,4.5]},{name:'DeepSeek',color:C.deep,values:[3.5,3.5,3.5]}],
+    max:5,aria:'竞品综合评分'});
+
+  function countUp(node){
+    var target=parseFloat(node.getAttribute('data-count'));
+    var dec=parseInt(node.getAttribute('data-dec')||'0',10);
+    var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduce){node.textContent=target.toFixed(dec);return;}
+    var dur=1150,start=null;
+    function tick(t){if(!start)start=t;var p=Math.min(1,(t-start)/dur);var e=1-Math.pow(1-p,3);
+      node.textContent=(target*e).toFixed(dec);
+      if(p<1)requestAnimationFrame(tick);else node.textContent=target.toFixed(dec);}
+    requestAnimationFrame(tick);
+  }
+
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if(!e.isIntersecting) return;
+      var el=e.target;
+      if(el.classList.contains('chart')) el.classList.add('in-view');
+      if(el.classList.contains('reveal')) el.classList.add('in');
+      if(el.hasAttribute('data-count')) countUp(el);
+      io.unobserve(el);
+    });
+  },{threshold:0.12,rootMargin:'0px 0px -7% 0px'});
+  document.querySelectorAll('.reveal, .chart, [data-count]').forEach(function(n){io.observe(n);});
+
+  var prog=document.getElementById('progress');
+  function onScroll(){var d=document.documentElement;var h=d.scrollHeight-window.innerHeight;
+    prog.style.width=(h>0?(window.scrollY/h*100):0)+'%';}
+  window.addEventListener('scroll',onScroll,{passive:true}); onScroll();
+
+  var links=[].slice.call(document.querySelectorAll('.nav a'));
+  var spy=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){
+    var id='#'+e.target.id; links.forEach(function(l){l.classList.toggle('active',l.getAttribute('href')===id);});}});},
+    {rootMargin:'-45% 0px -50% 0px'});
+  links.forEach(function(l){var s=document.querySelector(l.getAttribute('href'));if(s)spy.observe(s);});
+})();
+</script>
+</body>
+</html>
