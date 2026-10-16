@@ -5,7 +5,7 @@ import { useInkWipe } from '../lib/reveal'
 
 /**
  * Work — 作品页
- * 三组案卷（全宽列表）+ 附卷（Vibe Coding）。
+ * 案卷（全宽列表）+ 附卷（Side Project）。
  * 每份案卷：编号、标题（hover 红笔画线）、结论、证据入口。
  */
 export default function Work() {
@@ -66,9 +66,9 @@ export default function Work() {
         ))}
       </div>
 
-      {/* 附卷 · Vibe Coding */}
+      {/* 附卷 · Side Project */}
       <div className="container-codex mt-16 md:mt-24">
-        <p className="eyebrow-mono">附卷 · Vibe Coding</p>
+        <p className="eyebrow-mono">附卷 · Side Project</p>
         {vibeProjects.map((v) => (
           <a
             key={v.id}

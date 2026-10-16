@@ -707,7 +707,7 @@ export const vibeProjects = [
     id: 'intern-lens',
     title: '实习透镜',
     titleEn: 'Intern Lens',
-    tag: 'Vibe Coding · 单文件网页应用',
+    tag: 'Side Project · 单文件网页应用',
     summary:
       '面向双非 / 低年级在校生的实习机会分析台：把散落在社群、公众号、官网的招聘文案，结构化提取为「门槛友好度 · 截止时间 · 投递方式」可比维度，并用「友好指数」量化，帮你在最短时间内判断「到底该投哪一个」。单文件 HTML/CSS/JS、零外部依赖、可离线运行。',
     headline: '把散落的招聘文案，结构化成一键可比的「友好指数」',

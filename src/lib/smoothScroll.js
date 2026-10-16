@@ -1,14 +1,12 @@
 /**
- * smoothScroll.js — 全站平滑滚动打底（苹果风丝滑感的核心杠杆）
+ * smoothScroll.js — 全站平滑滚动打底
  *
- * 设计：Lenis 平滑滚动 + GSAP ticker 单一 rAF 循环驱动（业界验证的苹果式方案）
- *   - 不用两个互相打架的动画循环（卡顿头号原因）
- *   - Lenis 的 scroll 事件同步 ScrollTrigger.update，scrub 动画与平滑滚动严丝合缝
+ * 设计：Lenis 平滑滚动 + 单一原生 rAF 循环驱动
+ *   - 一个 requestAnimationFrame 循环驱动 Lenis，不引入额外动画库
  *   - 尊重 prefers-reduced-motion：开启减弱动效时完全不启用平滑滚动
  *   - 单例：重复调用返回已存在的实例；页面切换用 scrollToTop 立即归位
  */
 import Lenis from 'lenis'
-import { gsap } from 'gsap'
 
 /** 是否开启「减少动效」偏好 */
 export function prefersReduced() {
@@ -20,7 +18,7 @@ export function prefersReduced() {
 }
 
 let lenis = null
-let rafCallback = null
+let rafId = null
 
 export function initSmoothScroll() {
   if (typeof window === 'undefined') return null
@@ -37,20 +35,22 @@ export function initSmoothScroll() {
     touchMultiplier: 1.4,
   })
 
-  // 单一循环：GSAP ticker 驱动 Lenis（一个 rAF，不打架）
-  rafCallback = (time) => lenis.raf(time * 1000)
-  gsap.ticker.add(rafCallback)
-  gsap.ticker.lagSmoothing(0)
+  // 单一循环：原生 rAF 驱动 Lenis（无第三方 ticker）
+  const raf = (time) => {
+    lenis.raf(time)
+    rafId = requestAnimationFrame(raf)
+  }
+  rafId = requestAnimationFrame(raf)
 
   return lenis
 }
 
 export function destroySmoothScroll() {
   if (!lenis) return
-  if (rafCallback) gsap.ticker.remove(rafCallback)
+  if (rafId !== null) cancelAnimationFrame(rafId)
   lenis.destroy()
   lenis = null
-  rafCallback = null
+  rafId = null
 }
 
 export function getLenis() {

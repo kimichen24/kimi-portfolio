@@ -19,7 +19,7 @@
 
 - `#/` — 首页：定位、核心主张、四个真实数据、「此刻 Now」条、精选案卷
 - `#/notes` — 手记：笔记体短文，事实可回溯到案卷
-- `#/work` — 作品：五组案卷 + Vibe Coding 附卷
+- `#/work` — 作品：案卷 + Side Project 附卷
 - `#/about` — 关于：简介、经历时间线、方法索引、工具
 - `#/contact` — 联系：求职状态、邮箱、微信二维码
 - `#/project/<id>` — 案卷详情（anz-product-intel / visa-editing-workflow / campus-trade / doubao-research / intern-radar）
