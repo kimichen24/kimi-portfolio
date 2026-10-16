@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>实习招聘平台对双非用户友好吗 · 产品研究报告</title>
+<style>
+:root{
+  --ink:#1d1d1f; --sub:#6e6e73; --line:#d2d2d7; --bg:#ffffff; --panel:#f5f5f7;
+  --blue:#0071e3; --blue-soft:#e8f1fd; --red:#ff3b30; --green:#34c759; --amber:#ff9f0a;
+  --radius:18px; --shadow:0 4px 24px rgba(0,0,0,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","PingFang SC","Helvetica Neue",Arial,sans-serif;
+  color:var(--ink);background:var(--bg);line-height:1.6;font-size:17px;
+}
+.wrap{max-width:920px;margin:0 auto;padding:0 22px}
+
+/* nav */
+nav{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.72);backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:48px}
+nav .brand{font-size:15px;font-weight:600;letter-spacing:.2px}
+nav .tag{font-size:13px;color:var(--sub)}
+
+/* hero */
+.hero{padding:96px 0 72px;text-align:center}
+.hero .eyebrow{font-size:14px;font-weight:600;color:var(--blue);letter-spacing:.4px;text-transform:uppercase}
+.hero h1{font-size:clamp(34px,6vw,56px);line-height:1.08;font-weight:700;letter-spacing:-.02em;margin:14px 0 18px}
+.hero p{font-size:19px;color:var(--sub);max-width:600px;margin:0 auto}
+.hero .meta{margin-top:22px;font-size:14px;color:var(--sub)}
+
+/* section */
+section{padding:56px 0;border-top:1px solid var(--line)}
+.section-title{font-size:13px;font-weight:600;color:var(--blue);letter-spacing:.4px;text-transform:uppercase;margin-bottom:10px}
+h2{font-size:clamp(26px,4vw,34px);font-weight:700;letter-spacing:-.01em;margin-bottom:18px}
+.lead{font-size:18px;color:var(--sub);max-width:680px}
+
+/* stat cards */
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:28px}
+.stat{background:var(--panel);border-radius:var(--radius);padding:26px 24px}
+.stat .num{font-size:40px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.stat .num small{font-size:20px;font-weight:600}
+.stat .desc{font-size:15px;color:var(--sub);margin-top:6px}
+.stat .src{font-size:12px;color:#a1a1a6;margin-top:10px}
+
+/* 4-layer grid */
+.grid4{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:26px}
+.cell{background:var(--panel);border-radius:14px;padding:20px}
+.cell h3{font-size:17px;font-weight:600;margin-bottom:6px}
+.cell p{font-size:14.5px;color:var(--sub)}
+
+/* friction list */
+.friction{margin-top:24px;display:flex;flex-direction:column;gap:12px}
+.frow{display:flex;gap:16px;align-items:flex-start;padding:16px 18px;background:var(--panel);border-radius:14px}
+.frow .code{font-size:13px;font-weight:700;color:var(--blue);min-width:30px}
+.frow .body{font-size:15.5px}
+.frow .body b{font-weight:600}
+.frow .body span{color:var(--sub)}
+
+/* evidence (screenshots, small) */
+.evi{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;margin-top:26px}
+.evi figure{margin:0;text-align:center}
+.evi .frame{background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px;box-shadow:var(--shadow);display:inline-block;max-width:240px}
+.evi img{width:100%;border-radius:10px;display:block}
+.evi figcaption{font-size:14px;color:var(--sub);margin-top:12px;text-align:left;line-height:1.5}
+.evi figcaption b{color:var(--ink);font-weight:600}
+
+/* pain points */
+.pains{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:28px}
+.pain{background:var(--panel);border-radius:var(--radius);padding:26px 22px}
+.pain .ic{width:34px;height:34px;color:var(--blue);margin-bottom:14px}
+.pain h3{font-size:18px;font-weight:600;margin-bottom:10px;line-height:1.3}
+.pain p{font-size:14.5px;color:var(--sub)}
+.pain blockquote{margin-top:14px;padding:12px 14px;background:#fff;border-left:3px solid var(--blue);border-radius:0 10px 10px 0;font-size:13.5px;color:var(--ink);font-style:italic}
+
+/* solutions */
+.sol{margin-top:24px;display:flex;flex-direction:column;gap:14px}
+.sol .item{display:flex;gap:18px;align-items:flex-start;padding:20px 22px;border:1px solid var(--line);border-radius:14px}
+.sol .pri{font-size:12px;font-weight:700;color:#fff;background:var(--blue);padding:4px 10px;border-radius:20px;white-space:nowrap;margin-top:3px}
+.sol .txt h3{font-size:17px;font-weight:600;margin-bottom:4px}
+.sol .txt p{font-size:14.5px;color:var(--sub)}
+
+/* review */
+.review{margin-top:20px;display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.review .cell{background:#fff;border:1px solid var(--line)}
+
+footer{padding:48px 0 64px;text-align:center;color:#a1a1a6;font-size:13px;border-top:1px solid var(--line);margin-top:24px}
+
+@media(max-width:680px){
+  .stats,.grid4,.evi,.pains,.review{grid-template-columns:1fr}
+  .hero{padding:64px 0 48px}
+}
+
+.sol-img{margin-top:16px;text-align:center}
+.sol-img svg{width:100%;max-width:240px;height:auto;background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px;box-shadow:var(--shadow)}
+.sol-cap{font-size:13.5px;color:var(--sub);margin-top:10px;max-width:300px;margin-left:auto;margin-right:auto;line-height:1.5}
+</style>
+
+<!-- 视觉打磨注入 -->
+<style>
+:root{ --accent:#0071e3; --accent2:#0a84ff; --ink:#1d1d1f; --sub:#6e6e73; --line:#d2d2d7; }
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:9999;transition:width .12s ease-out;}
+nav{position:sticky;top:0;backdrop-filter:saturate(180%) blur(14px);-webkit-backdrop-filter:saturate(180%) blur(14px);background:rgba(255,255,255,.72);border-bottom:1px solid rgba(0,0,0,.06);z-index:50;}
+nav .wrap{height:52px;display:flex;align-items:center;}
+html{scroll-behavior:smooth;}
+section{scroll-margin-top:64px;}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s cubic-bezier(.22,.61,.36,1),transform .7s cubic-bezier(.22,.61,.36,1);}
+.reveal.in{opacity:1;transform:none;}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none;}}
+.cell,.stat,.frow,.sol .item{transition:transform .25s ease,box-shadow .25s ease;}
+.cell:hover,.stat:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(0,0,0,.08);}
+.frow:hover{transform:translateX(4px);}
+.sol .item:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(0,0,0,.07);}
+.stat .num{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.roadmap{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:22px;}
+.rstep{font-size:13px;font-weight:600;padding:8px 14px;border-radius:999px;}
+.rstep.p0{background:#e8f1fd;color:#0071e3;}
+.rstep.p1{background:#eef4ff;color:#0a84ff;}
+.rstep.p2{background:#f5f5f7;color:#6e6e73;}
+.rarr{color:#c7c7cc;font-weight:700;}
+details.deep{border:1px solid var(--line);border-radius:14px;padding:0 18px;margin:14px 0;background:#fff;}
+details.deep>summary{cursor:pointer;padding:16px 0;font-weight:600;color:var(--ink);list-style:none;display:flex;justify-content:space-between;align-items:center;}
+details.deep>summary::-webkit-details-marker{display:none;}
+details.deep>summary::after{content:"展开";font-size:13px;color:var(--accent);font-weight:500;}
+details.deep[open]>summary::after{content:"收起";}
+details.deep .dbody{padding:4px 0 18px;color:var(--sub);line-height:1.7;}
+details.deep .dbody li{margin:6px 0;}
+</style>
+
+
+</head>
+<body>
+
+<nav><div class="wrap"><span class="brand">产品研究报告</span><span class="tag">实习僧 · Boss 直聘 拆解</span></div></nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Product Research</div>
+    <h1>实习招聘平台，<br>对双非用户友好吗？</h1>
+    <p>一份基于实习僧与 Boss 直聘双平台拆解的产品研究报告，站在「双非 / 无经验」学生用户的视角。</p>
+    <div class="meta">2026 · 四层框架分析法 · 行业公开数据 + 真实 App 截图佐证</div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="section-title">Background</div>
+    <h2>为什么研究它</h2>
+    <p class="lead">大学生找实习几乎必用实习僧与 Boss 直聘。但从「双非 / 无经验」用户视角看，这类产品的默认逻辑服务于"已经有竞争力简历"的求职者，对弱势群体的适配明显不足。本报告的目标是拆解这些短板，并给出可落地的优化方向。</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-title">Context</div>
+    <h2>行业数据速览</h2>
+    <p class="lead">下文的每一个痛点，都有公开的行业调研数据支撑。</p>
+    <div class="stats">
+      <div class="stat"><div class="num">68.3<small>%</small></div><div class="desc">应届生处于"盲目海投"状态</div><div class="src">来源：智联招聘 2026 届调研（样本 21 万）</div></div>
+      <div class="stat"><div class="num">&lt;8<small>%</small></div><div class="desc">春招整体 offer 率，平均投 150–200 份才换 1 次面试</div><div class="src">来源：智联招聘 2026 春招监测</div></div>
+      <div class="stat"><div class="num">13.5<small>%</small></div><div class="desc">双非文科生简历机器初筛通过率</div><div class="src">来源：智联招聘</div></div>
+      <div class="stat"><div class="num">64.9<small>%</small></div><div class="desc">应届生遇到过就业歧视，院校越低比例越高</div><div class="src">来源：中青报·问卷网（样本 1333）</div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-title">Breakdown</div>
+    <h2>四层拆解</h2>
+    <div class="grid4">
+      <div class="cell"><h3>战略层</h3><p>两款产品的收入主要来自 B 端（企业发布、曝光付费），C 端弱势群体的体验被结构性忽视。</p></div>
+      <div class="cell"><h3>体验层</h3><p>关键路径"搜岗 → 判断够不够格 → 投递"中，双非用户在"判断是否够格"这一步几乎只能自己读 JD 硬猜。</p></div>
+      <div class="cell"><h3>商业层</h3><p>C 端隐性成本高：海投低效、被"已读不回"消耗情绪、信息噪音大。</p></div>
+      <div class="cell"><h3>能力层</h3><p>检索可按城市 / 行业 / 薪资筛，但推荐流未与"用户弱势背景"对齐，也无人辅助判断资格。</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-title">Friction</div>
+    <h2>走查中的四个摩擦点</h2>
+    <div class="friction">
+      <div class="frow"><div class="code">F1</div><div class="body"><b>无法按"实习意向"精准过滤</b> —— 筛选阶段缺失"无经验友好 / 双非可投 / 远程"等维度，海量噪音只能逐条肉眼判断。</div></div>
+      <div class="frow"><div class="code">F2</div><div class="body"><b>推荐流与意向不符</b> —— 列表大量展示不匹配岗位，用户在噪音里反复翻找，信心受损。</div></div>
+      <div class="frow"><div class="code">F3</div><div class="body"><b>详情无"你是否符合"提示</b> —— 读完整段 JD 才敢判断是否投，常常不敢投。</div></div>
+      <div class="frow"><div class="code">F4</div><div class="body"><b>直聊已读不回无预期管理</b> —— 情绪消耗，不确定是石沉大海还是在审核。</div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-title">Evidence</div>
+    <h2>截图证据（精选）</h2>
+    <p class="lead">走查中保留的真实 App 截图，下面挑四张最有代表性的配文字说明。</p>
+    <div class="evi">
+      <figure>
+        <div class="frame"><img loading="lazy" src="../../images/evidence/intern-radar-1.jpg" alt="推荐流错配"></div>
+        <figcaption><b>推荐与意向错配</b><br>在「产品运营」Tab 下，推荐流却出现游戏、HR、营销等不相关岗位。</figcaption>
+      </figure>
+      <figure>
+        <div class="frame"><img loading="lazy" src="../../images/evidence/intern-radar-2.png" alt="筛选维度缺失"></div>
+        <figcaption><b>筛选维度缺失</b><br>可筛学历、时长，却无"无经验可投 / 双非友好 / 远程"等弱势群体真正需要的维度。</figcaption>
+      </figure>
+      <figure>
+        <div class="frame"><img loading="lazy" src="../../images/evidence/intern-radar-3.png" alt="已读不回与 PK"></div>
+        <figcaption><b>已读不回 + 竞争者 PK</b><br>发起沟通后"已读"无回复，系统提示与竞争者 PK，放大焦虑。</figcaption>
+      </figure>
+      <figure>
+        <div class="frame"><img loading="lazy" src="../../images/evidence/intern-radar-4.png" alt="批量投递"></div>
+        <figcaption><b>批量投递</b><br>"一键投递 10 个职位"跨类岗位一次勾选——侧面说明用户靠海投对抗错配。</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-title">Pain Points</div>
+    <h2>三大痛点</h2>
+    <div class="pains">
+      <div class="pain">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg>
+        <h3>推荐与实习意向错配</h3>
+        <p>准备投递时，列表却大量展示不匹配岗位，用户被迫在噪音中反复翻找，效率与信心双双受损。</p>
+        <blockquote>"搜'用户运营实习生'，列表一半是销售/客服/游戏运营岗，翻好几页才遇到一个真正匹配的，越刷越没信心。"</blockquote>
+      </div>
+      <div class="pain">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 2.5-3 4"/><circle cx="12" cy="17.5" r=".6" fill="currentColor"/></svg>
+        <h3>资格判断靠猜（最痛）</h3>
+        <p>JD 写"有经验优先"，叠加歧视普遍、双非获录比例低，用户根本无从判断自己投不投得中，不敢投、不会投。</p>
+        <blockquote>"JD 写'有经验优先'，看完不知道自己该不该投，怕投了也是石沉大海，最后大多没投。"</blockquote>
+      </div>
+      <div class="pain">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0"/><circle cx="17" cy="9" r="2.4"/><path d="M15 19a4 4 0 0 1 6 0"/></svg>
+        <h3>缺少同类参考</h3>
+        <p>没有"双非上岸经验"社区，而多数求职者最大困难正是"找不到自身优势、定位模糊"。</p>
+        <blockquote>"不知道同专业学长学姐怎么上岸的，身边没人可问，全靠自己盲投。"</blockquote>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-title">Solutions</div>
+    <h2>优化方案</h2>
+    <div class="sol">      <div class="item"><span class="pri">P0</span><div class="txt"><h3>基于实习意向的精准匹配</h3><p>筛选区加"只看符合意向"开关，列表卡片标注匹配度（符合 / 不符），让推荐流优先展示与意向一致的岗位，从源头降噪。</p></div></div>
+      <div class="sol-img"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 720" width="360" height="720" font-family="-apple-system,'PingFang SC','Helvetica Neue',sans-serif">
+  <rect width="360" height="720" rx="32" fill="#ffffff" stroke="#d2d2d7" stroke-width="1"/>
+  <text x="22" y="32" font-size="13" fill="#1d1d1f" font-weight="600">9:41</text>
+  <rect x="306" y="22" width="16" height="11" rx="2" fill="#1d1d1f"/>
+  <text x="20" y="74" font-size="20" font-weight="700" fill="#1d1d1f">实习 · 上海</text>
+  <text x="20" y="95" font-size="13" fill="#6e6e73">用户运营实习生 · 128 个职位</text>
+  <rect x="20" y="110" width="138" height="32" rx="16" fill="#0071e3"/>
+  <text x="34" y="131" font-size="12.5" font-weight="600" fill="#ffffff">只看符合意向</text>
+  <circle cx="140" cy="126" r="11" fill="#ffffff"/>
+  <rect x="166" y="110" width="50" height="32" rx="16" fill="#f5f5f7"/>
+  <text x="180" y="131" font-size="12.5" fill="#6e6e73">远程</text>
+  <rect x="224" y="110" width="84" height="32" rx="16" fill="#f5f5f7"/>
+  <text x="240" y="131" font-size="12.5" fill="#6e6e73">双非可投</text>
+  <rect x="20" y="156" width="320" height="108" rx="16" fill="#ffffff" stroke="#d2d2d7"/>
+  <circle cx="38" cy="182" r="5" fill="#34c759"/>
+  <text x="50" y="187" font-size="12" font-weight="600" fill="#34c759">符合意向</text>
+  <text x="300" y="187" font-size="12" fill="#a1a1a6" text-anchor="end">字节跳动</text>
+  <text x="38" y="212" font-size="16" font-weight="700" fill="#1d1d1f">用户运营实习</text>
+  <rect x="38" y="228" width="60" height="24" rx="6" fill="#f5f5f7"/>
+  <text x="50" y="244" font-size="12" fill="#6e6e73">远程</text>
+  <rect x="106" y="228" width="76" height="24" rx="6" fill="#f5f5f7"/>
+  <text x="118" y="244" font-size="12" fill="#6e6e73">日常实习</text>
+  <rect x="190" y="228" width="84" height="24" rx="6" fill="#f5f5f7"/>
+  <text x="202" y="244" font-size="12" fill="#6e6e73">双非可投</text>
+  <rect x="20" y="280" width="320" height="108" rx="16" fill="#ffffff" stroke="#d2d2d7"/>
+  <circle cx="38" cy="306" r="5" fill="#34c759"/>
+  <text x="50" y="311" font-size="12" font-weight="600" fill="#34c759">符合意向</text>
+  <text x="300" y="311" font-size="12" fill="#a1a1a6" text-anchor="end">美团</text>
+  <text x="38" y="336" font-size="16" font-weight="700" fill="#1d1d1f">用户运营实习</text>
+  <rect x="38" y="352" width="60" height="24" rx="6" fill="#f5f5f7"/>
+  <text x="50" y="368" font-size="12" fill="#6e6e73">上海</text>
+  <rect x="106" y="352" width="76" height="24" rx="6" fill="#f5f5f7"/>
+  <text x="118" y="368" font-size="12" fill="#6e6e73">日常实习</text>
+  <rect x="190" y="352" width="84" height="24" rx="6" fill="#f5f5f7"/>
+  <text x="202" y="368" font-size="12" fill="#6e6e73">双非可投</text>
+  <rect x="20" y="412" width="320" height="56" rx="14" fill="#f5f5f7"/>
+  <text x="38" y="438" font-size="13" fill="#1d1d1f" font-weight="600">已为你过滤 96 个不匹配岗位</text>
+  <text x="38" y="458" font-size="12" fill="#6e6e73">仅展示与你的背景匹配的职位</text>
+  <rect x="0" y="676" width="360" height="44" fill="#f5f5f7"/>
+  <text x="40" y="703" font-size="12" fill="#0071e3" font-weight="600">推荐</text>
+  <text x="140" y="703" font-size="12" fill="#a1a1a6">搜索</text>
+  <text x="240" y="703" font-size="12" fill="#a1a1a6">我的</text>
+</svg></div>
+      <p class="sol-cap">方案 1 列表页示意：开启「只看符合意向」后仅展示匹配职位，卡片以圆点标注符合 / 不符，一眼过滤噪音。</p>
+      <div class="item"><span class="pri">P1</span><div class="txt"><h3>资格判断辅助（痛点 2 专项）</h3><p>在 JD 详情页增加「匹配度自检」模块：列出硬性要求与你的背景对照，标出硬伤与可补项，让求职者一眼判断该不该投，不再靠猜。</p></div></div>
+      <div class="sol-img"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 720" width="360" height="720" font-family="-apple-system,'PingFang SC','Helvetica Neue',sans-serif">
+  <rect width="360" height="720" rx="32" fill="#ffffff" stroke="#d2d2d7" stroke-width="1"/>
+  <text x="22" y="32" font-size="13" fill="#1d1d1f" font-weight="600">9:41</text>
+  <rect x="306" y="22" width="16" height="11" rx="2" fill="#1d1d1f"/>
+  <text x="20" y="74" font-size="20" font-weight="700" fill="#1d1d1f">用户运营实习</text>
+  <text x="20" y="95" font-size="13" fill="#6e6e73">字节跳动 · 上海 · 日常实习</text>
+  <text x="20" y="126" font-size="13" fill="#6e6e73">负责用户增长与社群运营，协助活动策划与</text>
+  <text x="20" y="145" font-size="13" fill="#6e6e73">数据复盘，配合内容投放。</text>
+  <rect x="20" y="166" width="320" height="148" rx="16" fill="#f5f5f7"/>
+  <text x="38" y="194" font-size="13" font-weight="600" fill="#1d1d1f">匹配度自检</text>
+  <circle cx="74" cy="256" r="34" fill="none" stroke="#d2d2d7" stroke-width="9"/>
+  <circle cx="74" cy="256" r="34" fill="none" stroke="#0071e3" stroke-width="9" stroke-linecap="round" stroke-dasharray="138.8 74.8" transform="rotate(-90 74 256)"/>
+  <text x="74" y="252" font-size="20" font-weight="700" fill="#1d1d1f" text-anchor="middle">65%</text>
+  <text x="74" y="272" font-size="11" fill="#6e6e73" text-anchor="middle">匹配度</text>
+  <text x="130" y="240" font-size="12" fill="#6e6e73">主要差距</text>
+  <text x="130" y="262" font-size="13" font-weight="600" fill="#ff3b30">缺 1 段相关实习</text>
+  <text x="130" y="286" font-size="12" fill="#6e6e73">其余要求基本符合</text>
+  <rect x="20" y="330" width="320" height="172" rx="16" fill="#ffffff" stroke="#d2d2d7"/>
+  <text x="38" y="358" font-size="13" font-weight="600" fill="#1d1d1f">硬性要求对照</text>
+  <circle cx="42" cy="390" r="5" fill="#34c759"/>
+  <text x="58" y="395" font-size="13" fill="#1d1d1f">学历要求　本科及以上</text>
+  <text x="300" y="395" font-size="12" fill="#34c759" text-anchor="end">符合</text>
+  <line x1="38" y1="410" x2="322" y2="410" stroke="#f5f5f7"/>
+  <circle cx="42" cy="438" r="5" fill="#ff3b30"/>
+  <text x="58" y="443" font-size="13" fill="#1d1d1f">经验要求　1 段实习经历</text>
+  <text x="300" y="443" font-size="12" fill="#ff3b30" text-anchor="end">待补</text>
+  <line x1="38" y1="458" x2="322" y2="458" stroke="#f5f5f7"/>
+  <circle cx="42" cy="486" r="5" fill="#34c759"/>
+  <text x="58" y="491" font-size="13" fill="#1d1d1f">技能要求　会用 Excel / 文案</text>
+  <text x="300" y="491" font-size="12" fill="#34c759" text-anchor="end">符合</text>
+  <rect x="20" y="518" width="320" height="64" rx="14" fill="#e8f1fd"/>
+  <text x="38" y="544" font-size="13" font-weight="600" fill="#0071e3">建议</text>
+  <text x="38" y="566" font-size="13" fill="#1d1d1f">先补 1 段校内项目再投，胜率更高</text>
+  <rect x="0" y="676" width="360" height="44" fill="#f5f5f7"/>
+  <text x="40" y="703" font-size="12" fill="#a1a1a6">职位</text>
+  <text x="140" y="703" font-size="12" fill="#0071e3" font-weight="600">自检</text>
+  <text x="240" y="703" font-size="12" fill="#a1a1a6">我的</text>
+</svg></div>
+      <p class="sol-cap">方案 2 示意：JD 详情页增加「匹配度自检」模块，硬性要求逐条对照、标出硬伤与可补项，一眼判断该不该投。</p>
+      <div class="item"><span class="pri">P2</span><div class="txt"><h3>双非上岸经验社区</h3><p>UGC 晾晒上岸经验，解决"缺少同类参考"，但成本高，放后面迭代。</p></div></div>
+      <div class="sol-img"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 720" width="360" height="720" font-family="-apple-system,'PingFang SC','Helvetica Neue',sans-serif">
+  <rect width="360" height="720" rx="32" fill="#ffffff" stroke="#d2d2d7" stroke-width="1"/>
+  <text x="22" y="32" font-size="13" fill="#1d1d1f" font-weight="600">9:41</text>
+  <rect x="306" y="22" width="16" height="11" rx="2" fill="#1d1d1f"/>
+  <text x="20" y="74" font-size="20" font-weight="700" fill="#1d1d1f">双非上岸经验</text>
+  <text x="20" y="95" font-size="13" fill="#6e6e73">看看和你一样的人，是怎么拿到 offer 的</text>
+  <rect x="20" y="120" width="320" height="128" rx="16" fill="#ffffff" stroke="#d2d2d7"/>
+  <circle cx="52" cy="160" r="18" fill="#f5f5f7"/>
+  <text x="52" y="166" font-size="16" fill="#6e6e73" text-anchor="middle" font-weight="600">王</text>
+  <text x="80" y="156" font-size="13" font-weight="600" fill="#1d1d1f">王同学 · 双非一本</text>
+  <text x="80" y="178" font-size="15" font-weight="600" fill="#1d1d1f">0 经验如何拿下用户运营实习</text>
+  <rect x="80" y="194" width="48" height="22" rx="6" fill="#f5f5f7"/>
+  <text x="90" y="209" font-size="11" fill="#6e6e73">经验</text>
+  <rect x="136" y="194" width="48" height="22" rx="6" fill="#f5f5f7"/>
+  <text x="146" y="209" font-size="11" fill="#6e6e73">方法</text>
+  <text x="300" y="216" font-size="12" fill="#a1a1a6" text-anchor="end">128 赞</text>
+  <rect x="20" y="260" width="320" height="128" rx="16" fill="#ffffff" stroke="#d2d2d7"/>
+  <circle cx="52" cy="300" r="18" fill="#f5f5f7"/>
+  <text x="52" y="306" font-size="16" fill="#6e6e73" text-anchor="middle" font-weight="600">林</text>
+  <text x="80" y="296" font-size="13" font-weight="600" fill="#1d1d1f">林同学 · 民办本科</text>
+  <text x="80" y="318" font-size="15" font-weight="600" fill="#1d1d1f">靠校内项目转正，我的 3 个关键点</text>
+  <rect x="80" y="334" width="64" height="22" rx="6" fill="#f5f5f7"/>
+  <text x="90" y="349" font-size="11" fill="#6e6e73">项目</text>
+  <rect x="152" y="334" width="64" height="22" rx="6" fill="#f5f5f7"/>
+  <text x="162" y="349" font-size="11" fill="#6e6e73">复盘</text>
+  <text x="300" y="356" font-size="12" fill="#a1a1a6" text-anchor="end">96 赞</text>
+  <rect x="20" y="400" width="320" height="128" rx="16" fill="#ffffff" stroke="#d2d2d7"/>
+  <circle cx="52" cy="440" r="18" fill="#f5f5f7"/>
+  <text x="52" y="446" font-size="16" fill="#6e6e73" text-anchor="middle" font-weight="600">陈</text>
+  <text x="80" y="436" font-size="13" font-weight="600" fill="#1d1d1f">陈同学 · 独立学院</text>
+  <text x="80" y="458" font-size="15" font-weight="600" fill="#1d1d1f">双非如何拿到第一段实习经验</text>
+  <rect x="80" y="474" width="48" height="22" rx="6" fill="#f5f5f7"/>
+  <text x="90" y="489" font-size="11" fill="#6e6e73">经验</text>
+  <rect x="136" y="474" width="48" height="22" rx="6" fill="#f5f5f7"/>
+  <text x="146" y="489" font-size="11" fill="#6e6e73">投递</text>
+  <text x="300" y="496" font-size="12" fill="#a1a1a6" text-anchor="end">204 赞</text>
+  <rect x="20" y="548" width="320" height="56" rx="14" fill="#f5f5f7"/>
+  <text x="38" y="574" font-size="13" fill="#1d1d1f" font-weight="600">想晒自己的经历？</text>
+  <text x="38" y="594" font-size="12" fill="#6e6e73">匿名发布，帮助下一个双非同学</text>
+  <rect x="0" y="676" width="360" height="44" fill="#f5f5f7"/>
+  <text x="40" y="703" font-size="12" fill="#a1a1a6">推荐</text>
+  <text x="140" y="703" font-size="12" fill="#0071e3" font-weight="600">社区</text>
+  <text x="240" y="703" font-size="12" fill="#a1a1a6">我的</text>
+</svg></div>
+      <p class="sol-cap">方案 3 示意：经验社区 Feed，双非学长晾晒上岸经验，标注岗位与可复用方法，解决「缺少同类参考」。</p>
+
+
+      <div class="roadmap">
+        <span class="rstep p0">P0 精准匹配 · 先行</span>
+        <span class="rarr">→</span>
+        <span class="rstep p1">P1 资格自检 · 跟进</span>
+        <span class="rarr">→</span>
+        <span class="rstep p2">P2 经验社区 · 后置</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-title">Retrospective</div>
+    <h2>复盘</h2>
+    <div class="review">
+      <div class="cell"><h3>取舍</h3><p>优先解决最高频的"意向错配 / 不敢投"，社区类方案成本高、非核心痛点，符合 MVP 原则后置。</p></div>
+      <div class="cell"><h3>预期指标</h3><p>双非用户有效投递率、投递转化率、在匹配岗位上的停留与投递意愿。</p></div>
+    </div>
+  </div>
+</section>
+
+
+<section>
+  <div class="wrap">
+    <div class="section-title">Appendix</div>
+    <h2>可深挖的支撑材料</h2>
+    <p class="lead">下面三块是本研究背后的拆解维度与依据，默认收起，想看细节再展开。</p>
+    <details class="deep">
+      <summary>竞品拆解维度（实习僧 vs Boss 直聘）</summary>
+      <div class="dbody">
+        <ul>
+          <li><b>筛选能力</b>：两平台均支持城市 / 行业 / 薪资，但缺「无经验友好 / 双非可投 / 远程」等弱势群体维度。</li>
+          <li><b>推荐逻辑</b>：以活跃度与付费曝光为主，未与求职者弱势背景对齐。</li>
+          <li><b>资格提示</b>：JD 详情页无「你是否够格」的结构化判断，全靠人工读文。</li>
+          <li><b>社区参考</b>：缺同类上岸经验的 UGC 沉淀，新手无参照系。</li>
+        </ul>
+      </div>
+    </details>
+    <details class="deep">
+      <summary>目标用户画像快照</summary>
+      <div class="dbody">
+        <ul>
+          <li><b>身份</b>：双非一本 · 大三升大四 · 会计学 · 无实习经历。</li>
+          <li><b>目标</b>：用户运营类实习，二线城市机会为主。</li>
+          <li><b>核心卡点</b>：不敢投（怕不够格）、不会筛（噪音大）、无参考（不知同类怎么上岸）。</li>
+          <li><b>行为</b>：海投 + 已读不回后情绪消耗，决策靠硬猜。</li>
+        </ul>
+      </div>
+    </details>
+    <details class="deep">
+      <summary>原型规格要点（三方案）</summary>
+      <div class="dbody">
+        <ul>
+          <li><b>P0 精准匹配</b>：筛选加「只看符合意向」，列表卡片标注符合 / 不符。</li>
+          <li><b>P1 资格自检</b>：JD 详情页加匹配度自检模块，硬性要求逐条对照，标硬伤与可补项。</li>
+          <li><b>P2 经验社区</b>：UGC 晾晒双非上岸经验，标注岗位与可复用方法，后置迭代。</li>
+        </ul>
+      </div>
+    </details>
+  </div>
+</section>
+
+
+<footer>
+  <div class="wrap">独立产品研究案例 · 所有痛点均有行业公开数据 + 真实 App 截图（双平台互证）佐证，未伪造一手数据。</div>
+</footer>
+
+
+<div id="progress"></div>
+<script>
+(function(){
+  var bar=document.getElementById('progress');
+  var reveal=document.querySelectorAll('section, header.hero, footer');
+  reveal.forEach(function(el){el.classList.add('reveal');});
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+    },{threshold:0.12, rootMargin:'0px 0px -8% 0px'});
+    reveal.forEach(function(el){ io.observe(el); });
+  } else { reveal.forEach(function(el){ el.classList.add('in'); }); }
+  window.addEventListener('scroll',function(){
+    var h=document.documentElement;
+    var p=h.scrollTop/(h.scrollHeight-h.clientHeight)*100;
+    if(bar) bar.style.width=p+'%';
+  },{passive:true});
+})();
+</script>
+
+</body>
+</html>
