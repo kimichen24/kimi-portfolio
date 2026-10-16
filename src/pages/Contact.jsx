@@ -66,7 +66,7 @@ export default function Contact() {
           {profile.email}
         </a>
 
-        {/* HR 30 秒路径 — 简历 + 意向 + 最快联系方式，一屏给齐 */}
+        {/* 简历下载 — 一行入口，不写求职话术 */}
         <div className="mt-8 flex max-w-3xl flex-wrap items-center gap-4 border border-paper-line bg-paper-deep/30 p-5">
           <a
             href="resume.pdf"
@@ -78,7 +78,7 @@ export default function Contact() {
             <span>↓</span>
           </a>
           <p className="font-mono text-[11px] leading-relaxed text-ink-mute">
-            单页 A4 · 内容 / AI 产品运营实习 · 随时到岗 · 支持异地驻场或远程
+            单页 A4 · 完整经历与作品清单
           </p>
         </div>
 

@@ -357,7 +357,7 @@ export default function Home() {
               rel="noopener noreferrer"
               className="shrink-0 font-mono text-[12px] text-ink-soft transition-colors hover:text-red"
             >
-              访问抖音音乐账号 (10.66w+) ↗
+              访问抖音音乐账号 (10w+ 播放) ↗
             </a>
           </div>
           <p className="mt-4 max-w-xl text-[13.5px] leading-[1.9] text-ink-soft">

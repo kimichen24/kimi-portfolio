@@ -88,7 +88,7 @@ export default function About() {
                 </span>
               </div>
               <p className="mt-3 text-[14px] leading-[2.05] text-ink-soft selection:bg-red/10 sm:text-[14.5px]">
-                软件工程在读，但大部分热情花在了运营上——做过音乐采样解析账号（10.66 万自然播放）、管过校园二手群（转化率 12%→38%）、深入访谈过 15 个豆包在校用户。
+                软件工程在读，但大部分热情花在了运营上——做过音乐采样解析账号（59 条作品、自然播放超 10 万）、管过校园二手群（转化率 12%→38%）、深入访谈过 15 个豆包在校用户。
               </p>
             </article>
 
