@@ -41,7 +41,7 @@ export default function About() {
                 window.print()
               }}
               className="font-mono text-[11px] text-ink-mute hover:text-red transition-colors flex items-center gap-1.5 border border-paper-line bg-white/60 px-3 py-1 cursor-pointer"
-              title="调起浏览器打印，导出极简纸质求职档案"
+              title="调起浏览器打印，导出极简纸质档案"
             >
               <span>打印纸质档案</span>
               <span className="text-[12px]">⎙</span>
@@ -135,8 +135,8 @@ export default function About() {
           <div className="border-t border-paper-line pt-6 lg:border-t-0 lg:border-l lg:pl-8 lg:pt-0 space-y-6">
             <div>
               <p className="eyebrow-mono">STATUS · 当前状态</p>
-              <p className="mt-2 font-serif text-[15px] font-bold text-ink">实习求职中 · 随时到岗</p>
-              <p className="mt-1 font-mono text-[11px] text-ink-mute">保证实习周期 · 具备持续投入韧性</p>
+              <p className="mt-2 font-serif text-[15px] font-bold text-ink">在校 · 持续做项目与内容</p>
+              <p className="mt-1 font-mono text-[11px] text-ink-mute">软件工程在读 · 2028 届</p>
             </div>
 
             <div className="border-t border-paper-line pt-5">
@@ -148,7 +148,7 @@ export default function About() {
             <div className="border-t border-paper-line pt-5">
               <p className="eyebrow-mono">BASE · 所在地</p>
               <p className="mt-2 font-serif text-[15px] font-bold text-ink">湖南 · 长沙</p>
-              <p className="mt-1 font-mono text-[11px] text-ink-mute">支持随时异地驻场或远程协作</p>
+              <p className="mt-1 font-mono text-[11px] text-ink-mute">可异地驻场或远程协作</p>
             </div>
 
             <div className="border-t border-paper-line pt-5">

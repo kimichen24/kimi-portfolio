@@ -414,7 +414,7 @@ export default function Home() {
             想聊聊产品增长、用户研究，<br className="hidden sm:inline" />或者只是一首老歌的采样？
           </h2>
           <p className="mt-4 mx-auto max-w-xl text-[14px] leading-relaxed text-ink-soft">
-            正在寻找内容产品运营 / AI 产品运营方向的实习机会。保证充沛实习周期与稳定投入，随时可以到岗。
+            案卷随时可查，邮箱长期有效——聊什么都可以。
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
             <a

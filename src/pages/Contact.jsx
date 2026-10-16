@@ -39,7 +39,7 @@ function VisitCard({ platform, handle, url, desc, external }) {
 /**
  * Contact — 联系页
  * 朋友式的「欢迎来信」：不催、不卖、不面试腔。
- * 求职状态只在首页「此刻」条里安静地存在一行。
+ * 简历入口保持中性：只给下载，不写求职话术。
  */
 export default function Contact() {
   const byPlatform = Object.fromEntries(profile.social.map((s) => [s.platform, s]))
