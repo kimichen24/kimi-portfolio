@@ -65,7 +65,7 @@ export default function About() {
             “混乱的东西是怎么变得有秩序的——这就是我着迷的唯一一件事。”
           </blockquote>
           <p className="mt-2 font-mono text-[11px] text-ink-mute">
-            从音乐采样的祖谱溯源，到二手交易群的流转闭环，再到 15 场深度访谈的痛点提纯。
+            从 2,254 条用户反馈的聚类提纯，到混乱交易群的流转闭环，再到 AI 剪辑流水线的规则闸门。
           </p>
         </div>
 
@@ -88,7 +88,7 @@ export default function About() {
                 </span>
               </div>
               <p className="mt-3 text-[14px] leading-[2.05] text-ink-soft selection:bg-red/10 sm:text-[14.5px]">
-                软件工程在读，但大部分热情花在了运营上——做过音乐采样解析账号（59 条作品、自然播放超 10 万）、管过校园二手群（转化率 12%→38%）、深入访谈过 15 个豆包在校用户。
+                软件工程在读，但大部分热情花在了运营上——独立做出 Signal 反馈分析系统（2,254 条反馈 → 44 个产品机会）、在海伦天空国旅做过内容运营实习、管过校园二手群（转化率 12%→38%）、还把一个音乐采样账号做到了 10 万播放。
               </p>
             </article>
 
@@ -107,7 +107,7 @@ export default function About() {
                 </span>
               </div>
               <p className="mt-3 text-[14px] leading-[2.05] text-ink-soft selection:bg-red/10 sm:text-[14.5px]">
-                一条采样怎么变成新歌，一个刷屏的群怎么变成顺畅的交易，一堆抱怨怎么变成三个能动手改的 P0。我喜欢在看似混沌的信息流里理出结构，再用数据验证每一个动作的真实价值。
+                一堆零散抱怨怎么变成按优先级排好的调查清单，一个刷屏的群怎么变成顺畅的交易，29 个候选产品怎么收敛成 7 个能比较的竞品。我喜欢在看似混沌的信息流里理出结构，再用数据验证每一个动作的真实价值。
               </p>
             </article>
 
@@ -126,7 +126,7 @@ export default function About() {
                 </span>
               </div>
               <p className="mt-3 text-[14px] leading-[2.05] text-ink-soft selection:bg-red/10 sm:text-[14.5px]">
-                AI 是我的第二双手——初稿交给它跑，判断留给自己。省下来的时间用来做第二版、第三版迭代。这个网站本身就是「先做完，再做好」的产物。
+                AI 是我的第二双手——初稿交给它跑，判断留给自己。Signal 里我把这条做成了可度量的流程：调规则、调提示词，把模型与人工标注的严格一致率从 55% 提到 75%；剪辑工作流里则给它设了三道人工批准门。省下来的时间，用来做第二版、第三版。
               </p>
             </article>
           </div>
