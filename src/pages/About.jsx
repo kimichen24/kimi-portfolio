@@ -148,7 +148,6 @@ export default function About() {
             <div className="border-t border-paper-line pt-5">
               <p className="eyebrow-mono">BASE · 所在地</p>
               <p className="mt-2 font-serif text-[15px] font-bold text-ink">湖南 · 长沙</p>
-              <p className="mt-1 font-mono text-[11px] text-ink-mute">可异地驻场或远程协作</p>
             </div>
 
             <div className="border-t border-paper-line pt-5">
